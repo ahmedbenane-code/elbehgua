@@ -1,0 +1,1396 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Suivi de la production laitière de la ferme d’El Behgua · MPE">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<title>Suivi laitier El Behgua</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Readex+Pro:wght@300;400;500;600;700&display=swap">
+<style>/* Layout : barre haute en verre + scène de cartes flottantes sur un fond « pâturage » (dégradé menthe, sable, ciel) ; navigation par dock flottant en bas et mosaïque plein écran */
+:root{
+  --bg:#eef4f1; --mesh-1:#cdeee2; --mesh-2:#f7e9cf; --mesh-3:#dbe7fb;
+  --glass:rgba(255,255,255,.72); --glass-2:rgba(255,255,255,.55); --glass-line:rgba(255,255,255,.9);
+  --surface:#ffffff; --surface-2:#f2f7f5; --ink:#0f1f1a; --muted:#5a6e67; --line:#dbe6e1;
+  --brand:#0c7a60; --brand-2:#12a37f; --brand-deep:#064b3b; --brand-soft:#d5f1e7; --brand-ink:#ffffff;
+  --matin:#e3940f; --matin-soft:#fdeccc; --soir:#5560d6; --soir-soft:#e3e5fc; --coral:#ef6b57;
+  --ok:#11905d; --ok-soft:#d5f2e4; --warn:#c27606; --warn-soft:#fdeccc; --bad:#d63f3f; --bad-soft:#fbdddd;
+  --milk-top:#ffffff; --milk-bot:#e8f2ef; --on-milk:#0a4b3b; --hb-a:#0c7a60; --hb-b:#16a585; --hb-c:#e3940f; --hb-ink:#ffffff;
+  --t0:#d5f1e7; --t1:#fdeccc; --t2:#e3e5fc; --t3:#fde0db;
+  --shadow:0 1px 1px rgba(12,60,48,.04),0 12px 32px -14px rgba(12,60,48,.22);
+  --shadow-lg:0 30px 60px -24px rgba(12,60,48,.35);
+  --r-xl:30px; --r-lg:22px; --r-md:16px;
+  --f-ui:"Readex Pro","Segoe UI",Tahoma,system-ui,sans-serif;
+  --f-num:"Bricolage Grotesque","Readex Pro","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#07110e; --mesh-1:#0d3a2e; --mesh-2:#2b2310; --mesh-3:#141d3a;
+  --glass:rgba(20,34,30,.72); --glass-2:rgba(30,48,42,.6); --glass-line:rgba(255,255,255,.07);
+  --surface:#12201c; --surface-2:#1a2b26; --ink:#e7f1ed; --muted:#93a9a2; --line:#24372f;
+  --brand:#3fd1a6; --brand-2:#7ce6c6; --brand-deep:#c9f7e9; --brand-soft:#123a2f; --brand-ink:#04241b;
+  --matin:#f4b54c; --matin-soft:#3a2d12; --soir:#959df5; --soir-soft:#232750; --coral:#ff8a78;
+  --ok:#45cf93; --ok-soft:#133a29; --warn:#f4b54c; --warn-soft:#3a2d12; --bad:#ff7d7d; --bad-soft:#401d1d;
+  --milk-top:#f3fbf8; --milk-bot:#bfe3d6; --on-milk:#0a4b3b; --hb-a:#0b5b48; --hb-b:#0f7d63; --hb-c:#8a5a0a; --hb-ink:#ecfff8;
+  --t0:#123a2f; --t1:#3a2d12; --t2:#232750; --t3:#40211c;
+  --shadow:0 1px 1px rgba(0,0,0,.3),0 14px 34px -16px rgba(0,0,0,.7); --shadow-lg:0 30px 60px -24px rgba(0,0,0,.8); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#07110e; --mesh-1:#0d3a2e; --mesh-2:#2b2310; --mesh-3:#141d3a;
+  --glass:rgba(20,34,30,.72); --glass-2:rgba(30,48,42,.6); --glass-line:rgba(255,255,255,.07);
+  --surface:#12201c; --surface-2:#1a2b26; --ink:#e7f1ed; --muted:#93a9a2; --line:#24372f;
+  --brand:#3fd1a6; --brand-2:#7ce6c6; --brand-deep:#c9f7e9; --brand-soft:#123a2f; --brand-ink:#04241b;
+  --matin:#f4b54c; --matin-soft:#3a2d12; --soir:#959df5; --soir-soft:#232750; --coral:#ff8a78;
+  --ok:#45cf93; --ok-soft:#133a29; --warn:#f4b54c; --warn-soft:#3a2d12; --bad:#ff7d7d; --bad-soft:#401d1d;
+  --milk-top:#f3fbf8; --milk-bot:#bfe3d6; --on-milk:#0a4b3b; --hb-a:#0b5b48; --hb-b:#0f7d63; --hb-c:#8a5a0a; --hb-ink:#ecfff8;
+  --t0:#123a2f; --t1:#3a2d12; --t2:#232750; --t3:#40211c;
+  --shadow:0 1px 1px rgba(0,0,0,.3),0 14px 34px -16px rgba(0,0,0,.7); --shadow-lg:0 30px 60px -24px rgba(0,0,0,.8); color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--f-ui);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background-image:radial-gradient(60vw 50vh at 0% 0%,var(--mesh-1),transparent 70%),radial-gradient(50vw 45vh at 100% 10%,var(--mesh-3),transparent 70%),radial-gradient(60vw 50vh at 60% 100%,var(--mesh-2),transparent 70%);background-attachment:fixed}
+body.locked{overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--brand)}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.15}
+.num,td.n,th.n,.kpi b{font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--brand) 55%,transparent);outline-offset:2px;border-radius:12px}
+
+/* --- barre haute --- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:31;background:var(--glass)}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;padding:12px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.tb-in{max-width:1320px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:8px 10px 8px 12px;border-radius:999px;background:var(--glass);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid var(--glass-line);box-shadow:var(--shadow)}
+.brand{display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--ink);min-width:0}
+.brand .mark{width:40px;height:40px;border-radius:50%;background:conic-gradient(from 200deg,var(--brand),var(--brand-2),var(--matin),var(--brand));display:grid;place-items:center;color:#fff;flex:none;box-shadow:0 6px 16px -6px var(--brand)}
+.brand b{display:block;white-space:nowrap;font:700 16px/1.1 var(--f-num);letter-spacing:-.01em}
+.brand small{color:var(--muted);font-size:11.5px;display:block}
+.tb-status .pill{max-width:min(46vw,380px);overflow:hidden;text-overflow:ellipsis}
+.tb-status{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;min-width:0}
+
+/* --- scène --- */
+.main{max-width:1320px;margin:0 auto;padding-block:22px 130px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end;justify-content:space-between;margin-bottom:20px}
+.top .ar{font-size:13px;color:var(--muted);direction:rtl}
+.top h1{font-family:var(--f-num);font-size:34px;font-weight:800;letter-spacing:-.03em}
+.top .sub{color:var(--muted);font-size:13px}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* --- dock flottant --- */
+.dock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:35;display:flex;gap:4px;padding:7px;border-radius:999px;
+  background:var(--glass);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border:1px solid var(--glass-line);box-shadow:var(--shadow-lg);max-width:calc(100% - 24px)}
+.dock a,.dock button{display:flex;align-items:center;gap:7px;padding:10px 14px;border-radius:999px;border:0;background:transparent;color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}
+.dock svg{width:20px;height:20px;flex:none}
+.dock a:hover,.dock button:hover{color:var(--ink);background:var(--glass-2)}
+.dock .on{background:var(--ink);color:var(--bg)}
+.dock .on:hover{background:var(--ink);color:var(--bg)}
+@media (max-width:1100px){.dock span{display:none}.dock a,.dock button{padding:11px}.dock .on span{display:inline}}
+@media (max-width:560px){.dock .d-semaine,.dock .d-mois,.dock .d-troupeau{display:none}.dock .on span{display:none}.dock a,.dock button{padding:12px 14px}}
+
+/* --- mosaïque plein écran --- */
+.sheet{position:fixed;inset:0;z-index:45;background:rgba(5,20,15,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow-y:auto;padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet-in{max-width:880px;margin:0 auto;background:var(--surface);border-radius:34px;padding:22px;box-shadow:var(--shadow-lg)}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.sheet-head b{font:800 22px var(--f-num);letter-spacing:-.02em}
+.nav-sec{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:16px 4px 8px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.tile{display:flex;align-items:center;gap:12px;padding:14px;border-radius:22px;text-decoration:none;color:var(--ink);font-weight:500;background:var(--surface-2);border:1px solid transparent;transition:transform .15s}
+.tile:hover{transform:translateY(-2px);border-color:var(--line)}
+.tile .ti{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;flex:none}
+.tile svg{width:20px;height:20px}
+.tile.t0 .ti{background:var(--t0);color:var(--brand)} .tile.t1 .ti{background:var(--t1);color:var(--matin)} .tile.t2 .ti{background:var(--t2);color:var(--soir)} .tile.t3 .ti{background:var(--t3);color:var(--coral)}
+.tile.on{border-color:var(--brand);background:var(--brand-soft)}
+.copy{text-align:center;color:var(--muted);font-size:12px;padding:26px 8px 0;display:grid;gap:3px}
+.copy .ar{direction:rtl}
+.copy b{color:var(--ink);font-weight:600}
+
+/* --- composants --- */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:500;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.brand{background:var(--brand-soft);color:var(--brand)}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block;box-shadow:0 0 0 3px color-mix(in srgb,currentColor 22%,transparent)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;border:1px solid var(--glass-line);background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;font-weight:500;font-size:13.5px;text-decoration:none;color:var(--ink);box-shadow:var(--shadow)}
+.btn:hover{color:var(--brand)}
+.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));border-color:transparent;color:var(--brand-ink);box-shadow:0 10px 24px -10px var(--brand)}
+.btn.primary:hover{filter:brightness(1.06);color:var(--brand-ink)}
+.btn.sm{padding:6px 13px;font-size:12.5px;box-shadow:none}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn svg{width:16px;height:16px}
+.icon-btn{width:38px;height:38px;border-radius:50%;display:inline-grid;place-items:center;border:1px solid var(--glass-line);background:var(--glass);cursor:pointer;color:var(--ink);flex:none}
+.icon-btn:hover{color:var(--brand)}
+.icon-btn svg{width:17px;height:17px}
+
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g-main{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)}
+.card{background:var(--glass);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);border:1px solid var(--glass-line);border-radius:var(--r-xl);padding:22px;box-shadow:var(--shadow);min-width:0}
+.card h2{font:700 17px var(--f-num);letter-spacing:-.01em;display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.card h2 .n{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:var(--brand-ink);display:inline-grid;place-items:center;font:700 13px var(--f-ui);flex:none}
+.card h2 .sp{flex:1}
+.card .hint{color:var(--muted);font-size:12.5px;margin:-8px 0 14px}
+.section{display:grid;gap:18px;margin-bottom:18px}
+
+/* bandeau héros du tableau de bord */
+.hero-band{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:end;gap:24px;padding:28px 30px;border-radius:36px;color:var(--hb-ink);overflow:hidden;position:relative;
+  background:radial-gradient(120% 140% at 100% 0%,color-mix(in srgb,var(--hb-c) 70%,transparent),transparent 55%),linear-gradient(135deg,var(--hb-a),var(--hb-b));box-shadow:var(--shadow-lg)}
+.hero-band::after{content:"";position:absolute;right:-60px;bottom:-90px;width:260px;height:260px;border-radius:50%;border:40px solid rgba(255,255,255,.08)}
+.eyebrow{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.hb-num{font:800 clamp(52px,9vw,96px)/0.95 var(--f-num);letter-spacing:-.05em;margin:6px 0 10px}
+.hb-num small{font-size:.28em;font-weight:500;letter-spacing:0;opacity:.85}
+.hb-sub{font-size:14px;opacity:.95;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hb-r{display:grid;gap:6px;position:relative;z-index:1}
+.hero-band .delta{background:rgba(255,255,255,.2);color:var(--hb-ink)}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpis.k6{grid-template-columns:repeat(6,minmax(0,1fr))}
+.kpi{background:var(--surface-2);border-radius:var(--r-lg);padding:15px 16px;display:flex;flex-direction:column;gap:4px;min-width:0;position:relative;overflow:hidden}
+.kpis>.kpi:nth-child(4n+1){background:var(--t0)} .kpis>.kpi:nth-child(4n+2){background:var(--t1)} .kpis>.kpi:nth-child(4n+3){background:var(--t2)} .kpis>.kpi:nth-child(4n+4){background:var(--surface-2)}
+.kpi span{font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+.kpi b{font-family:var(--f-num);font-size:28px;font-weight:800;letter-spacing:-.03em;line-height:1.05;overflow-wrap:anywhere}
+.kpi b small{font-size:13px;font-weight:500;color:var(--muted);margin-left:3px;letter-spacing:0}
+.kpi em{font-style:normal;font-size:12px;color:var(--muted)}
+.kpis>.kpi.hero,.kpi.hero{background:linear-gradient(140deg,var(--ink),color-mix(in srgb,var(--ink) 75%,var(--brand)));color:var(--bg)}
+.kpi.hero span,.kpi.hero em,.kpi.hero b small{color:color-mix(in srgb,var(--bg) 75%,transparent)}
+.kpi.hero .delta{background:color-mix(in srgb,var(--bg) 18%,transparent);color:var(--bg)}
+.delta{display:inline-flex;align-items:center;gap:3px;font-weight:600;font-size:12px;padding:1px 9px;border-radius:999px}
+.delta.up{color:var(--ok);background:var(--ok-soft)} .delta.down{color:var(--bad);background:var(--bad-soft)} .delta.flat{color:var(--muted);background:var(--surface)}
+
+/* bouteille objectif */
+.goal{display:flex;gap:20px;align-items:center}
+.bottle{width:132px;height:198px;flex:none;filter:drop-shadow(0 12px 18px rgba(12,60,48,.18))}
+@media (prefers-reduced-motion:no-preference){.bottle .wv{animation:wave 3.2s linear infinite}.bottle .w2{animation-duration:5s;animation-direction:reverse}@keyframes wave{to{transform:translateX(40px)}}}
+
+/* tableaux */
+.tbl-wrap{overflow-x:auto;border-radius:var(--r-md);background:var(--surface)}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+th{background:var(--surface-2);text-align:left;font-weight:600;font-size:11.5px;color:var(--muted);letter-spacing:.03em;padding:10px 12px;white-space:nowrap;position:sticky;top:0}
+th:first-child{border-top-left-radius:var(--r-md)} th:last-child{border-top-right-radius:var(--r-md)}
+td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:middle}
+td.n,th.n{text-align:right}
+tr.click{cursor:pointer} tr.click:hover td,tbody tr:hover td{background:color-mix(in srgb,var(--brand-soft) 45%,transparent)}
+tfoot td{font-weight:700;background:var(--surface-2)}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:600;background:var(--surface-2);white-space:nowrap}
+.tag.F1{background:var(--brand-soft);color:var(--brand)} .tag.ZM{background:var(--matin-soft);color:var(--matin)} .tag.ZMA{background:var(--soir-soft);color:var(--soir)}
+.tag.lact{background:var(--ok-soft);color:var(--ok)} .tag.tarie{background:var(--soir-soft);color:var(--soir)} .tag.sortie{background:var(--surface-2);color:var(--muted)} .tag.morte{background:var(--bad-soft);color:var(--bad)}
+.empty{padding:28px;text-align:center;color:var(--muted);font-size:13px;background:var(--surface-2);border-radius:var(--r-lg)}
+
+/* formulaires */
+.field{display:grid;gap:5px;min-width:0}
+.field label{font-size:12px;color:var(--muted);font-weight:500}
+.inp{width:100%;padding:10px 15px;border-radius:16px;border:1px solid var(--line);background:var(--surface);min-width:0}
+.inp:focus{border-color:var(--brand);outline:none;box-shadow:0 0 0 4px var(--brand-soft)}
+input.cell{width:78px;padding:7px 10px;border-radius:12px;border:1px solid transparent;background:var(--matin-soft);text-align:right}
+input.cell.s{background:var(--soir-soft)}
+input.cell:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft)}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.row.end{justify-content:flex-end}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:4px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:7px 15px;border-radius:999px;cursor:pointer;font-size:13px;color:var(--muted)}
+.seg button.on{background:var(--ink);color:var(--bg);font-weight:600}
+
+/* alertes */
+.alerts{display:grid;gap:9px}
+.alert{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:20px;background:var(--surface-2)}
+.alert .ic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none}
+.alert .ic svg{width:16px;height:16px}
+.alert.bad .ic{background:var(--bad-soft);color:var(--bad)} .alert.warn .ic{background:var(--warn-soft);color:var(--warn)} .alert.ok .ic{background:var(--ok-soft);color:var(--ok)} .alert.info .ic{background:var(--brand-soft);color:var(--brand)}
+.alert b{display:block;font-size:13.5px} .alert p{margin:0;color:var(--muted);font-size:12.5px}
+.banner{display:flex;gap:12px;align-items:center;padding:13px 18px;border-radius:999px;background:var(--warn-soft);color:var(--ink);margin-bottom:18px;font-size:13px}
+.banner.info{background:var(--brand-soft)}
+.banner svg{width:18px;height:18px;flex:none;color:var(--warn)}
+.banner.info svg{color:var(--brand)}
+@media (max-width:700px){.banner{border-radius:22px}}
+
+/* graphiques */
+.chart{width:100%;overflow:visible}
+.chart text{fill:var(--muted);font-size:10.5px;font-family:var(--f-ui)}
+.chart .grid-l{stroke:var(--line);stroke-width:1;stroke-dasharray:2 4}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.bar-h{display:grid;gap:10px}
+.bar-h .r{display:grid;grid-template-columns:60px minmax(0,1fr) 84px;gap:10px;align-items:center;font-size:12.5px}
+.bar-h .t{height:14px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.bar-h .t i{display:block;height:100%;border-radius:999px}
+
+/* fenêtres */
+.scrim{position:fixed;inset:0;background:rgba(5,20,15,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:grid;place-items:center;z-index:50;padding:16px}
+.modal{background:var(--surface);border-radius:var(--r-xl);padding:24px;width:min(580px,100%);max-height:90vh;overflow:auto;box-shadow:var(--shadow-lg)}
+.modal h3{font:700 19px var(--f-num);margin-bottom:12px}
+.modal p{white-space:pre-line}
+.toast{position:fixed;bottom:calc(92px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 22px;border-radius:999px;z-index:60;font-size:13.5px;box-shadow:var(--shadow-lg);max-width:calc(100% - 32px)}
+
+/* en-tête des bulletins */
+.doc-head{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;padding:26px 28px;border-radius:34px;color:var(--hb-ink);margin-bottom:18px;position:relative;overflow:hidden;
+  background:radial-gradient(90% 160% at 100% 0%,color-mix(in srgb,var(--hb-c) 65%,transparent),transparent 60%),linear-gradient(135deg,var(--hb-a),var(--hb-b));box-shadow:var(--shadow-lg)}
+.doc-head::after{content:"";position:absolute;left:-50px;top:-80px;width:200px;height:200px;border-radius:50%;border:34px solid rgba(255,255,255,.07)}
+.doc-head>*{position:relative;z-index:1}
+.doc-head .ar{direction:rtl;font-size:14px;opacity:.95}
+.doc-head h2{font:800 26px/1.1 var(--f-num);letter-spacing:-.02em;margin:4px 0}
+.doc-head small{opacity:.85}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.sign div{border:1.5px dashed var(--line);border-radius:22px;padding:14px 16px;min-height:96px;color:var(--muted);font-size:12.5px}
+textarea.inp{min-height:84px;resize:vertical;border-radius:20px}
+.wa{white-space:pre-wrap;font-size:12.5px;background:var(--surface-2);border-radius:20px;padding:14px;max-height:280px;overflow:auto}
+.tip{color:var(--muted);font-size:12px}
+
+@media (max-width:1200px){.kpis.k6{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:1100px){.g-main,.g3{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){
+  .g2,.hero-band{grid-template-columns:minmax(0,1fr)}
+  .top h1{font-size:28px}
+  .sign{grid-template-columns:1fr}
+  .tb-status .pill:first-child{display:none}
+  .brand small{display:none}
+}
+@media (max-width:640px){.kpis,.kpis.k6{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi b{font-size:23px}.hero-band{padding:22px;border-radius:30px}.goal{flex-direction:column;align-items:flex-start}.card{padding:18px;border-radius:26px}}
+@media (prefers-reduced-motion:no-preference){.card,.hero-band{animation:rise .4s cubic-bezier(.2,.8,.2,1) both}@keyframes rise{from{transform:translateY(8px);opacity:.6}to{transform:none;opacity:1}}}
+@media print{
+  @page{size:A4;margin:10mm}
+  body{background:#fff}
+  .topbar,.dock,.sheet,.top-actions,.noprint,.toast{display:none!important}
+  .main{padding:0;max-width:none}
+  .card{box-shadow:none;border:1px solid #dde5e1;break-inside:avoid;animation:none;backdrop-filter:none;background:#fff}
+  .doc-head,.kpi,.tag,.pill,.hero-band{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+/* mode capture PDF : neutralise ce que le moteur de capture ne sait pas lire (color-mix, flou, animations) */
+.pdf-mode *{animation:none!important;transition:none!important}
+.pdf-mode .card,.pdf-mode .btn,.pdf-mode .icon-btn{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--surface)}
+.pdf-mode .dot{box-shadow:none}
+.pdf-mode .hero-band,.pdf-mode .doc-head{background:linear-gradient(135deg,var(--hb-a),var(--hb-b))}
+.pdf-mode .kpis>.kpi.hero,.pdf-mode .kpi.hero{background:var(--ink)}
+.pdf-mode .kpi.hero span,.pdf-mode .kpi.hero em,.pdf-mode .kpi.hero b small{color:var(--bg);opacity:.8}
+.pdf-mode .kpi.hero .delta{background:var(--surface-2);color:var(--ink)}
+.pdf-mode tbody tr:hover td{background:transparent}
+.pdf-mode .main{padding-bottom:10px}
+</style>
+
+<header class="topbar"><div class="tb-in">
+  <a href="#accueil" class="brand"><span class="mark"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/></svg></span><span><b>El Behgua</b><small><span dir="rtl">مزرعة الأبقار الحلوب</span> · MPE</small></span></a>
+  <div id="status" class="tb-status"></div>
+  <button class="icon-btn" data-act="theme" aria-label="Thème clair ou sombre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15A8 8 0 1 1 9 4a7 7 0 0 0 11 11z"/></svg></button>
+</div></header>
+<main class="main">
+  <header class="top"><div style="min-width:0"><div class="ar">الموريتانية للمنتجات الحيوانية · مزرعة الأبقار الحلوب</div><h1 id="page-title">Chargement…</h1><div class="sub" id="page-sub">Lecture des données</div></div><div class="top-actions" id="page-actions"></div></header>
+  <div id="view"><div class="empty">Chargement des données…</div></div>
+  <footer><div class="copy"><span class="ar">© 2026 الموريتانية للمنتجات الحيوانية · جميع الحقوق محفوظة</span><span>© 2026 <b>MPE · La Mauritanienne des Produits de l’Élevage</b> · Tous droits réservés</span><span>Ferme laitière d’El Behgua · Direction Technique</span></div></footer>
+</main>
+<nav class="dock" id="dock" aria-label="Navigation principale"></nav>
+<div class="sheet" id="sheet" hidden><div class="sheet-in"><div class="sheet-head"><b>Toutes les pages</b><button class="icon-btn" data-act="menu" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div id="nav"></div><div class="copy"><span class="ar">© 2026 الموريتانية للمنتجات الحيوانية · جميع الحقوق محفوظة</span><span>© 2026 <b>MPE · La Mauritanienne des Produits de l’Élevage</b> · Tous droits réservés</span><span>Ferme laitière d’El Behgua · Direction Technique</span></div></div></div>
+<script>/* ================= Core : données, stockage, historique, calculs ================= */
+'use strict';
+const APPV = '1.1';
+const HOSTED = !document.getElementById('seed');   // version en ligne : données dans data.json publié avec la page
+const STATIC = HOSTED && !(window.claude && window.claude.use);   // site web libre (GitHub Pages) : consultation, données data.json mises à jour par GitHub
+const WEB = { art: null, user: null, mcp: null, ro: false, ready: false,
+  async init() { if (!window.claude?.use) { this.ro = true; return; } const [a, u, m] = await Promise.all([claude.use('artifact'), claude.use('user'), claude.use('mcp').catch(() => null)]); this.art = a; this.user = u; this.mcp = m; if (!a) this.ro = true; else if (u) { try { const ok = await u.canEdit(); if (ok === false) this.ro = true; } catch (e) {} } this.ready = true; },
+  async save(txt) {
+    if (this.ro || !this.art) return false;
+    try { await this.art.publish({ 'data.json': { content: txt, contentType: 'application/json' } }); return true; }
+    catch (e) { const c = e && e.code; if (c === 'conflict') UI.toast('Une mise à jour (synchronisation Kobo ou autre utilisateur) est arrivée : la page se recharge, refaire la dernière modification.'); else if (['not_writer', 'not_granted', 'capability_disabled', 'capability_removed', 'not_declared', 'consent_required'].includes(c)) { this.ro = true; UI.toast('Consultation seule : vos modifications ne peuvent pas être enregistrées sur ce lien.'); } else UI.toast('Enregistrement impossible : ' + (e.message || c)); return false; }
+  },
+};
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const RACES = ['F1', 'ZM', 'ZMA'];
+const STATUTS = ['En lactation', 'Tarie', 'Sortie', 'Morte'];
+const TYPES_EV = ['Vêlage','Tarissement','Chaleur','Insémination (IA)','Diagnostic gestation','Maladie / Traitement','Mammite','Vaccination','Déparasitage','Mortalité','Sortie / Vente','Entrée','Autre'];
+const MOTIFS = ['Acidité','Densité','Test alcool positif','Propreté','Température','Mouillage','Autre'];
+const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const JOURS = ['dim.','lun.','mar.','mer.','jeu.','ven.','sam.'];
+const ALIM_LBL = ['Tourteau de coton (kg)','Maïs (kg)','Luzerne (bottes)','Pois (bottes)','Maralfalfa (bottes)','Panicum (bottes)','Autres coûts (MRU)'];
+
+/* ---------- dates : nombre de jours depuis 1970-01-01 ---------- */
+const DAY = 864e5;
+const today = () => { const n = new Date(); return Math.floor(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()) / DAY); };
+const toDate = d => new Date(d * DAY);
+const fd = d => { if (d == null || d === '') return ''; const x = toDate(d); return `${String(x.getUTCDate()).padStart(2,'0')}/${String(x.getUTCMonth()+1).padStart(2,'0')}/${x.getUTCFullYear()}`; };
+const fdShort = d => { const x = toDate(d); return `${x.getUTCDate()}/${x.getUTCMonth()+1}`; };
+const fdLong = d => { const x = toDate(d); return `${JOURS[x.getUTCDay()]} ${x.getUTCDate()} ${MOIS[x.getUTCMonth()]} ${x.getUTCFullYear()}`; };
+const iso = d => d == null ? '' : toDate(d).toISOString().slice(0, 10);
+const fromIso = s => { if (!s) return null; const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s); return m ? Date.UTC(+m[1], +m[2]-1, +m[3]) / DAY : null; };
+const parseAnyDate = v => {
+  if (v == null || v === '') return null;
+  if (typeof v === 'number') return v > 20000 && v < 80000 ? Math.floor(v) - 25569 : null; // numéro de série Excel
+  if (v instanceof Date) return Math.floor(Date.UTC(v.getFullYear(), v.getMonth(), v.getDate()) / DAY);
+  const s = String(v).trim(); let m;
+  if ((m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s))) return Date.UTC(+m[1], +m[2]-1, +m[3]) / DAY;
+  if ((m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(s))) return Date.UTC(+m[3], +m[2]-1, +m[1]) / DAY;
+  return null;
+};
+const weekday1 = d => ((toDate(d).getUTCDay() + 6) % 7) + 1; // lundi=1
+const monday = d => d - weekday1(d) + 1;
+const isoWeek = d => { const th = d - weekday1(d) + 4; const y = toDate(th).getUTCFullYear(); const j1 = Date.UTC(y, 0, 1) / DAY; return { w: Math.floor((th - j1) / 7) + 1, y }; };
+const monthStart = d => { const x = toDate(d); return Date.UTC(x.getUTCFullYear(), x.getUTCMonth(), 1) / DAY; };
+const monthEnd = d => { const x = toDate(d); return Date.UTC(x.getUTCFullYear(), x.getUTCMonth() + 1, 1) / DAY - 1; };
+const addMonths = (d, k) => { const x = toDate(d); return Date.UTC(x.getUTCFullYear(), x.getUTCMonth() + k, 1) / DAY; };
+const monthLbl = d => { const x = toDate(d); return `${MOIS[x.getUTCMonth()]} ${x.getUTCFullYear()}`; };
+const nowStamp = () => { const n = new Date(); return `${fd(today())} ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`; };
+
+/* ---------- nombres ---------- */
+const nf = (v, dec = 1) => (v == null || v === '' || !isFinite(v)) ? '–' : Number(v).toLocaleString('fr-FR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+const pf = (v, dec = 1) => (v == null || !isFinite(v)) ? '–' : (v * 100).toLocaleString('fr-FR', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + ' %';
+const num = v => { if (v == null || v === '') return null; const x = typeof v === 'number' ? v : parseFloat(String(v).replace(/\s/g, '').replace(',', '.')); return isFinite(x) ? x : null; };
+const r3 = v => v == null ? null : Math.round(v * 1000) / 1000;
+const sum = a => a.reduce((s, x) => s + (x || 0), 0);
+const deltaHtml = (v, invert) => { if (v == null || !isFinite(v)) return '<span class="delta flat">–</span>'; const c = Math.abs(v) < 0.005 ? 'flat' : ((v > 0) !== !!invert ? 'up' : 'down'); return `<span class="delta ${c}">${v > 0 ? '▲' : v < 0 ? '▼' : '•'} ${pf(Math.abs(v), 1)}</span>`; };
+
+/* ================= Modèle ================= */
+let DB = null;      // données
+let IX = null;      // index
+const tot = r => (r.m == null && r.s == null) ? (r.t ?? null) : (r.m || 0) + (r.s || 0);
+
+function decode(raw) {
+  const dic = raw.dict, L = raw.lait, n = L.id.length, lait = new Array(n);
+  let d = 0; const g = i => dic[i] || '';
+  for (let i = 0; i < n; i++) {
+    d += L.d[i];
+    lait[i] = { d, id: g(L.id[i]), race: g(L.race[i]), m: L.m[i], s: L.s[i], t: L.t[i], src: g(L.src[i]), obs: g(L.obs[i]), tm: g(L.tm[i]), hm: g(L.hm[i]), ts: g(L.ts[i]), hs: g(L.hs[i]) };
+  }
+  const ev = raw.ev.map(e => ({ d: e[0], id: e[1], type: e[2], detail: e[3], trait: e[4], retrait: e[5], rappel: e[6], obs: e[7], src: e[8] }));
+  const param = Object.assign({ ferme: 'Ferme laitière d’El Behgue', seuilBaisse: .2, seuilSmpl: .02, seuilTroupeau: .15, prixLait: 21, prixAlim: [null,null,null,null,null,null], koboServeur: 'https://kf.kobotoolbox.org', koboUid: '', koboSyncMin: 30, koboLastId: 0, trayeurs: [], objectif: 300, objectifDate: '2027-01-31', compareEgal: true }, raw.param || {});
+  const kobolog = (raw.kobolog || []).map(k => Array.isArray(k) ? ({ uuid: k[0], d: k[1], session: k[2], trayeur: k[3], heure: k[4], nv: k[5], total: k[6], livre: k[7], nev: k[8], at: k[9] }) : k);
+  return { lait, smpl: raw.smpl || [], ev, reg: raw.reg || [], alim: raw.alim || [], param, kobolog, journal: raw.journal || [], notes: raw.notes || {}, rev: raw.rev || 0, source: raw.source || '' };
+}
+function encode(db) {
+  const dic = new Map(), dl = []; const I = s => { s = s || ''; let k = dic.get(s); if (k == null) { k = dl.length; dic.set(s, k); dl.push(s); } return k; };
+  const rows = [...db.lait].sort((a, b) => a.d - b.d || (a.id < b.id ? -1 : 1));
+  const L = { d: [], id: [], race: [], m: [], s: [], t: [], src: [], obs: [], tm: [], hm: [], ts: [], hs: [] }; let p = 0;
+  for (const r of rows) { L.d.push(r.d - p); p = r.d; L.id.push(I(r.id)); L.race.push(I(r.race)); L.m.push(r.m ?? null); L.s.push(r.s ?? null); L.t.push(r.m == null && r.s == null ? (r.t ?? null) : null); L.src.push(I(r.src)); L.obs.push(I(r.obs)); L.tm.push(I(r.tm)); L.hm.push(I(r.hm)); L.ts.push(I(r.ts)); L.hs.push(I(r.hs)); }
+  return { v: 1, app: APPV, rev: db.rev, dict: dl, lait: L, smpl: db.smpl, ev: db.ev.map(e => [e.d, e.id, e.type, e.detail, e.trait, e.retrait, e.rappel, e.obs, e.src]), reg: db.reg, alim: db.alim, param: db.param, kobolog: db.kobolog, journal: db.journal, notes: db.notes, source: db.source };
+}
+
+/* ---------- index & caches ---------- */
+function reindex() {
+  const byDate = new Map(), byCow = new Map(), key = new Map(), daily = new Map();
+  for (const r of DB.lait) {
+    const t = tot(r);
+    let a = byDate.get(r.d); if (!a) byDate.set(r.d, a = []); a.push(r);
+    let c = byCow.get(r.id); if (!c) byCow.set(r.id, c = []); c.push(r);
+    key.set(r.d + '|' + r.id, r);
+    let dd = daily.get(r.d); if (!dd) daily.set(r.d, dd = { t: 0, m: 0, s: 0, n: 0, nm: 0, ns: 0, rows: 0 });
+    dd.rows++; dd.t += t || 0; if (t > 0) dd.n++;
+    if (r.m != null) { dd.m += r.m; if (r.m > 0) dd.nm++; }
+    if (r.s != null) { dd.s += r.s; if (r.s > 0) dd.ns++; }
+  }
+  for (const c of byCow.values()) c.sort((a, b) => a.d - b.d);
+  const dates = [...daily.keys()].sort((a, b) => a - b);
+  const reg = new Map(DB.reg.map(v => [v.id, v]));
+  const smpl = new Map(DB.smpl.map(s => [s.d, s]));
+  DB.ev.sort((a, b) => a.d - b.d);
+  const evByCow = new Map(); for (const e of DB.ev) { let a = evByCow.get(e.id); if (!a) evByCow.set(e.id, a = []); a.push(e); }
+  IX = { byDate, byCow, key, daily, dates, first: dates[0], last: dates[dates.length - 1], reg, smpl, evByCow };
+}
+const cowTot = (id, d) => { const r = IX.key.get(d + '|' + id); return r ? tot(r) : null; };
+const dayTot = d => IX.daily.get(d)?.t ?? null;
+
+/* ================= Persistance : IndexedDB + pont local (fichier sur disque) ================= */
+const IDB = {
+  db: null,
+  open() { return new Promise(res => { try { const q = indexedDB.open('elbehgua', 2); q.onupgradeneeded = () => { const d = q.result; if (!d.objectStoreNames.contains('kv')) d.createObjectStore('kv'); if (!d.objectStoreNames.contains('snaps')) d.createObjectStore('snaps', { keyPath: 'id' }); }; q.onsuccess = () => { this.db = q.result; res(true); }; q.onerror = () => res(false); } catch (e) { res(false); } }); },
+  tx(store, mode, fn) { return new Promise((res, rej) => { if (!this.db) return res(null); try { const t = this.db.transaction(store, mode); const s = t.objectStore(store); const out = fn(s); t.oncomplete = () => res(out && out.result !== undefined ? out.result : out); t.onerror = () => rej(t.error); } catch (e) { rej(e); } }); },
+  get(k) { return this.tx('kv', 'readonly', s => s.get(k)); },
+  put(k, v) { return this.tx('kv', 'readwrite', s => s.put(v, k)); },
+  async snaps() { if (!this.db) return []; return new Promise(res => { const t = this.db.transaction('snaps', 'readonly'); const q = t.objectStore('snaps').getAll(); q.onsuccess = () => res(q.result.map(x => ({ id: x.id, t: x.t, label: x.label, n: x.n })).sort((a, b) => b.id - a.id)); q.onerror = () => res([]); }); },
+  getSnap(id) { return this.tx('snaps', 'readonly', s => s.get(id)); },
+  async addSnap(label, data) { if (!this.db) return; await this.tx('snaps', 'readwrite', s => s.put({ id: Date.now(), t: nowStamp(), label, n: DB.lait.length, data })); const all = await this.snaps(); for (const x of all.slice(12)) await this.tx('snaps', 'readwrite', s => s.delete(x.id)); },
+};
+const LS = { get(k, d) { try { const v = localStorage.getItem('elb_' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem('elb_' + k, JSON.stringify(v)); } catch (e) {} } };
+
+/* Pont local (PowerShell) : http://localhost:8787 — sert l'application, relaie l'API Kobo et enregistre les données sur le disque */
+const PONT = {
+  base: null, ok: false, info: null,
+  async detect() {
+    if (HOSTED) { this.ok = false; return false; }
+    const cands = [];
+    if (location.protocol.startsWith('http') && /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) cands.push(location.origin);
+    cands.push('http://localhost:' + (LS.get('port', 8787)));
+    for (const b of [...new Set(cands)]) {
+      try { const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 5000); const r = await fetch(b + '/pont/ping', { signal: ctl.signal }); clearTimeout(tm); if (r.ok) { this.info = await r.json(); this.base = b; this.ok = true; return true; } } catch (e) {}
+    }
+    this.ok = false; return false;
+  },
+  async load() { if (!this.ok) return null; try { const r = await fetch(this.base + '/pont/donnees'); if (r.status !== 200) return null; return await r.text(); } catch (e) { return null; } },
+  async save(txt) { if (!this.ok) return false; try { const r = await fetch(this.base + '/pont/donnees', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: txt }); return r.ok; } catch (e) { return false; } },
+};
+
+let saveTimer = null, saveState = 'ok';
+function persist(immediate) {
+  clearTimeout(saveTimer); saveState = 'pending'; UI.status();
+  saveTimer = setTimeout(async () => {
+    DB.rev = Date.now();
+    const txt = JSON.stringify(encode(DB));
+    let ok1 = false, ok2 = false;
+    if (HOSTED) { ok1 = await WEB.save(txt); saveState = ok1 ? 'ok' : (WEB.ro ? 'ro' : 'fail'); UI.status(); return; }
+    try { await IDB.put('data', txt); ok1 = !!IDB.db; } catch (e) {}
+    if (PONT.ok) ok2 = await PONT.save(txt);
+    saveState = (ok1 || ok2) ? 'ok' : 'fail'; UI.status();
+  }, immediate ? 10 : (HOSTED ? 2500 : 600));
+}
+async function snapshot(label) { try { await IDB.addSnap(label, JSON.stringify(encode(DB))); } catch (e) {} }
+function journal(type, resume) { DB.journal.unshift({ t: nowStamp(), type, resume }); if (DB.journal.length > 2000) DB.journal.length = 2000; }
+
+/* Opération modifiant les données : instantané (annulable) + journal + réindexation + sauvegarde */
+async function commit(label, type, fn) {
+  if (HOSTED && WEB.ro) { UI.toast('Consultation seule : modification impossible sur ce lien.'); return new Promise(() => {}); }
+  await snapshot('Avant : ' + label);
+  const out = fn();
+  journal(type, typeof out === 'string' ? out : label);
+  reindex(); persist(); return out;
+}
+
+async function boot() {
+  if (HOSTED) {
+    await Promise.all([IDB.open(), WEB.init()]);
+    const r = await fetch('data.json', { cache: 'no-store' }); if (!r.ok) throw new Error('Données en ligne introuvables (data.json).');
+    DB = decode(await r.json()); DB.loadedFrom = 'en ligne'; reindex(); return;
+  }
+  const seed = JSON.parse(document.getElementById('seed').textContent);
+  await IDB.open();
+  await PONT.detect();
+  let best = { raw: seed, from: 'classeur' };
+  const cands = [];
+  try { const t = await IDB.get('data'); if (t) cands.push({ raw: JSON.parse(t), from: 'navigateur' }); } catch (e) {}
+  try { const t = await PONT.load(); if (t) cands.push({ raw: JSON.parse(t), from: 'disque' }); } catch (e) {}
+  for (const c of cands) if ((c.raw.rev || 0) >= (best.raw.rev || 0)) best = c;
+  DB = decode(best.raw); DB.loadedFrom = best.from;
+  if (!DB.journal.length) journal('Initialisation', `Reprise du classeur ${seed.source} : ${DB.lait.length} traites-vache, ${DB.reg.length} vaches, ${DB.ev.length} événements`);
+  reindex();
+  if (best.from === 'classeur') persist(true);
+}
+
+/* ================= Calculs (équivalents des formules Excel) ================= */
+const P = () => DB.param;
+const regCount = st => DB.reg.filter(v => v.statut === st).length;
+
+/* moyenne journalière troupeau des 7 jours précédents (jours réellement saisis) */
+function prev7(d, field = 't') { let s = 0, k = 0; for (let i = 1; i <= 7; i++) { const x = IX.daily.get(d - i); if (x && x.rows) { s += x[field]; k++; } } return k ? s / k : null; }
+/* journée incomplète : pas de traite du soir saisie alors que les 7 jours précédents en ont */
+function incomplete(d) { const x = IX.daily.get(d); if (!x) return false; const ps = prev7(d, 's'); return x.s === 0 && x.m > 0 && ps > 0; }
+
+function cowDay(id, d, mode) {
+  // mode 'm' : comparer la traite du matin seulement (journée incomplète)
+  const r = IX.key.get(d + '|' + id);
+  const val = r ? (mode === 'm' ? r.m : tot(r)) : null;
+  let s = 0, k = 0;
+  for (let i = 1; i <= 7; i++) { const q = IX.key.get((d - i) + '|' + id); if (!q) continue; const v = mode === 'm' ? q.m : tot(q); if (v > 0) { s += v; k++; } }
+  const moy = k ? s / k : null;
+  return { r, val, has: !!r, moy, varr: (r && moy > 0 && val != null) ? val / moy - 1 : null };
+}
+function cowMoy7(id, d) { let s = 0, k = 0; for (let i = 0; i <= 6; i++) { const q = IX.key.get((d - i) + '|' + id); if (q) { s += tot(q) || 0; k++; } } return k ? s / k : null; }
+function jel(v, d) { return (v.statut === 'En lactation' && v.velage) ? d - v.velage : null; }
+function stade(j) { if (j == null) return ''; return j <= 100 ? 'Début ≤100 j' : j <= 200 ? 'Milieu 101-200 j' : j <= 305 ? 'Fin 201-305 j' : 'Prolongée >305 j'; }
+function lastMilk(id) { const a = IX.byCow.get(id); return a && a.length ? a[a.length - 1].d : null; }
+function cumulLact(v, d) { if (!v.velage) return null; const a = IX.byCow.get(v.id) || []; let s = 0; for (const r of a) if (r.d >= v.velage && r.d <= d) s += tot(r) || 0; return s; }
+function retraitsActifs(d) { return DB.ev.filter(e => e.retrait > 0 && e.d <= d && e.d + e.retrait >= d); }
+
+function dayReport(d) {
+  const x = IX.daily.get(d) || { t: 0, m: 0, s: 0, n: 0, rows: 0 };
+  const inc = P().compareEgal && incomplete(d);
+  const mode = inc ? 'm' : 't';
+  const lact = regCount('En lactation'), taries = regCount('Tarie');
+  const p7 = prev7(d), p7m = prev7(d, 'm');
+  const cows = DB.reg.map(v => ({ v, ...cowDay(v.id, d, mode) }));
+  const alerts = [];
+  for (const c of cows) {
+    if (c.v.statut === 'En lactation' && !c.has) alerts.push({ c, kind: 'non', txt: 'Non traite / non saisie' });
+    else if (c.varr != null && c.varr <= -P().seuilBaisse) alerts.push({ c, kind: 'baisse', txt: `Baisse de ${Math.round(-c.varr * 100)} %` });
+  }
+  const milked = cows.filter(c => c.has && tot(c.r) > 0).sort((a, b) => tot(b.r) - tot(a.r));
+  const evs = DB.ev.filter(e => e.d === d);
+  const ret = retraitsActifs(d);
+  const s = IX.smpl.get(d);
+  const races = RACES.map(rc => {
+    const rows = (IX.byDate.get(d) || []).filter(r => (IX.reg.get(r.id)?.race || r.race) === rc);
+    const prod = sum(rows.map(tot)), n = rows.filter(r => tot(r) > 0).length;
+    let s7 = 0, k7 = 0; for (let i = 1; i <= 7; i++) for (const r of (IX.byDate.get(d - i) || [])) if ((IX.reg.get(r.id)?.race || r.race) === rc && tot(r) > 0) { s7 += tot(r); k7++; }
+    const moy = n ? prod / n : null, m7 = k7 ? s7 / k7 : null;
+    return { rc, prod, n, moy, m7, varr: moy && m7 ? moy / m7 - 1 : null };
+  });
+  return { d, x, inc, lact, taries, p7, p7m, prevDay: dayTot(d - 1), cows, alerts, milked, evs, ret, s, races,
+    varJ1: dayTot(d - 1) ? x.t / dayTot(d - 1) - 1 : null,
+    var7: inc ? (p7m ? x.m / p7m - 1 : null) : (p7 ? x.t / p7 - 1 : null) };
+}
+function smplRow(s) {
+  if (!s) return null;
+  const prod = dayTot(s.d) ?? 0;
+  const ecart = (s.livre != null && s.recu != null) ? s.recu - s.livre : null;
+  const ecartP = (ecart != null && s.livre) ? ecart / s.livre : null;
+  const statut = ecartP == null ? (s.livre != null && s.recu == null ? 'Reçu SMPL non saisi' : '') : (Math.abs(ecartP) <= P().seuilSmpl ? 'Conforme' : 'Écart à justifier');
+  const prix = s.prix ?? P().prixLait;
+  return { ...s, prod, ecart, ecartP, statut, nonLivre: s.livre != null ? prod - s.livre : null, tauxLiv: (s.livre != null && prod) ? s.livre / prod : null, prix, montant: prix != null ? ((s.recu != null ? s.recu : (s.livre || 0)) * prix) : null };
+}
+function periodStats(a, b) {
+  let t = 0, m = 0, sS = 0, vj = 0, days = 0, nsum = 0;
+  for (let d = a; d <= b; d++) { const x = IX.daily.get(d); if (!x || !x.rows) continue; days++; t += x.t; m += x.m; sS += x.s; vj += x.n; nsum += x.n; }
+  let livre = 0, recu = 0, refus = 0, nl = 0, hors = 0, montant = 0, recuForEcart = 0, livreForEcart = 0;
+  for (const s0 of DB.smpl) if (s0.d >= a && s0.d <= b) { const s = smplRow(s0); nl++; livre += s.livre || 0; recu += s.recu || 0; refus += s.refus || 0; montant += s.montant || 0; if (s.statut === 'Écart à justifier') hors++; if (s.recu != null && s.livre != null) { recuForEcart += s.recu; livreForEcart += s.livre; } }
+  return { t, m, s: sS, vj, days, moyJ: days ? t / days : null, moyV: vj ? t / vj : null, nMoy: days ? nsum / days : null, livre, recu, refus, nl, hors, montant, ecart: livreForEcart ? recuForEcart - livreForEcart : null, ecartP: livreForEcart ? (recuForEcart - livreForEcart) / livreForEcart : null };
+}
+function cowPeriod(id, a, b) { let t = 0, k = 0; for (const r of (IX.byCow.get(id) || [])) if (r.d >= a && r.d <= b) { const v = tot(r) || 0; t += v; if (v > 0) k++; } return { t, k, moy: k ? t / k : null }; }
+function raceOf(id) { return IX.reg.get(id)?.race || (IX.byCow.get(id)?.[0]?.race) || ''; }
+
+/* ---------- Registre : mise à jour par événement (Enregistrer_Evenement) ---------- */
+function addEvent(e, majRegistre = true) {
+  DB.ev.push(e);
+  const v = DB.reg.find(x => x.id === e.id); if (!v || !majRegistre) return;
+  if (e.type === 'Vêlage') { v.statut = 'En lactation'; v.velage = e.d; v.nbv = (v.nbv || 0) + 1; }
+  else if (e.type === 'Tarissement') v.statut = 'Tarie';
+  else if (e.type === 'Mortalité') { v.statut = 'Morte'; v.sortie = e.d; v.motif = 'Mortalité'; }
+  else if (e.type === 'Sortie / Vente') { v.statut = 'Sortie'; v.sortie = e.d; v.motif = e.detail || ''; }
+}
+function regReintegrer(v, race, dEnt, orig, st, dVel) {
+  let hist = 'Sortie' + (v.sortie ? ' le ' + fd(v.sortie) : '') + (v.motif ? ` (${v.motif})` : '') + ', réintégrée le ' + fd(dEnt) + (v.obs ? ' | ' + v.obs : '');
+  v.obs = hist; v.sortie = null; v.motif = ''; v.entree = dEnt; if (orig) v.origine = orig; if (race) v.race = race;
+  if (dVel != null && (!v.velage || dVel > v.velage)) { v.velage = dVel; v.nbv = (v.nbv || 0) + 1; }
+  v.statut = st;
+}
+/* renvoie [ajoutée?, note] */
+function regAjouter(id, race, dEnt, orig, st, dVel, alias) {
+  const v = DB.reg.find(x => x.id === id);
+  if (v) {
+    if (v.statut === 'Sortie') { regReintegrer(v, race, dEnt, orig, st, dVel); return [true, `${id} : réintégrée (était sortie), statut ${st}`]; }
+    if (v.statut === 'Morte') return [false, `${id} : identifiant d’une vache MORTE, non ajoutée (vérifier le numéro)`];
+    return [false, `${id} : déjà présente dans le registre (${v.statut})`];
+  }
+  DB.reg.push({ id, alias: alias || '', race: race || '', entree: dEnt, origine: orig || '', velage: dVel ?? null, nbv: dVel != null ? 1 : 0, statut: st, sortie: null, motif: '', obs: '' });
+  return [true, `${id} : ajoutée au registre (${st})`];
+}
+function upsertLait(d, id, patch) {
+  let r = IX.key.get(d + '|' + id);
+  if (!r) { r = { d, id, race: raceOf(id), m: null, s: null, t: null, src: '', obs: '', tm: '', hm: '', ts: '', hs: '' }; DB.lait.push(r); IX.key.set(d + '|' + id, r); }
+  Object.assign(r, patch); return r;
+}
+
+/* ================= Graphiques SVG ================= */
+const CH = {
+  nice(max) { if (!(max > 0)) return 1; const p = Math.pow(10, Math.floor(Math.log10(max))); const f = max / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; },
+  /* combo : barres (empilées ou groupées) + lignes ; opts {labels, bars:[{name,values,color}], stacked, lines:[{name,values,color,dash,right}], h, rightMax, goal:{v,label}} */
+  combo(o) {
+    const W = 760, H = o.h || 240, pl = 44, pr = o.lines?.some(l => l.right) ? 44 : 14, pt = 14, pb = 28;
+    const n = o.labels.length, iw = W - pl - pr, ih = H - pt - pb, bw = iw / Math.max(n, 1);
+    const bars = o.bars || [], lines = o.lines || [];
+    let max = 0;
+    for (let i = 0; i < n; i++) { const st = o.stacked ? sum(bars.map(b => b.values[i] || 0)) : Math.max(0, ...bars.map(b => b.values[i] || 0)); max = Math.max(max, st); }
+    for (const l of lines) if (!l.right) max = Math.max(max, ...l.values.filter(v => v != null));
+    if (o.goal) max = Math.max(max, o.goal.v);
+    const top = this.nice(max * 1.08), y = v => pt + ih - (v / top) * ih;
+    const rmax = this.nice(Math.max(1, ...lines.filter(l => l.right).flatMap(l => l.values.filter(v => v != null))) * 1.1), yr = v => pt + ih - (v / rmax) * ih;
+    let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" preserveAspectRatio="xMidYMid meet">`;
+    for (let k = 0; k <= 4; k++) { const v = top * k / 4, yy = y(v); s += `<line class="grid-l" x1="${pl}" x2="${W - pr}" y1="${yy}" y2="${yy}"/><text x="${pl - 6}" y="${yy + 3.5}" text-anchor="end">${nf(v, v < 10 && v % 1 ? 1 : 0)}</text>`; if (lines.some(l => l.right)) s += `<text x="${W - pr + 6}" y="${yy + 3.5}">${nf(rmax * k / 4, 0)}</text>`; }
+    const step = Math.ceil(n / 16);
+    for (let i = 0; i < n; i++) {
+      const x0 = pl + i * bw;
+      if (i % step === 0 || i === n - 1) s += `<text x="${x0 + bw / 2}" y="${H - 9}" text-anchor="middle">${esc(o.labels[i])}</text>`;
+      if (o.stacked) { let acc = 0; for (const b of bars) { const v = b.values[i] || 0; if (v > 0) { const h = (v / top) * ih; s += `<rect x="${x0 + bw * .16}" y="${y(acc + v)}" width="${bw * .68}" height="${Math.max(h, 0)}" rx="${Math.min(5, bw * .3)}" style="fill:${b.color}"><title>${esc(o.labels[i])} · ${esc(b.name)} : ${nf(v)} L</title></rect>`; } acc += v; } }
+      else { const k = bars.length, w = bw * .72 / Math.max(k, 1); bars.forEach((b, j) => { const v = b.values[i]; if (v > 0) s += `<rect x="${x0 + bw * .14 + j * w}" y="${y(v)}" width="${w * .9}" height="${(v / top) * ih}" rx="${Math.min(5, w * .4)}" style="fill:${b.color}"><title>${esc(o.labels[i])} · ${esc(b.name)} : ${nf(v)}</title></rect>`; }); }
+    }
+    if (o.goal) s += `<line x1="${pl}" x2="${W - pr}" y1="${y(o.goal.v)}" y2="${y(o.goal.v)}" style="stroke:var(--warn);stroke-width:1.5" stroke-dasharray="6 5"/><text x="${W - pr - 4}" y="${y(o.goal.v) - 6}" text-anchor="end" style="fill:var(--warn);font-weight:600">${esc(o.goal.label)}</text>`;
+    for (const l of lines) {
+      const yy = l.right ? yr : y; let d = '', area = '', started = false, lastX = 0, firstX = 0;
+      l.values.forEach((v, i) => { if (v == null) return; const X = pl + i * bw + bw / 2, Y = yy(v); if (!started) { firstX = X; d += `M${X},${Y}`; started = true; } else d += `L${X},${Y}`; lastX = X; });
+      if (l.area && started) area = `<path d="${d}L${lastX},${pt + ih}L${firstX},${pt + ih}Z" style="fill:${l.color};opacity:.13"/>`;
+      s += area + `<path d="${d}" style="fill:none;stroke:${l.color};stroke-width:${l.w || 2.2};stroke-linejoin:round;stroke-linecap:round" ${l.dash ? 'stroke-dasharray="5 4"' : ''}/>`;
+      if (l.dots !== false) l.values.forEach((v, i) => { if (v == null) return; const last = i === l.values.length - 1; if (n > 40 && !last) return; s += `<circle cx="${pl + i * bw + bw / 2}" cy="${yy(v)}" r="${last ? 4.5 : 3}" style="fill:var(--surface);stroke:${l.color};stroke-width:2"><title>${esc(o.labels[i])} · ${esc(l.name)} : ${nf(v)}</title></circle>`; });
+    }
+    s += '</svg>';
+    const leg = [...bars.map(b => [b.name, b.color]), ...lines.map(l => [l.name, l.color])];
+    if (o.goal) leg.push([o.goal.label, 'var(--warn)']);
+    return s + `<div class="legend">${leg.map(([n, c]) => `<span><i style="background:${c}"></i>${esc(n)}</span>`).join('')}</div>`;
+  },
+  donut(items, center) {
+    const T = sum(items.map(i => i.v)) || 1, R = 52, C = 2 * Math.PI * R; let off = 0;
+    let s = `<svg viewBox="0 0 140 140" style="width:140px;height:140px;flex:none"><circle cx="70" cy="70" r="${R}" style="fill:none;stroke:var(--surface-2);stroke-width:18"/>`;
+    for (const it of items) { const L = C * it.v / T; s += `<circle cx="70" cy="70" r="${R}" transform="rotate(-90 70 70)" style="fill:none;stroke:${it.c};stroke-width:18" stroke-dasharray="${Math.max(L - 2, 0)} ${C}" stroke-dashoffset="${-off}" stroke-linecap="round"><title>${esc(it.l)} : ${nf(it.v, 0)}</title></circle>`; off += L; }
+    s += `<text x="70" y="68" text-anchor="middle" style="fill:var(--ink);font:700 22px var(--f-num)">${center[0]}</text><text x="70" y="86" text-anchor="middle" style="fill:var(--muted);font-size:10.5px">${center[1]}</text></svg>`;
+    return `<div class="row" style="gap:18px;flex-wrap:nowrap">${s}<div style="display:grid;gap:8px;min-width:0">${items.map(i => `<div style="font-size:12.5px"><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${i.c};margin-right:7px"></i>${esc(i.l)} <b class="num">${nf(i.v, 0)}</b> <span class="tip">${pf(i.v / T, 0)}</span></div>`).join('')}</div></div>`;
+  },
+  hbars(items, unit = 'L') { const mx = Math.max(...items.map(i => i.v), 1); return `<div class="bar-h">${items.map(i => `<div class="r"><span>${esc(i.l)}</span><div class="t"><i style="width:${(i.v / mx * 100).toFixed(1)}%;background:${i.c || 'var(--brand)'}"></i></div><b class="num" style="text-align:right">${nf(i.v, i.dec ?? 1)} ${unit}</b></div>`).join('')}</div>`; },
+  spark(vals, color = 'var(--brand)') { const v = vals.filter(x => x != null); if (v.length < 2) return ''; const mx = Math.max(...v), mn = Math.min(...v), W = 120, H = 34; const pts = vals.map((x, i) => x == null ? null : [i / (vals.length - 1) * W, H - 3 - ((x - mn) / ((mx - mn) || 1)) * (H - 6)]).filter(Boolean); return `<svg viewBox="0 0 ${W} ${H}" style="width:120px;height:34px"><path d="M${pts.map(p => p.join(',')).join('L')}" style="fill:none;stroke:${color};stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/><circle cx="${pts[pts.length - 1][0]}" cy="${pts[pts.length - 1][1]}" r="3" style="fill:${color}"/></svg>`; },
+};
+
+/* ================= KoboToolbox : synchronisation (port fidèle des macros VBA) ================= */
+const KOBO = {
+  cfg() { return { srv: (P().koboServeur || '').replace(/\/+$/, ''), uid: (P().koboUid || '').trim(), tok: (LS.get('token', '') || '').trim() }; },
+  running: false, last: LS.get('koboLast', ''), timer: null,
+  find(o, name) { if (!o || typeof o !== 'object') return undefined; name = name.toLowerCase(); for (const k of Object.keys(o)) { const l = k.toLowerCase(); if (l === name || l.endsWith('/' + name)) return o[k]; } return undefined; },
+  str(v) { return v == null ? '' : String(v).trim(); },
+  tray(v, autre) { let s = this.str(v); if (s.toLowerCase() === 'autre') { s = this.str(autre) || 'Autre'; } else s = s.replace(/_/g, ' '); return s; },
+  type(c) { return ({ velage: 'Vêlage', tarissement: 'Tarissement', chaleur: 'Chaleur', ia: 'Insémination (IA)', diag_gestation: 'Diagnostic gestation', maladie: 'Maladie / Traitement', mammite: 'Mammite', vaccination: 'Vaccination', deparasitage: 'Déparasitage', mortalite: 'Mortalité', sortie: 'Sortie / Vente', entree: 'Entrée' })[this.str(c).toLowerCase()] || 'Autre'; },
+  motif(c) { c = this.str(c).toLowerCase(); if (!c) return ''; return ({ acidite: 'Acidité', densite: 'Densité', alcool: 'Test alcool positif', proprete: 'Propreté', temperature: 'Température', mouillage: 'Mouillage' })[c] || 'Autre'; },
+
+  /* une soumission JSON (API ou export) -> fiche normalisée */
+  parseSub(s) {
+    const f = n => this.find(s, n);
+    const fiche = { idx: this.str(f('_id') ?? f('_index')), uuid: this.str(f('_uuid')), d: parseAnyDate(f('date_traite')), session: this.str(f('session')).toLowerCase(),
+      trayeur: this.tray(f('trayeur'), f('trayeur_autre')), heure: this.str(f('heure_debut')).slice(0, 5), livraison: this.str(f('livraison')).toLowerCase(),
+      bon: this.str(f('n_bon')), livre: num(f('livre_mpe')), recu: num(f('recu_smpl')), refus: num(f('refus')), motif: this.str(f('motif')), dens: num(f('densite')), alcool: this.str(f('test_alcool')).toLowerCase(), traites: [], events: [] };
+    for (const [grp, cid, cl] of [['traite', 'vache_id', 'litres'], ['autres', 'autre_id', 'autre_litres']]) {
+      const arr = f(grp); if (Array.isArray(arr)) for (const e of arr) fiche.traites.push({ id: this.str(this.find(e, cid)).toUpperCase(), L: num(this.find(e, cl)), tray: this.tray(this.find(e, 'trayeur'), this.find(e, 'trayeur_autre')) });
+    }
+    const evs = f('evenements'); if (Array.isArray(evs)) for (const e of evs) { const g = n => this.find(e, n); fiche.events.push({ type: this.type(g('ev_type')), id: this.str(g('ev_id')).toUpperCase(), newid: this.str(g('ev_nouvel_id')).toUpperCase(), race: this.str(g('ev_race')).toUpperCase(), statut: this.str(g('ev_statut')).toLowerCase(), velage: parseAnyDate(g('ev_velage')), detail: this.str(g('ev_detail')), trait: this.str(g('ev_traitement')), retrait: num(g('ev_retrait')), rappel: parseAnyDate(g('ev_rappel')) }); }
+    return fiche;
+  },
+
+  /* Kobo_Ecrire : intègre des fiches ; ignore les UUID déjà importés */
+  integrate(fiches, origine) {
+    const deja = new Set(DB.kobolog.map(k => k.uuid)); const parents = new Set();
+    const src = 'Kobo ' + nowStamp(); const notes = [];
+    let nNew = 0, nSkip = 0, nLig = 0, nSm = 0, nEv = 0;
+    for (const F of fiches) {
+      if (F.d == null) continue;
+      if (F.uuid && deja.has(F.uuid)) { nSkip++; continue; }
+      if (parents.has(F.idx + '|' + F.uuid)) continue; parents.add(F.idx + '|' + F.uuid);
+      nNew++; let nv = 0, tt = 0, ne = 0;
+      if (F.livraison === 'oui') {
+        let s = DB.smpl.find(x => x.d === F.d); if (!s) { s = { d: F.d, bon: '', livre: null, recu: null, refus: null, motif: '', dens: null, alcool: '', obs: '', prix: null }; DB.smpl.push(s); }
+        if (F.bon) s.bon = F.bon; if (F.livre != null) s.livre = F.livre; if (F.recu != null) s.recu = F.recu; if (F.refus != null) s.refus = F.refus;
+        if (F.motif) s.motif = this.motif(F.motif); if (F.dens != null) s.dens = F.dens; if (F.alcool) s.alcool = F.alcool === 'positif' ? 'Positif' : 'Négatif';
+        s.obs = 'Kobo – ' + F.trayeur; if (P().prixLait != null) s.prix = P().prixLait; nSm++;
+      }
+      for (const t of F.traites) {
+        if (!t.id || t.L == null) continue;
+        const tr = t.tray || F.trayeur;
+        const r = upsertLait(F.d, t.id, {});
+        if (!r.src) r.src = src;
+        if (F.session === 'matin') { r.m = t.L; r.tm = tr; r.hm = F.heure; } else { r.s = t.L; r.ts = tr; r.hs = F.heure; }
+        if (!r.race) r.race = raceOf(t.id);
+        nv++; tt += t.L; nLig++;
+      }
+      for (const e of F.events) {
+        let id = e.id;
+        if (e.type === 'Entrée') {
+          id = e.newid;
+          const st = e.statut === 'tarie' ? 'Tarie' : 'En lactation';
+          if (id) { const [ok, note] = regAjouter(id, e.race, F.d, e.detail, st, e.velage); notes.push(note); if (ok && e.velage != null) addEvent({ d: e.velage, id, type: 'Vêlage', detail: '', trait: '', retrait: null, rappel: null, obs: '', src }, false); }
+        }
+        if (id) { addEvent({ d: F.d, id, type: e.type, detail: e.detail, trait: e.trait, retrait: e.retrait, rappel: e.rappel, obs: F.trayeur ? 'Trayeur : ' + F.trayeur : '', src }); ne++; nEv++; }
+      }
+      DB.kobolog.push({ uuid: F.uuid, d: F.d, session: F.session, trayeur: F.trayeur, heure: F.heure, nv, total: r3(tt), livre: F.livraison === 'oui' ? F.livre : null, nev: ne, at: nowStamp(), via: origine });
+    }
+    return { nNew, nSkip, nLig, nSm, nEv, notes, resume: `${nNew} fiche(s), ${nLig} traite(s) vache, ${nSm} livraison(s) SMPL, ${nEv} événement(s)` + (nSkip ? ` · ${nSkip} déjà importée(s)` : '') + (notes.length ? ' · Registre : ' + notes.join(' ; ') : '') };
+  },
+
+  /* ---- réseau : via le pont local (CORS) ou en direct ---- */
+  async http(method, path, body) {
+    if (!PONT.ok) { await PONT.detect(); UI.status(); }
+    const { srv, tok } = this.cfg();
+    const headers = { Authorization: 'Token ' + tok, Accept: 'application/json' };
+    if (body) headers['Content-Type'] = 'application/json';
+    let url;
+    if (PONT.ok) { url = PONT.base + '/kobo' + path; headers['X-Kobo-Server'] = srv; }
+    else url = srv + path;
+    let r;
+    try { r = await fetch(url, { method, headers, body: body ? JSON.stringify(body) : undefined }); }
+    catch (e) { const err = new Error(PONT.ok ? 'Le pont local ne répond plus : la fenêtre noire « El Behgua - pont local » a peut-être été fermée. Relancer « Lancer_El_Behgua.bat ».' : PONT_AIDE()); err.code = 0; throw err; }
+    const txt = await r.text(); let js = null; try { js = JSON.parse(txt); } catch (e) {}
+    if (!r.ok) { const err = new Error(this.msg(r.status, js?.detail || txt.slice(0, 160))); err.code = r.status; throw err; }
+    return js;
+  },
+  msg(st, extra) { if (st === 401 || st === 403) return `Accès refusé (${st}) : vérifier la clé API et les droits du compte sur le projet.`; if (st === 404) return 'Projet introuvable (404) : vérifier l’identifiant du projet (UID).'; if (st === 502) return 'Serveur Kobo injoignable depuis le pont : vérifier la connexion internet. ' + (extra || ''); return `Erreur du serveur Kobo (code ${st}). ${extra || ''}`; },
+  check() { const c = this.cfg(); if (!c.srv || !c.uid || !c.tok) throw new Error('Liaison Kobo non configurée : renseigner le serveur, l’UID du projet et la clé API (page KoboToolbox).'); return c; },
+  async test() { const c = this.check(); const js = await this.http('GET', `/api/v2/assets/${c.uid}/?format=json`); return { name: js.name, count: js.deployment__submission_count, deployed: js.has_deployment }; },
+  async fetchNew(fromId) {
+    const c = this.check(); const out = []; let maxId = fromId;
+    let path = `/api/v2/assets/${c.uid}/data/?format=json&limit=300&sort=${encodeURIComponent('{"_id":1}')}&query=${encodeURIComponent(JSON.stringify({ _id: { $gt: fromId } }))}`;
+    for (let p = 0; p < 200 && path; p++) {
+      const js = await this.http('GET', path);
+      for (const s of (js.results || [])) { out.push(this.parseSub(s)); const id = +this.find(s, '_id'); if (id > maxId) maxId = id; }
+      path = js.next ? js.next.replace(/^https?:\/\/[^/]+/, '') : null;
+    }
+    return { fiches: out, maxId };
+  },
+  async sync(silent) {
+    if (this.running) return; this.running = true; UI.status();
+    try {
+      const { fiches, maxId } = await this.fetchNew(P().koboLastId || 0);
+      if (!fiches.length) { this.last = nowStamp() + ' · à jour (aucune nouvelle fiche)'; if (!silent) UI.toast('Synchronisation terminée : aucune nouvelle fiche sur Kobo.'); }
+      else {
+        let res;
+        await commit('Synchronisation Kobo', 'Synchro Kobo', () => { res = this.integrate(fiches, 'API'); P().koboLastId = maxId; return 'Synchro Kobo : ' + res.resume; });
+        this.last = nowStamp() + ' · ' + res.resume;
+        UI.toast('Kobo : ' + res.resume); if (res.notes.length) UI.modal('Registre des vaches', `<p>${res.notes.map(esc).join('<br>')}</p><p class="tip">Pensez à publier les listes sur Kobo.</p>`);
+        UI.refresh();
+      }
+    } catch (e) { this.last = nowStamp() + ' · ÉCHEC : ' + e.message; if (!silent) UI.modal('Synchronisation Kobo', `<p>${esc(e.message)}</p>`); }
+    finally { LS.set('koboLast', this.last); this.running = false; UI.status(); if (location.hash === '#kobo') UI.refresh(); }
+  },
+  schedule() { clearInterval(this.timer); const mn = +P().koboSyncMin || 0; if (mn > 0 && LS.get('autoSync', true)) this.timer = setInterval(() => { if (this.cfg().tok) this.sync(true); }, mn * 60000); },
+
+  /* ---- import manuel : JSON collé / fichier JSON / export Excel Kobo ---- */
+  importJsonText(txt) {
+    let js; try { js = JSON.parse(txt); } catch (e) { throw new Error('Texte non reconnu : coller le contenu JSON complet de la page Kobo (commence par { ).'); }
+    const arr = Array.isArray(js) ? js : (js.results || []);
+    if (!arr.length) throw new Error('Aucune fiche trouvée dans ce contenu.');
+    return arr.map(s => this.parseSub(s));
+  },
+  async importXlsx(file) {
+    const X = await loadXLSX(); const wb = X.read(await file.arrayBuffer(), { type: 'array', cellDates: true });
+    const rows = n => { const ws = wb.Sheets[n]; return ws ? X.utils.sheet_to_json(ws, { defval: '' }) : []; };
+    const main = rows(wb.SheetNames[0]); if (!main.length || this.find(main[0], 'date_traite') === undefined) throw new Error('Fichier non reconnu : exporter depuis Kobo au format XLS avec « Valeurs et en-têtes XML ».');
+    const sheet = n => wb.SheetNames.find(s => s.toLowerCase() === n || s.toLowerCase().endsWith('/' + n) || s.toLowerCase().startsWith(n));
+    const kids = { traite: rows(sheet('traite')), autres: rows(sheet('autres')), evenements: rows(sheet('evenements')) };
+    return main.map(m => { const idx = this.str(this.find(m, '_index')); const sub = { ...m }; for (const k of Object.keys(kids)) sub[k] = kids[k].filter(c => this.str(this.find(c, '_parent_index')) === idx); return this.parseSub(sub); });
+  },
+  dataUrl() { const c = this.cfg(); return `${c.srv}/api/v2/assets/${c.uid}/data/?format=json&limit=1000&query=${encodeURIComponent(JSON.stringify({ _id: { $gt: P().koboLastId || 0 } }))}`; },
+
+  /* ---- listes CSV pour le formulaire (vaches.csv, vaches_toutes.csv, trayeurs.csv) ---- */
+  lists() {
+    const lact = DB.reg.filter(v => v.statut === 'En lactation'); let k = 0;
+    const t1 = 'name,label,rang,race,nb\r\n' + lact.map(v => `${v.id},${v.id} - ${v.race},${++k},${v.race},${lact.length}`).join('\r\n') + '\r\n';
+    const t2 = 'name,label\r\n' + DB.reg.filter(v => v.statut === 'En lactation' || v.statut === 'Tarie').map(v => `${v.id},${v.id} - ${v.race} - ${v.statut}`).join('\r\n') + '\r\n';
+    const t3 = 'name,label\r\n' + P().trayeurs.filter(Boolean).map(n => `${n.replace(/ /g, '_').replace(/,/g, '')},${n.replace(/,/g, '')}`).join('\r\n') + '\r\nautre,Autre (écrire le nom) / أخرى\r\n';
+    return { n: lact.length, files: [['vaches.csv', t1], ['vaches_toutes.csv', t2], ['trayeurs.csv', t3]] };
+  },
+  async publishLists() {
+    const c = this.check(); const L = this.lists(); const base = `/api/v2/assets/${c.uid}`;
+    const ex = await this.http('GET', `${base}/files/?file_type=form_media&format=json&limit=200`);
+    for (const f of (ex.results || [])) { const fn = (f.metadata?.filename || '').toLowerCase(); if (['vaches.csv', 'vaches_toutes.csv', 'trayeurs.csv'].includes(fn)) await this.http('DELETE', `${base}/files/${f.uid}/`); }
+    for (const [fn, txt] of L.files) await this.http('POST', `${base}/files/?format=json`, { description: 'default', file_type: 'form_media', metadata: { filename: fn }, base64Encoded: 'data:text/csv;base64,' + btoa(unescape(encodeURIComponent(txt))) });
+    const a = await this.http('GET', `${base}/?format=json`);
+    await this.http('PATCH', `${base}/deployment/?format=json`, { active: true, version_id: a.version_id });
+    return L.n;
+  },
+};
+let XLSXlib = null;
+function loadXLSX() { if (window.XLSX) return Promise.resolve(window.XLSX); if (XLSXlib) return XLSXlib; XLSXlib = new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload = () => res(window.XLSX); s.onerror = () => { XLSXlib = null; rej(new Error('Bibliothèque Excel non chargée : une connexion internet est nécessaire pour lire/écrire un fichier Excel.')); }; document.head.appendChild(s); }); return XLSXlib; }
+function PONT_AIDE() {
+  const fichier = location.protocol === 'file:';
+  return (fichier
+    ? 'L’application est ouverte directement depuis le fichier (' + decodeURIComponent(location.pathname).split('/').slice(-2).join('/') + ') et le pont local n’a pas été trouvé.'
+    : 'Le pont local n’a pas été trouvé à l’adresse http://localhost:8787.') +
+    '\n\nKoboToolbox refuse les connexions venant directement d’une page web : le pont est indispensable pour la synchronisation automatique.' +
+    '\n\n1. Vérifier que le dossier a été extrait du .zip (clic droit sur le zip › Extraire tout), et non ouvert dans le zip.' +
+    '\n2. Double-cliquer « Lancer_El_Behgua.bat » : une fenêtre noire doit rester ouverte avec « Pont El Behgua actif ».' +
+    '\n3. Travailler dans l’onglet qui s’ouvre à l’adresse http://localhost:8787.' +
+    '\n\nSi la fenêtre noire se ferme aussitôt ou affiche une erreur, en faire une capture. En attendant, l’import manuel ci-dessous fonctionne sans le pont.';
+}
+
+/* ================= Interface : coque, navigation, tableau de bord, saisie, bulletins ================= */
+const IC = {
+  home: '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/>',
+  day: '<rect x="3" y="5" width="18" height="16" rx="4"/><path d="M8 3v4M16 3v4M3 10h18"/><circle cx="12" cy="15" r="2"/>',
+  week: '<rect x="3" y="5" width="18" height="16" rx="4"/><path d="M8 3v4M16 3v4M3 10h18M7 15h10"/>',
+  month: '<rect x="3" y="5" width="18" height="16" rx="4"/><path d="M8 3v4M16 3v4M3 10h18M7 14h2M11 14h2M15 14h2M7 17h2M11 17h2"/>',
+  cow: '<path d="M5 8c0-2 1-4 3-4M19 8c0-2-1-4-3-4"/><path d="M6 8h12v5a6 6 0 0 1-12 0z"/><circle cx="10" cy="12" r=".8"/><circle cx="14" cy="12" r=".8"/><path d="M10 16h4"/>',
+  herd: '<circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 8 1 8 5"/>',
+  db: '<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  feed: '<path d="M12 21V9M12 9c0-3 2-6 6-6 0 4-3 6-6 6zM12 13c0-3-2-6-6-6 0 4 3 6 6 6z"/>',
+  sync: '<path d="M20 11a8 8 0 0 0-14-5l-2 2M4 13a8 8 0 0 0 14 5l2-2"/><path d="M4 4v4h4M20 20v-4h-4"/>',
+  cog: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
+  hist: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 3"/>',
+  check: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+  alert: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+  drop: '<path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/>',
+  truck: '<path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+  print: '<path d="M6 9V3h12v6M6 18H4v-7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/>',
+  chat: '<path d="M4 20l1.5-4A8 8 0 1 1 9 19z"/>',
+  left: '<path d="M15 5l-7 7 7 7"/>', right: '<path d="M9 5l7 7-7 7"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', down: '<path d="M12 4v12M6 10l6 6 6-6M4 20h16"/>', up: '<path d="M12 20V8M6 14l6-6 6 6M4 4h16"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>', moon: '<path d="M20 15A8 8 0 1 1 9 4a7 7 0 0 0 11 11z"/>', trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+};
+const ic = (n, cls = '') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n] || ''}</svg>`;
+const NAV = [
+  ['Pilotage', [['accueil', 'Tableau de bord', 'home'], ['saisie', 'Saisie du jour', 'edit']]],
+  ['Bulletins', [['jour', 'Bulletin journalier', 'day'], ['semaine', 'Bulletin hebdomadaire', 'week'], ['mois', 'Bulletin mensuel', 'month'], ['vache', 'Fiche vache', 'cow']]],
+  ['Données', [['troupeau', 'Registre du troupeau', 'herd'], ['bases', 'Bases de données', 'db'], ['alim', 'Coûts alimentaires', 'feed'], ['qualite', 'Contrôle qualité', 'check']]],
+  ['Système', [['kobo', 'KoboToolbox', 'sync'], ['historique', 'Historique & sauvegardes', 'hist'], ['param', 'Paramètres', 'cog']]],
+];
+const ST = { jour: null, sem: null, mois: null, vache: null, saisie: null, bases: 'lait', bq: '', bfrom: '', bto: '', bpage: 0, tq: '', tst: 'actives', trace: '' };
+const PAGES = {};
+const ACT = {};
+
+const UI = {
+  toast(t) { const el = document.createElement('div'); el.className = 'toast'; el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 3800); },
+  modal(title, body, actions = '') { const s = document.createElement('div'); s.className = 'scrim'; s.innerHTML = `<div class="modal" role="dialog" aria-modal="true"><h3>${esc(title)}</h3>${body}<div class="row end" style="margin-top:16px">${actions}<button class="btn" data-act="close">Fermer</button></div></div>`; s.addEventListener('click', e => { if (e.target === s) s.remove(); }); document.body.appendChild(s); return s; },
+  confirm(title, msg, label, fn) { const m = this.modal(title, `<p>${msg}</p>`, `<button class="btn primary" id="cfm-ok">${esc(label)}</button>`); $('#cfm-ok', m).onclick = () => { m.remove(); fn(); }; },
+  status() {
+    const el = $('#status'); if (!el) return;
+    if (HOSTED) { el.innerHTML = (STATIC ? '<span class="pill brand"><span class="dot"></span>Site public · consultation</span>' : WEB.ro ? '<span class="pill"><span class="dot"></span>Consultation seule</span>' : saveState === 'pending' ? '<span class="pill warn"><span class="dot"></span>Enregistrement…</span>' : saveState === 'fail' ? '<span class="pill bad"><span class="dot"></span>Non enregistré</span>' : '<span class="pill ok"><span class="dot"></span>Enregistré en ligne</span>') + `<span class="pill ${P().syncCloudOk === false ? 'bad' : 'brand'}" title="${esc(P().syncCloud || '')}"><span class="dot"></span>Kobo : ${esc((P().syncCloud || 'en attente').split(' · ')[0])}</span>`; return; }
+    const sv = saveState === 'ok' ? `<span class="pill ok"><span class="dot"></span>Enregistré ${PONT.ok ? 'sur le disque' : 'dans le navigateur'}</span>` : saveState === 'pending' ? '<span class="pill warn"><span class="dot"></span>Enregistrement…</span>' : '<span class="pill bad"><span class="dot"></span>Non enregistré : exporter une sauvegarde</span>';
+    const kb = KOBO.running ? '<span class="pill brand"><span class="dot"></span>Synchronisation Kobo…</span>' : `<span class="pill ${PONT.ok ? 'ok' : ''}" title="${esc(KOBO.last)}"><span class="dot"></span>${PONT.ok ? 'Pont Kobo actif' : 'Kobo : import manuel'}</span>`;
+    el.innerHTML = sv + kb;
+  },
+  nav() {
+    const cur = (location.hash || '#accueil').slice(1);
+    $('#nav').innerHTML = NAV.map(([sec, items], si) => `<div class="nav-sec">${sec}</div><div class="tiles">` + items.map(([k, l, i], j) => `<a href="#${k}" class="tile t${(si + j) % 4} ${cur === k ? 'on' : ''}"><span class="ti">${ic(i)}</span><span>${l}</span></a>`).join('') + '</div>').join('');
+    const dock = [['accueil', 'Accueil', 'home'], ['saisie', 'Saisie', 'edit'], ['jour', 'Jour', 'day'], ['semaine', 'Semaine', 'week'], ['mois', 'Mois', 'month'], ['vache', 'Vache', 'cow'], ['troupeau', 'Troupeau', 'herd']];
+    $('#dock').innerHTML = dock.map(([k, l, i]) => `<a href="#${k}" class="${cur === k ? 'on' : ''} d-${k}" aria-label="${l}">${ic(i)}<span>${l}</span></a>`).join('') + `<button data-act="menu" class="${dock.some(d => d[0] === cur) ? '' : 'on'}" aria-label="Toutes les pages">${ic('grid')}<span>Plus</span></button>`;
+  },
+  refresh() {
+    const cur = (location.hash || '#accueil').slice(1); const pg = PAGES[cur] || PAGES.accueil;
+    this.nav(); $('#sheet').hidden = true; document.body.classList.remove('locked');
+    const [title, sub, actions, body] = pg();
+    $('#page-title').textContent = title; $('#page-sub').innerHTML = sub || ''; $('#page-actions').innerHTML = actions || ''; $('#view').innerHTML = body;
+    document.title = 'El Behgua · ' + title;
+    this.status();
+  },
+};
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-act]'); if (!a) return;
+  const n = a.dataset.act;
+  if (n === 'close') { a.closest('.scrim')?.remove(); return; }
+  if (ACT[n]) { e.preventDefault(); ACT[n](a, e); }
+});
+document.addEventListener('change', e => { const a = e.target.closest('[data-chg]'); if (a && ACT[a.dataset.chg]) ACT[a.dataset.chg](a, e); });
+document.addEventListener('input', e => { const a = e.target.closest('[data-inp]'); if (a && ACT[a.dataset.inp]) ACT[a.dataset.inp](a, e); });
+window.addEventListener('hashchange', () => { UI.refresh(); window.scrollTo(0, 0); });
+ACT.menu = () => { const s = $('#sheet'); s.hidden = !s.hidden; document.body.classList.toggle('locked', !s.hidden); };
+IC.grid = '<rect x="4" y="4" width="7" height="7" rx="2.5"/><rect x="13" y="4" width="7" height="7" rx="2.5"/><rect x="4" y="13" width="7" height="7" rx="2.5"/><rect x="13" y="13" width="7" height="7" rx="2.5"/>';
+IC.x = '<path d="M6 6l12 12M18 6L6 18"/>';
+/* Bouteille de lait : jauge de l’objectif (remplissage = moyenne 7 j / objectif) */
+function milkBottle(pct) {
+  const p = Math.max(0, Math.min(100, pct || 0)), top = 30, bot = 196, y = bot - (bot - top) * p / 100;
+  const wave = (yy, amp) => { let d = `M-160 ${yy}`; for (let x = -160; x < 320; x += 40) d += ` q10 ${-amp} 20 0 t20 0`; return d + ` V220 H-160 Z`; };
+  return `<svg class="bottle" viewBox="0 0 140 210" role="img" aria-label="Objectif atteint à ${Math.round(p)} %"><defs><clipPath id="bclip"><path d="M50 8h40v22c0 6 6 10 14 18 9 9 14 18 14 32v104c0 12-8 20-20 20H42c-12 0-20-8-20-20V80c0-14 5-23 14-32 8-8 14-12 14-18z"/></clipPath><linearGradient id="milkg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" style="stop-color:var(--milk-top)"/><stop offset="1" style="stop-color:var(--milk-bot)"/></linearGradient></defs>
+  <g clip-path="url(#bclip)"><rect x="0" y="0" width="140" height="210" style="fill:var(--glass-2)"/><path class="wv w2" d="${wave(y + 2, 5)}" style="fill:var(--milk-bot);opacity:.45"/><path class="wv w1" d="${wave(y, 6)}" style="fill:url(#milkg)"/>
+  ${[25, 50, 75].map(t => { const yy = bot - (bot - top) * t / 100; return `<line x1="22" x2="34" y1="${yy}" y2="${yy}" style="stroke:var(--ink);opacity:.25;stroke-width:1.5"/><text x="38" y="${yy + 3.5}" style="fill:var(--ink);opacity:.45;font:600 9px var(--f-ui)">${t}%</text>`; }).join('')}</g>
+  <path d="M50 8h40v22c0 6 6 10 14 18 9 9 14 18 14 32v104c0 12-8 20-20 20H42c-12 0-20-8-20-20V80c0-14 5-23 14-32 8-8 14-12 14-18z" style="fill:none;stroke:var(--brand);stroke-width:3"/><rect x="46" y="2" width="48" height="12" rx="6" style="fill:var(--brand)"/>
+  <text x="70" y="${Math.min(y + 30, 186)}" text-anchor="middle" style="fill:var(--on-milk);font:800 26px var(--f-num)">${Math.round(p)}%</text></svg>`;
+}
+ACT.theme = () => { const r = document.documentElement; const dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; r.dataset.theme = dark ? 'light' : 'dark'; LS.set('theme', r.dataset.theme); };
+ACT.print = () => window.print();
+ACT.go = a => { location.hash = a.dataset.to; };
+
+/* ---------- petits blocs ---------- */
+const kpi = (label, val, unit = '', extra = '', cls = '') => `<div class="kpi ${cls}"><span>${label}</span><b>${val}${unit ? `<small>${unit}</small>` : ''}</b>${extra ? `<em>${extra}</em>` : ''}</div>`;
+const card = (n, title, body, right = '', hint = '') => `<section class="card">${title ? `<h2>${n ? `<span class="n">${n}</span>` : ''}${title}<span class="sp"></span>${right}</h2>` : ''}${hint ? `<p class="hint">${hint}</p>` : ''}${body}</section>`;
+const tbl = (head, rows, foot = '') => `<div class="tbl-wrap"><table><thead><tr>${head.map(h => `<th class="${h[1] || ''}">${h[0]}</th>`).join('')}</tr></thead><tbody>${rows.join('') || `<tr><td colspan="${head.length}"><div class="empty">Aucune donnée pour cette période.</div></td></tr>`}</tbody>${foot}</table></div>`;
+const raceTag = r => r ? `<span class="tag ${esc(r)}">${esc(r)}</span>` : '';
+const stTag = s => `<span class="tag ${({ 'En lactation': 'lact', 'Tarie': 'tarie', 'Sortie': 'sortie', 'Morte': 'morte' })[s] || ''}">${esc(s)}</span>`;
+const cowLink = id => `<a href="#vache" data-act="openCow" data-id="${esc(id)}">${esc(id)}</a>`;
+ACT.openCow = a => { ST.vache = a.dataset.id; location.hash = 'vache'; UI.refresh(); };
+const docHead = (ar, fr, period) => `<div class="doc-head"><div><div class="ar">الموريتانية للمنتجات الحيوانية – مزرعة الأبقار الحلوب · ${ar}</div><h2>${fr}</h2><small>${esc(P().ferme)} · MPE – La Mauritanienne des Produits de l’Élevage</small></div><div style="text-align:right"><div style="font-size:18px;font-weight:600">${period}</div><small>Édité le ${fd(today())}</small></div></div>`;
+const notesBlock = key => card('', 'Observations / actions correctives', `<textarea class="inp" id="note-${esc(key)}" data-inp="note" data-key="${esc(key)}" placeholder="Écrire ici les constats, décisions et actions à mener…">${esc(DB.notes[key] || '')}</textarea><div class="sign" style="margin-top:14px"><div>Le Chef de ferme<br>Signature :</div><div>Le Directeur Technique<br>Signature :</div></div>`);
+ACT.note = a => { if (HOSTED && WEB.ro) return; DB.notes[a.dataset.key] = a.value; persist(); };
+const navPeriod = (prev, label, next, input) => `<div class="row noprint"><button class="icon-btn" data-act="${prev}" aria-label="Période précédente">${ic('left')}</button>${input}<button class="icon-btn" data-act="${next}" aria-label="Période suivante">${ic('right')}</button>${label}</div>`;
+const printBtns = (wa) => `<button class="btn primary" data-act="pdf">${ic('down')}Télécharger le PDF</button>${HOSTED && !STATIC ? '' : `<button class="btn" data-act="print">${ic('print')}Imprimer</button>`}${wa ? `<button class="btn" data-act="${wa}">${ic('chat')}Résumé WhatsApp</button>` : ''}`;
+function waModal(txt) { const m = UI.modal('Résumé pour WhatsApp', `<div class="wa" id="wa-txt">${esc(txt)}</div><p class="tip">Copier puis coller dans le groupe WhatsApp, ou ouvrir WhatsApp directement.</p>`, `<a class="btn" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(txt)}">${ic('chat')}Ouvrir WhatsApp</a><button class="btn primary" id="wa-copy">Copier</button>`); $('#wa-copy', m).onclick = async () => { try { await navigator.clipboard.writeText(txt); UI.toast('Résumé copié.'); } catch (e) { const r = document.createRange(); r.selectNodeContents($('#wa-txt', m)); getSelection().removeAllRanges(); getSelection().addRange(r); UI.toast('Texte sélectionné : Ctrl+C pour copier.'); } }; }
+
+/* ================= Tableau de bord ================= */
+PAGES.accueil = () => {
+  const d = IX.last, R = dayReport(d), x = R.x, obj = +P().objectif || 0;
+  const days = []; for (let i = 59; i >= 0; i--) days.push(d - i);
+  const m7 = days.map(dd => { let s = 0, k = 0; for (let i = 0; i < 7; i++) { const v = dayTot(dd - i); if (v != null) { s += v; k++; } } return k ? s / k : null; });
+  const ref7 = R.inc ? null : m7[m7.length - 1];
+  const best = Math.max(...days.map(dd => dayTot(dd) || 0));
+  const pct = obj ? Math.min(100, (ref7 ?? prev7(d)) / obj * 100) : 0;
+  const ms = monthStart(d), M = periodStats(ms, d), Mp = periodStats(addMonths(ms, -1), monthEnd(addMonths(ms, -1)));
+  const tasks = [];
+  if (R.inc) tasks.push(['warn', 'alert', 'Traite du soir non saisie', `Le ${fd(d)} ne contient que la traite du matin. Les comparaisons sont faites à traite égale.`]);
+  const nonT = R.alerts.filter(a => a.kind === 'non'), bas = R.alerts.filter(a => a.kind === 'baisse');
+  if (nonT.length) tasks.push(['bad', 'cow', `${nonT.length} vache(s) en lactation sans traite`, nonT.slice(0, 12).map(a => a.c.v.id).join(', ') + (nonT.length > 12 ? '…' : '')]);
+  if (bas.length) tasks.push(['warn', 'trend', `${bas.length} baisse(s) ≥ ${pf(P().seuilBaisse, 0)} vs moyenne 7 j`, bas.sort((a, b) => a.c.varr - b.c.varr).slice(0, 10).map(a => `${a.c.v.id} (${Math.round(a.c.varr * 100)} %)`).join(', ')]);
+  if (R.ret.length) tasks.push(['bad', 'drop', `${R.ret.length} vache(s) sous délai d’attente : lait à écarter`, R.ret.map(e => `${e.id} jusqu’au ${fd(e.d + e.retrait)}`).join(', ')]);
+  const late = DB.reg.filter(v => v.statut === 'En lactation' && jel(v, d) > 305);
+  if (late.length) tasks.push(['info', 'info', `${late.length} vache(s) à plus de 305 jours de lactation`, 'Envisager le tarissement : ' + late.slice(0, 12).map(v => v.id).join(', ') + (late.length > 12 ? '…' : '')]);
+  const rap = DB.ev.filter(e => e.rappel != null && e.rappel >= today() && e.rappel <= today() + 7);
+  if (rap.length) tasks.push(['info', 'day', `${rap.length} rappel(s) dans les 7 prochains jours`, rap.map(e => `${e.id} · ${e.type} le ${fd(e.rappel)}`).join(', ')]);
+  const smplMiss = DB.smpl.filter(s => s.livre != null && s.recu == null).length;
+  if (smplMiss) tasks.push(['warn', 'truck', `${smplMiss} livraison(s) SMPL sans quantité reçue`, 'Saisir la quantité du bon de réception SMPL (base SMPL).']);
+  if (!tasks.length) tasks.push(['ok', 'check', 'Rien à signaler', 'Aucune alerte sur la dernière journée.']);
+  const raceItems = R.races.map((r, i) => ({ l: r.rc, v: r.prod, c: ['var(--brand)', 'var(--matin)', 'var(--soir)'][i] }));
+  return ['Tableau de bord', `Dernière journée saisie : <b>${fdLong(d)}</b> · ${nf(DB.lait.length, 0)} traites-vache depuis le ${fd(IX.first)}`, printBtns(),
+  `${R.inc ? `<div class="banner">${ic('alert')}<div><b>Journée du ${fd(d)} incomplète :</b> seule la traite du matin est enregistrée. Les variations et alertes comparent le matin à la moyenne des matins.</div></div>` : ''}
+  <div class="hero-band section"><div class="hb-l"><span class="eyebrow">${esc(fdLong(d))}</span><div class="hb-num">${nf(x.t)}<small> litres</small></div><div class="hb-sub">${x.n} vaches traites · ${deltaHtml(R.var7)} vs moyenne 7 jours${R.inc ? ' · traite du soir à venir' : ''}</div></div><div class="hb-r">${CH.spark(days.slice(-21).map(dayTot), 'var(--hb-ink)').replace('<svg ', '<svg preserveAspectRatio="none" ').replace('style="width:120px;height:34px"', 'style="width:100%;height:70px"').replace('stroke-width:2;', 'stroke-width:2.5;vector-effect:non-scaling-stroke;')}<span class="eyebrow">21 derniers jours</span></div></div>
+  <div class="section"><div class="kpis k6">
+    ${kpi('Production de la veille', nf(R.prevDay), 'L', `${fdShort(d - 1)} · ${deltaHtml(R.varJ1)} vs veille`, 'hero')}
+    ${kpi('Traite matin', nf(x.m), 'L', `${x.nm} vaches`)}
+    ${kpi('Traite soir', nf(x.s), 'L', `${x.ns} vaches`)}
+    ${kpi('Vaches traites', x.n, '', `sur ${R.lact} en lactation`)}
+    ${kpi('Moyenne / vache', nf(x.n ? x.t / x.n : null, 2), 'L', R.inc ? 'matin seul' : '')}
+    ${kpi('Moy. 7 jours', nf(R.p7), 'L/j', `record 60 j : ${nf(best)} L`)}
+  </div></div>
+  <div class="grid g-main section">
+    ${card('', 'Production des 60 derniers jours', CH.combo({ labels: days.map(fdShort), bars: [{ name: 'Matin', values: days.map(dd => IX.daily.get(dd)?.m || 0), color: 'var(--matin)' }, { name: 'Soir', values: days.map(dd => IX.daily.get(dd)?.s || 0), color: 'var(--soir)' }, { name: 'Total jour (historique sans détail)', values: days.map(dd => { const q = IX.daily.get(dd); return q ? q.t - q.m - q.s : 0; }), color: 'var(--brand)' }], stacked: true, lines: [{ name: 'Moyenne mobile 7 j', values: m7, color: 'var(--ink)', dots: false, w: 2 }], goal: obj ? { v: obj, label: `Objectif ${obj} L/j` } : null, h: 260 }))}
+    ${card('', 'Objectif de production', `<div class="goal">${milkBottle(pct)}<div style="display:grid;gap:10px;min-width:0"><div><span class="tip">Objectif</span><br><b style="font:700 22px var(--f-num)">${nf(obj, 0)} L/j</b> <span class="tip">d’ici le ${fd(fromIso(P().objectifDate))}</span></div><div><span class="tip">Moyenne actuelle (7 j)</span><br><b class="num">${nf(ref7 ?? R.p7)} L/j</b></div><div><span class="tip">Écart à combler</span><br><b class="num">${nf(obj - (ref7 ?? R.p7))} L/j</b> · soit ${nf(x.n ? (obj - (ref7 ?? R.p7)) / Math.max(R.lact, 1) : null, 2)} L de plus par vache en lactation</div></div></div>
+      <div style="margin-top:16px">${kpi('Mois en cours (' + monthLbl(ms) + ')', nf(M.t, 0), 'L', `${nf(M.moyJ)} L/j · M-1 : ${nf(Mp.moyJ)} L/j ${deltaHtml(Mp.moyJ ? M.moyJ / Mp.moyJ - 1 : null)}`)}</div>`)}
+  </div>
+  <div class="grid g3 section">
+    ${card('', 'À faire aujourd’hui', `<div class="alerts">${tasks.map(([c, i, t, p]) => `<div class="alert ${c}"><div class="ic">${ic(i)}</div><div style="min-width:0"><b>${t}</b><p>${esc(p)}</p></div></div>`).join('')}</div>`)}
+    ${card('', 'Troupeau', `<div class="kpis" style="grid-template-columns:repeat(2,minmax(0,1fr))">${kpi('En lactation', R.lact)}${kpi('Taries', R.taries)}${kpi('Taux de lactation', pf(R.lact / Math.max(R.lact + R.taries, 1), 0))}${kpi('Sorties / mortes', regCount('Sortie') + regCount('Morte'))}</div><div style="margin-top:14px">${CH.hbars(RACES.map((rc, i) => ({ l: rc, v: DB.reg.filter(v => v.statut === 'En lactation' && v.race === rc).length, c: ['var(--brand)', 'var(--matin)', 'var(--soir)'][i], dec: 0 })), 'vaches')}</div>`)}
+    ${card('', 'Production par race · ' + fdShort(d), CH.donut(raceItems, [nf(x.t, 0), 'litres']) + `<div style="margin-top:12px">${tbl([['Race'], ['L/vache', 'n'], ['Moy. 7 j', 'n'], ['Var.', 'n']], R.races.map(r => `<tr><td>${raceTag(r.rc)}</td><td class="n">${nf(r.moy, 2)}</td><td class="n">${nf(r.m7, 2)}</td><td class="n">${deltaHtml(R.inc ? null : r.varr)}</td></tr>`))}</div>`)}
+  </div>
+  <div class="grid g2 section">
+    ${card('', 'Livraisons SMPL · 30 jours', (() => { const dd = []; for (let i = 29; i >= 0; i--) dd.push(d - i); return CH.combo({ labels: dd.map(fdShort), bars: [{ name: 'Livré MPE', values: dd.map(q => IX.smpl.get(q)?.livre || 0), color: 'var(--brand)' }, { name: 'Reçu SMPL', values: dd.map(q => IX.smpl.get(q)?.recu || 0), color: 'var(--soir)' }], lines: [{ name: 'Production', values: dd.map(q => dayTot(q)), color: 'var(--matin)', dots: false }], h: 220 }); })())}
+    ${card('', 'Événements récents', tbl([['Date'], ['Vache'], ['Type'], ['Détail']], DB.ev.slice(-10).reverse().map(e => `<tr><td>${fd(e.d)}</td><td>${cowLink(e.id)}</td><td>${esc(e.type)}</td><td>${esc(e.detail || e.trait)}</td></tr>`)))}
+  </div>`];
+};
+
+/* ================= Saisie du jour ================= */
+PAGES.saisie = () => {
+  if (ST.saisie == null) ST.saisie = Math.min(IX.last + 1, today());
+  const d = ST.saisie, exists = IX.daily.has(d);
+  const ids = new Set(DB.reg.filter(v => v.statut === 'En lactation').map(v => v.id)); for (const r of (IX.byDate.get(d) || [])) ids.add(r.id);
+  const list = [...ids].sort();
+  const s = IX.smpl.get(d) || {};
+  const rows = list.map((id, i) => { const r = IX.key.get(d + '|' + id); const mo = cowMoy7(id, d - 1); return `<tr><td class="n tip">${i + 1}</td><td><b>${esc(id)}</b></td><td>${raceTag(raceOf(id))}</td><td><input class="cell" inputmode="decimal" data-id="${esc(id)}" data-k="m" data-inp="saisieCalc" value="${r?.m ?? ''}" aria-label="Matin ${esc(id)}"></td><td><input class="cell s" inputmode="decimal" data-id="${esc(id)}" data-k="s" data-inp="saisieCalc" value="${r?.s ?? ''}" aria-label="Soir ${esc(id)}"></td><td class="n" id="tt-${esc(id)}">${r ? nf(tot(r), 2) : ''}</td><td class="n tip" data-moy="${mo ?? ''}">${nf(mo, 2)}</td><td id="ck-${esc(id)}"></td></tr>`; });
+  const evRow = (i) => `<div class="form-grid ev-row" style="grid-template-columns:110px 170px repeat(4,minmax(0,1fr));margin-bottom:8px"><input class="inp" list="dl-cows" placeholder="ID vache" data-e="id"><select class="inp" data-e="type">${TYPES_EV.map(t => `<option>${t}</option>`).join('')}</select><input class="inp" placeholder="Détail / diagnostic" data-e="detail"><input class="inp" placeholder="Traitement / produit" data-e="trait"><input class="inp" inputmode="numeric" placeholder="Retrait lait (j)" data-e="retrait"><input class="inp" type="date" title="Date de rappel" data-e="rappel"></div>`;
+  return ['Saisie du jour', 'Traite matin et soir, livraison SMPL et événements · une seule validation', '',
+  `${exists ? `<div class="banner info">${ic('info')}<div>Des données existent déjà pour le <b>${fd(d)}</b> (${IX.daily.get(d).rows} vaches). Les valeurs affichées seront remplacées à l’enregistrement.</div></div>` : ''}
+  <div class="section">${card('1', 'Date et contrôle', `<div class="row"><div class="field"><label for="sj-date">Date de traite</label><input type="date" class="inp" id="sj-date" value="${iso(d)}" max="${iso(today())}" data-chg="saisieDate"></div><div class="field"><label for="sj-tm">Trayeur matin</label><input class="inp" id="sj-tm" list="dl-tray" placeholder="Nom"></div><div class="field"><label for="sj-ts">Trayeur soir</label><input class="inp" id="sj-ts" list="dl-tray" placeholder="Nom"></div><div class="kpi" style="min-width:150px"><span>Total saisi</span><b id="sj-total">–</b></div><div class="kpi" style="min-width:150px"><span>Vaches saisies</span><b id="sj-n">–</b></div></div>`)}</div>
+  <div class="section">${card('2', 'Traite par vache', tbl([['N°', 'n'], ['Vache'], ['Race'], ['Matin (L)'], ['Soir (L)'], ['Total', 'n'], ['Moy. 7 j', 'n'], ['Contrôle']], rows), `<button class="btn sm" data-act="saisieAddCow">${ic('plus')}Ajouter une vache</button>`, 'Liste = vaches « En lactation » du registre. Valeurs de 0 à 25 L par traite, décimale avec virgule ou point. Contrôle : ⚠ si baisse au-delà du seuil ou valeur anormale.')}</div>
+  <div class="grid g2 section">
+    ${card('3', 'Livraison SMPL', `<div class="form-grid"><div class="field"><label for="sm-bon">N° bon de livraison</label><input class="inp" id="sm-bon" value="${esc(s.bon || '')}"></div><div class="field"><label for="sm-livre">Qté livrée MPE (L)</label><input class="inp" id="sm-livre" inputmode="decimal" value="${s.livre ?? ''}"></div><div class="field"><label for="sm-recu">Qté reçue SMPL (L)</label><input class="inp" id="sm-recu" inputmode="decimal" value="${s.recu ?? ''}"></div><div class="field"><label for="sm-refus">Qté refusée (L)</label><input class="inp" id="sm-refus" inputmode="decimal" value="${s.refus ?? ''}"></div><div class="field"><label for="sm-motif">Motif du refus</label><select class="inp" id="sm-motif"><option></option>${MOTIFS.map(m => `<option ${s.motif === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div><div class="field"><label for="sm-dens">Densité</label><input class="inp" id="sm-dens" inputmode="decimal" value="${s.dens ?? ''}"></div><div class="field"><label for="sm-alc">Test alcool</label><select class="inp" id="sm-alc"><option></option><option ${s.alcool === 'Négatif' ? 'selected' : ''}>Négatif</option><option ${s.alcool === 'Positif' ? 'selected' : ''}>Positif</option></select></div><div class="field"><label for="sm-obs">Observation</label><input class="inp" id="sm-obs" value="${esc(s.obs || '')}"></div></div><p class="tip">Toujours saisir la quantité du bon SMPL, pas celle annoncée oralement.</p>`)}
+    ${card('4', 'Événements du jour', `<div id="ev-rows">${evRow(0)}${evRow(1)}</div><button class="btn sm" data-act="saisieEvRow">${ic('plus')}Ligne d’événement</button><p class="tip">Vêlage, tarissement, mortalité et sortie mettent à jour le registre automatiquement.</p>`)}
+  </div>
+  <div class="row end noprint"><button class="btn" data-act="saisieReset">Vider</button><button class="btn primary" data-act="saisieSave">${ic('check')}Valider la journée</button></div>
+  <datalist id="dl-cows">${DB.reg.filter(v => v.statut !== 'Morte').map(v => `<option value="${esc(v.id)}">`).join('')}</datalist><datalist id="dl-tray">${P().trayeurs.map(t => `<option value="${esc(t)}">`).join('')}</datalist>`];
+};
+ACT.saisieDate = a => { ST.saisie = fromIso(a.value); UI.refresh(); setTimeout(ACT.saisieCalc, 0); };
+ACT.saisieReset = () => { ST.saisie = null; UI.refresh(); };
+ACT.saisieEvRow = () => { const w = $('#ev-rows'); w.insertAdjacentHTML('beforeend', w.lastElementChild.outerHTML); $$('input,select', w.lastElementChild).forEach(i => i.value = i.tagName === 'SELECT' ? TYPES_EV[0] : ''); };
+ACT.saisieAddCow = () => { const m = UI.modal('Ajouter une vache à la saisie', `<div class="field"><label for="add-id">Identifiant</label><input class="inp" id="add-id" list="dl-cows"></div><p class="tip">Pour une vache nouvelle, l’enregistrer d’abord dans le registre.</p>`, '<button class="btn primary" id="add-ok">Ajouter</button>'); $('#add-ok', m).onclick = () => { const id = $('#add-id', m).value.trim().toUpperCase(); if (!id) return; m.remove(); const tb = $('#view table tbody'); tb.insertAdjacentHTML('beforeend', `<tr><td class="n tip">+</td><td><b>${esc(id)}</b></td><td>${raceTag(raceOf(id))}</td><td><input class="cell" inputmode="decimal" data-id="${esc(id)}" data-k="m" data-inp="saisieCalc"></td><td><input class="cell s" inputmode="decimal" data-id="${esc(id)}" data-k="s" data-inp="saisieCalc"></td><td class="n" id="tt-${esc(id)}"></td><td class="n tip" data-moy="${cowMoy7(id, ST.saisie - 1) ?? ''}">${nf(cowMoy7(id, ST.saisie - 1), 2)}</td><td id="ck-${esc(id)}"></td></tr>`); }; };
+ACT.saisieCalc = () => {
+  let T = 0, n = 0;
+  for (const tr of $$('#view tbody tr')) {
+    const ins = $$('input.cell', tr); if (ins.length < 2) continue; const id = ins[0].dataset.id;
+    const m = num(ins[0].value), s = num(ins[1].value), has = m != null || s != null, t = (m || 0) + (s || 0);
+    if (has) { T += t; n++; }
+    const tt = $('#tt-' + CSS.escape(id)); if (tt) tt.textContent = has ? nf(t, 2) : '';
+    const mo = num(tr.querySelector('[data-moy]')?.dataset.moy); const ck = $('#ck-' + CSS.escape(id)); if (!ck) continue;
+    let msg = '';
+    if ((m != null && (m < 0 || m > 25)) || (s != null && (s < 0 || s > 25))) msg = '<span class="pill bad">Valeur hors 0–25 L</span>';
+    else if (has && mo > 0 && m != null && s != null && t / mo - 1 <= -P().seuilBaisse) msg = `<span class="pill warn">⚠ Baisse ${Math.round((1 - t / mo) * 100)} %</span>`;
+    else if (has && mo > 0 && t > mo * 2.2) msg = '<span class="pill warn">⚠ Trop élevé ?</span>';
+    else if (has) msg = '<span class="pill ok">OK</span>';
+    ck.innerHTML = msg;
+  }
+  $('#sj-total').textContent = nf(T, 2) + ' L'; $('#sj-n').textContent = n;
+};
+ACT.saisieSave = () => {
+  const d = num(fromIso($('#sj-date').value)); if (d == null) return UI.toast('Choisir une date.'); if (d > today()) return UI.toast('La date ne peut pas être dans le futur.');
+  const vals = []; let bad = 0;
+  for (const tr of $$('#view tbody tr')) { const ins = $$('input.cell', tr); if (ins.length < 2) continue; const m = num(ins[0].value), s = num(ins[1].value); if ((m != null && (m < 0 || m > 25)) || (s != null && (s < 0 || s > 25))) bad++; if (m != null || s != null) vals.push({ id: ins[0].dataset.id, m, s }); }
+  if (bad) return UI.toast(`${bad} valeur(s) hors de 0–25 L : corriger avant de valider.`);
+  const sm = { bon: $('#sm-bon').value.trim(), livre: num($('#sm-livre').value), recu: num($('#sm-recu').value), refus: num($('#sm-refus').value), motif: $('#sm-motif').value, dens: num($('#sm-dens').value), alcool: $('#sm-alc').value, obs: $('#sm-obs').value.trim() };
+  const evs = $$('.ev-row').map(r => { const g = k => $(`[data-e="${k}"]`, r).value.trim(); return { id: g('id').toUpperCase(), type: g('type'), detail: g('detail'), trait: g('trait'), retrait: num(g('retrait')), rappel: fromIso(g('rappel')) }; }).filter(e => e.id);
+  if (!vals.length && sm.livre == null && sm.recu == null && !evs.length) return UI.toast('Journée vide : rien à enregistrer.');
+  const go = () => commit(`Saisie du ${fd(d)}`, 'Saisie', () => {
+    const src = 'Saisie ' + nowStamp(), tm = $('#sj-tm').value.trim(), ts = $('#sj-ts').value.trim();
+    for (const v of vals) { const r = upsertLait(d, v.id, { m: v.m, s: v.s, t: null }); r.src = r.src && r.src.startsWith('Kobo') ? r.src + ' + ' + src : src; if (tm && v.m != null) r.tm = tm; if (ts && v.s != null) r.ts = ts; }
+    if (sm.livre != null || sm.recu != null || sm.bon) { let s = DB.smpl.find(x => x.d === d); if (!s) DB.smpl.push(s = { d }); Object.assign(s, sm, { prix: P().prixLait }); }
+    for (const e of evs) addEvent({ d, ...e, obs: '', src });
+    return `Saisie du ${fd(d)} : ${vals.length} vache(s), ${nf(sum(vals.map(v => (v.m || 0) + (v.s || 0))), 2)} L${sm.livre != null ? ', SMPL ' + nf(sm.livre) + ' L' : ''}${evs.length ? ', ' + evs.length + ' événement(s)' : ''}`;
+  }).then(msg => { UI.toast('Journée enregistrée. ' + msg); ST.jour = d; ST.saisie = null; location.hash = 'jour'; UI.refresh(); });
+  if (IX.daily.has(d)) UI.confirm('Date déjà saisie', `Le ${fd(d)} contient déjà des traites. Remplacer les valeurs des vaches saisies ?`, 'Remplacer', go); else go();
+};
+
+/* ================= Bulletin journalier ================= */
+PAGES.jour = () => {
+  if (ST.jour == null || !IX.daily.has(ST.jour) && ST.jour > IX.last) ST.jour = IX.last;
+  const d = ST.jour, R = dayReport(d), x = R.x, S = smplRow(R.s), prix = P().prixLait || 0;
+  const days = []; for (let i = 13; i >= 0; i--) days.push(d - i);
+  const top = R.milked.slice(0, 5), flop = R.milked.slice(-5).reverse();
+  return ['Bulletin journalier', 'النشرة اليومية لإنتاج الحليب', printBtns('waJour'),
+  `${navPeriod('jPrev', '', 'jNext', `<input type="date" class="inp" style="width:auto" value="${iso(d)}" data-chg="jDate" aria-label="Date du bulletin">`)}<div style="height:12px"></div>
+  ${docHead('النشرة اليومية لإنتاج الحليب', 'Bulletin journalier de production laitière', fdLong(d))}
+  ${R.inc ? `<div class="banner">${ic('alert')}<div>Traite du soir non saisie pour ce jour : variations et alertes calculées <b>à traite égale (matin)</b>.</div></div>` : ''}
+  <div class="section">${card('1', 'Production du jour', `<div class="kpis">${kpi('Production totale', nf(x.t), 'L', '', 'hero')}${kpi('Traite matin', nf(x.m), 'L')}${kpi('Traite soir', nf(x.s), 'L')}${kpi('Vaches traites', x.n)}${kpi('Moyenne / vache', nf(x.n ? x.t / x.n : null, 2), 'L')}${kpi('Var. vs J-1', deltaHtml(R.varJ1))}${kpi('Var. vs moy. 7 j', deltaHtml(R.var7))}${kpi('Production J-1', nf(R.prevDay), 'L')}</div>
+    <div class="kpis" style="margin-top:12px">${kpi('Vaches en lactation', R.lact)}${kpi('Vaches taries', R.taries)}${kpi('Taux de lactation', pf(R.lact / Math.max(R.lact + R.taries, 1), 0))}${kpi('Non traites / non saisies', R.alerts.filter(a => a.kind === 'non').length)}${kpi('Alertes baisse', R.alerts.filter(a => a.kind === 'baisse').length)}${kpi('Sous délai d’attente', R.ret.length)}${kpi('Événements du jour', R.evs.length)}${kpi('Part traite matin', pf(x.t ? x.m / x.t : null, 0))}</div>`)}</div>
+  <div class="section">${card('2', 'Livraison SMPL · comparaison des quantités', S ? `<div class="kpis">${kpi('Production du jour', nf(x.t), 'L')}${kpi('Livré par MPE', nf(S.livre), 'L')}${kpi('Reçu par SMPL', nf(S.recu), 'L')}${kpi('Refusé SMPL', nf(S.refus), 'L')}${kpi('Écart SMPL − MPE', nf(S.ecart), 'L')}${kpi('Écart (%)', pf(S.ecartP))}${kpi('Lait non livré', nf(S.nonLivre), 'L')}${kpi('Statut', `<span class="pill ${S.statut === 'Conforme' ? 'ok' : S.statut ? 'warn' : ''}" style="font-size:13px">${esc(S.statut || '–')}</span>`)}</div><p class="tip" style="margin-top:10px">Taux de livraison : <b>${pf(S.tauxLiv)}</b> · N° bon : <b>${esc(S.bon || '–')}</b> · Montant SMPL : <b>${nf(S.montant, 0)} MRU</b> · Valeur de la production : <b>${nf(x.t * prix, 0)} MRU</b> · Écart : <b>${nf((S.ecart || 0) * prix, 0)} MRU</b> · Non livré : <b>${nf((S.nonLivre || 0) * prix, 0)} MRU</b></p>` : '<div class="empty">Aucune livraison SMPL saisie pour ce jour.</div>')}</div>
+  <div class="grid g2 section">
+    ${card('3', 'Production par race', tbl([['Race'], ['Production', 'n'], ['Vaches', 'n'], ['Moy./vache', 'n'], ['Moy. 7 j/vache', 'n'], ['Variation', 'n'], ['Part', 'n']], R.races.map(r => `<tr><td>${raceTag(r.rc)}</td><td class="n">${nf(r.prod, 2)}</td><td class="n">${r.n}</td><td class="n">${nf(r.moy, 2)}</td><td class="n">${nf(r.m7, 2)}</td><td class="n">${deltaHtml(R.inc ? null : r.varr)}</td><td class="n">${pf(x.t ? r.prod / x.t : null, 0)}</td></tr>`), `<tfoot><tr><td>Total</td><td class="n">${nf(x.t, 2)}</td><td class="n">${x.n}</td><td class="n">${nf(x.n ? x.t / x.n : null, 2)}</td><td colspan="3"></td></tr></tfoot>`))}
+    ${card('6', 'Meilleures et plus faibles productrices', `<div class="grid g2">${tbl([['Top'], ['Race'], ['L', 'n']], top.map(c => `<tr><td>${cowLink(c.v.id)}</td><td>${raceTag(c.v.race)}</td><td class="n">${nf(tot(c.r), 2)}</td></tr>`))}${tbl([['Faibles'], ['Race'], ['L', 'n']], flop.map(c => `<tr><td>${cowLink(c.v.id)}</td><td>${raceTag(c.v.race)}</td><td class="n">${nf(tot(c.r), 2)}</td></tr>`))}</div>`)}
+  </div>
+  <div class="section">${card('4', `Alertes individuelles (baisse ≥ ${pf(P().seuilBaisse, 0)} ou non traite)`, tbl([['N°', 'n'], ['Vache'], ['Race'], ['Stade'], ['Prod. jour', 'n'], ['Moy. 7 j', 'n'], ['Variation', 'n'], ['Alerte']], R.alerts.sort((a, b) => (a.kind === b.kind ? (a.c.varr ?? 0) - (b.c.varr ?? 0) : a.kind === 'non' ? -1 : 1)).map((a, i) => `<tr><td class="n tip">${i + 1}</td><td>${cowLink(a.c.v.id)}</td><td>${raceTag(a.c.v.race)}</td><td>${esc(stade(jel(a.c.v, d)))}</td><td class="n">${nf(a.c.val, 2)}</td><td class="n">${nf(a.c.moy, 2)}</td><td class="n">${a.c.varr != null ? deltaHtml(a.c.varr) : ''}</td><td><span class="pill ${a.kind === 'non' ? 'bad' : 'warn'}">${esc(a.txt)}</span></td></tr>`)), `<span class="pill">${R.alerts.length}</span>`)}</div>
+  <div class="grid g2 section">
+    ${card('5', 'Événements du jour', tbl([['Vache'], ['Type'], ['Détail'], ['Traitement'], ['Fin retrait']], R.evs.map(e => `<tr><td>${cowLink(e.id)}</td><td>${esc(e.type)}</td><td>${esc(e.detail)}</td><td>${esc(e.trait)}</td><td>${e.retrait ? fd(e.d + e.retrait) : ''}</td></tr>`)))}
+    ${card('', 'Vaches sous délai d’attente : lait à écarter', tbl([['Vache'], ['Type'], ['Produit'], ['Début'], ['Fin'], ['Jours restants', 'n']], R.ret.map(e => `<tr><td>${cowLink(e.id)}</td><td>${esc(e.type)}</td><td>${esc(e.trait)}</td><td>${fd(e.d)}</td><td>${fd(e.d + e.retrait)}</td><td class="n">${e.d + e.retrait - d}</td></tr>`)))}
+  </div>
+  <div class="section">${card('7', 'Évolution de la production · 14 derniers jours', CH.combo({ labels: days.map(fdShort), bars: [{ name: 'Matin', values: days.map(q => IX.daily.get(q)?.m || 0), color: 'var(--matin)' }, { name: 'Soir', values: days.map(q => IX.daily.get(q)?.s || 0), color: 'var(--soir)' }], stacked: true, lines: [{ name: 'Livré SMPL', values: days.map(q => IX.smpl.get(q)?.livre ?? null), color: 'var(--brand)' }, { name: 'Vaches traites (axe droit)', values: days.map(q => IX.daily.get(q)?.n ?? null), color: 'var(--muted)', dash: true, right: true }], h: 250 }))}</div>
+  ${notesBlock('J' + d)}`];
+};
+ACT.jDate = a => { ST.jour = fromIso(a.value); UI.refresh(); };
+ACT.jPrev = () => { const i = IX.dates.findIndex(x => x >= ST.jour); ST.jour = IX.dates[Math.max(0, i - 1)]; UI.refresh(); };
+ACT.jNext = () => { const i = IX.dates.findIndex(x => x > ST.jour); if (i >= 0) ST.jour = IX.dates[i]; UI.refresh(); };
+ACT.waJour = () => { const d = ST.jour, R = dayReport(d), x = R.x, S = smplRow(R.s);
+  const t = [`🐄 *Ferme El Behgua – Bulletin du ${fd(d)}*`, `Production : *${nf(x.t)} L* (matin ${nf(x.m)} L · soir ${nf(x.s)} L)`, `Vaches traites : ${x.n} / ${R.lact} en lactation · moy. ${nf(x.n ? x.t / x.n : null, 2)} L/vache`, `Variation vs moy. 7 j : ${R.var7 == null ? '–' : (R.var7 > 0 ? '+' : '') + pf(R.var7)}${R.inc ? ' (à traite égale, soir non saisi)' : ''}`,
+    S ? `SMPL : livré ${nf(S.livre)} L · reçu ${nf(S.recu)} L · écart ${nf(S.ecart)} L (${S.statut || '–'})` : 'SMPL : pas de livraison saisie',
+    `Alertes : ${R.alerts.filter(a => a.kind === 'non').length} non traite(s), ${R.alerts.filter(a => a.kind === 'baisse').length} baisse(s)`,
+    R.ret.length ? `⚠ Lait à écarter : ${R.ret.map(e => e.id).join(', ')}` : '', R.evs.length ? `Événements : ${R.evs.map(e => `${e.id} ${e.type}`).join(' ; ')}` : '', DB.notes['J' + d] ? 'Observations : ' + DB.notes['J' + d] : ''].filter(Boolean).join('\n');
+  waModal(t); };
+
+/* ================= Bulletin hebdomadaire ================= */
+PAGES.semaine = () => {
+  if (ST.sem == null) ST.sem = monday(IX.last);
+  const WS = ST.sem, WE = WS + 6, WD = Math.min(IX.last, WE), wk = isoWeek(WS);
+  const A = periodStats(WS, WD), B = periodStats(WS - 7, WD - 7);
+  const days = []; for (let q = WS; q <= WE; q++) days.push(q);
+  const cows = DB.reg.map(v => { const a = cowPeriod(v.id, WS, WD), b = cowPeriod(v.id, WS - 7, WD - 7); return { v, a, b, varr: v.statut === 'En lactation' && b.t > 0 ? a.t / b.t - 1 : null }; });
+  const top = cows.filter(c => c.a.t > 0).sort((p, q) => q.a.t - p.a.t).slice(0, 10);
+  const drops = cows.filter(c => c.varr != null).sort((p, q) => p.varr - q.varr).slice(0, 10);
+  const evs = DB.ev.filter(e => e.d >= WS && e.d <= WE);
+  const byType = TYPES_EV.map(t => [t, evs.filter(e => e.type === t).length]).filter(x => x[1]);
+  const raceRows = RACES.map(rc => { let t = 0, vj = 0, tb = 0, vjb = 0; for (const c of cows) if (c.v.race === rc) { t += c.a.t; vj += c.a.k; tb += c.b.t; vjb += c.b.k; } return { rc, t, vj, mv: vj ? t / vj : null, mvb: vjb ? tb / vjb : null }; });
+  return ['Bulletin hebdomadaire', 'النشرة الأسبوعية لإنتاج الحليب', printBtns('waSem'),
+  `${navPeriod('wPrev', `<span class="pill brand">Semaine ${wk.w} · ${wk.y}</span>`, 'wNext', `<input type="date" class="inp" style="width:auto" value="${iso(WS)}" data-chg="wDate" aria-label="Choisir un jour de la semaine">`)}<div style="height:12px"></div>
+  ${docHead('النشرة الأسبوعية لإنتاج الحليب', 'Bulletin hebdomadaire de production laitière', `Semaine ${wk.w} · du ${fd(WS)} au ${fd(WE)}`)}
+  ${WD < WE ? `<div class="banner info">${ic('info')}<div>Semaine en cours : comparaison <b>à période égale</b> (${WD - WS + 1} jour(s)) avec la semaine précédente.</div></div>` : ''}
+  <div class="section">${card('1', 'Production de la semaine', `<div class="kpis">${kpi('Production semaine', nf(A.t, 0), 'L', '', 'hero')}${kpi('Semaine précédente', nf(B.t, 0), 'L', 'même période')}${kpi('Variation', deltaHtml(B.t ? A.t / B.t - 1 : null))}${kpi('Moyenne journalière', nf(A.moyJ), 'L/j', `S-1 : ${nf(B.moyJ)} L/j`)}${kpi('Vaches traites / jour', nf(A.nMoy, 0))}${kpi('Moy. / vache / jour', nf(A.moyV, 2), 'L', `S-1 : ${nf(B.moyV, 2)} L ${deltaHtml(B.moyV ? A.moyV / B.moyV - 1 : null)}`)}${kpi('Jours saisis', A.days)}${kpi('Part traite matin', pf(A.t ? A.m / A.t : null, 0))}</div>`)}</div>
+  <div class="section">${card('2', 'Production journalière · semaine et semaine précédente', CH.combo({ labels: days.map(q => JOURS[toDate(q).getUTCDay()] + ' ' + fdShort(q)), bars: [{ name: 'Matin', values: days.map(q => IX.daily.get(q)?.m || 0), color: 'var(--matin)' }, { name: 'Soir', values: days.map(q => IX.daily.get(q)?.s || 0), color: 'var(--soir)' }, { name: 'Total sans détail', values: days.map(q => { const z = IX.daily.get(q); return z ? z.t - z.m - z.s : 0; }), color: 'var(--brand)' }], stacked: true, lines: [{ name: 'Semaine précédente', values: days.map(q => dayTot(q - 7)), color: 'var(--ink)', dash: true }], h: 230 }))}</div>
+  <div class="section">${card('3', 'Livraisons SMPL de la semaine', tbl([['Date'], ['N° bon'], ['Production', 'n'], ['Livré MPE', 'n'], ['Reçu SMPL', 'n'], ['Refusé', 'n'], ['Écart', 'n'], ['Écart %', 'n'], ['Statut']], days.map(q => smplRow(IX.smpl.get(q))).filter(Boolean).map(s => `<tr><td>${fd(s.d)}</td><td>${esc(s.bon)}</td><td class="n">${nf(s.prod)}</td><td class="n">${nf(s.livre)}</td><td class="n">${nf(s.recu)}</td><td class="n">${nf(s.refus)}</td><td class="n">${nf(s.ecart)}</td><td class="n">${pf(s.ecartP)}</td><td><span class="pill ${s.statut === 'Conforme' ? 'ok' : s.statut ? 'warn' : ''}">${esc(s.statut || '–')}</span></td></tr>`), `<tfoot><tr><td colspan="2">Total</td><td class="n">${nf(A.t)}</td><td class="n">${nf(A.livre)}</td><td class="n">${nf(A.recu)}</td><td class="n">${nf(A.refus)}</td><td class="n">${nf(A.ecart)}</td><td class="n">${pf(A.ecartP)}</td><td>${nf(A.montant, 0)} MRU</td></tr></tfoot>`))}</div>
+  <div class="grid g2 section">
+    ${card('4', 'Performance par race', tbl([['Race'], ['Production', 'n'], ['Part', 'n'], ['Vache-jours', 'n'], ['Moy./vache/j', 'n'], ['S-1', 'n'], ['Var.', 'n']], raceRows.map(r => `<tr><td>${raceTag(r.rc)}</td><td class="n">${nf(r.t, 1)}</td><td class="n">${pf(A.t ? r.t / A.t : null, 0)}</td><td class="n">${r.vj}</td><td class="n">${nf(r.mv, 2)}</td><td class="n">${nf(r.mvb, 2)}</td><td class="n">${deltaHtml(r.mvb ? r.mv / r.mvb - 1 : null)}</td></tr>`)))}
+    ${card('5', 'Événements de la semaine', (byType.length ? `<div class="row" style="margin-bottom:12px">${byType.map(([t, n]) => `<span class="pill brand">${esc(t)} · ${n}</span>`).join('')}</div>` : '') + tbl([['Date'], ['Vache'], ['Type'], ['Détail']], evs.map(e => `<tr><td>${fd(e.d)}</td><td>${cowLink(e.id)}</td><td>${esc(e.type)}</td><td>${esc(e.detail || e.trait)}</td></tr>`)))}
+  </div>
+  <div class="grid g2 section">
+    ${card('6', 'Top 10 de la semaine', tbl([['Rang', 'n'], ['Vache'], ['Race'], ['Production', 'n'], ['Jours', 'n'], ['Moy. L/j', 'n']], top.map((c, i) => `<tr><td class="n">${i + 1}</td><td>${cowLink(c.v.id)}</td><td>${raceTag(c.v.race)}</td><td class="n">${nf(c.a.t, 1)}</td><td class="n">${c.a.k}</td><td class="n">${nf(c.a.moy, 2)}</td></tr>`)))}
+    ${card('7', 'Plus fortes baisses vs semaine précédente', tbl([['Vache'], ['Race'], ['Semaine', 'n'], ['S-1', 'n'], ['Variation', 'n']], drops.map(c => `<tr><td>${cowLink(c.v.id)}</td><td>${raceTag(c.v.race)}</td><td class="n">${nf(c.a.t, 1)}</td><td class="n">${nf(c.b.t, 1)}</td><td class="n">${deltaHtml(c.varr)}</td></tr>`)))}
+  </div>
+  ${notesBlock('S' + WS)}`];
+};
+ACT.wDate = a => { ST.sem = monday(fromIso(a.value)); UI.refresh(); };
+ACT.wPrev = () => { ST.sem -= 7; UI.refresh(); };
+ACT.wNext = () => { if (ST.sem + 7 <= IX.last) ST.sem += 7; UI.refresh(); };
+ACT.waSem = () => { const WS = ST.sem, WD = Math.min(IX.last, WS + 6), A = periodStats(WS, WD), B = periodStats(WS - 7, WD - 7), wk = isoWeek(WS);
+  waModal([`🐄 *Ferme El Behgua – Semaine ${wk.w} (${fd(WS)} – ${fd(WS + 6)})*`, `Production : *${nf(A.t, 0)} L* sur ${A.days} jour(s) · ${nf(A.moyJ)} L/j`, `Semaine précédente (même période) : ${nf(B.t, 0)} L · variation ${B.t ? pf(A.t / B.t - 1) : '–'}`, `Moyenne par vache : ${nf(A.moyV, 2)} L/j · ${nf(A.nMoy, 0)} vaches traites/j`, `SMPL : livré ${nf(A.livre, 0)} L · reçu ${nf(A.recu, 0)} L · ${A.hors} jour(s) hors tolérance`, DB.notes['S' + WS] ? 'Observations : ' + DB.notes['S' + WS] : ''].filter(Boolean).join('\n')); };
+
+/* ================= Bulletin mensuel ================= */
+PAGES.mois = () => {
+  if (ST.mois == null) ST.mois = monthStart(IX.last);
+  const MS = ST.mois, ME = monthEnd(MS), MD = Math.min(ME, IX.last), pMS = addMonths(MS, -1), pME = monthEnd(pMS);
+  const A = periodStats(MS, ME), B = periodStats(pMS, pME);
+  const lact = regCount('En lactation'), tar = regCount('Tarie');
+  const prix = P().prixLait || 0;
+  const al = alimMonth(MS);
+  const cows = DB.reg.map(v => ({ v, a: cowPeriod(v.id, MS, ME) })).filter(c => c.a.t > 0).sort((p, q) => q.a.t - p.a.t);
+  const raceRows = RACES.map(rc => { let t = 0, vj = 0, tb = 0, vjb = 0; for (const v of DB.reg) if (v.race === rc) { const a = cowPeriod(v.id, MS, ME), b = cowPeriod(v.id, pMS, pME); t += a.t; vj += a.k; tb += b.t; vjb += b.k; } return { rc, t, vj, mv: vj ? t / vj : null, mvb: vjb ? tb / vjb : null, nl: DB.reg.filter(v => v.race === rc && v.statut === 'En lactation').length }; });
+  const evs = DB.ev.filter(e => e.d >= MS && e.d <= ME);
+  const days = []; for (let q = MS; q <= ME; q++) days.push(q);
+  const months = []; for (let k = 12; k >= 0; k--) months.push(addMonths(MS, -k));
+  const mrows = months.map(m => ({ m, s: periodStats(m, monthEnd(m)) }));
+  const mopts = []; for (let m = monthStart(IX.last); m >= monthStart(IX.first); m = addMonths(m, -1)) mopts.push(`<option value="${m}" ${m === MS ? 'selected' : ''}>${monthLbl(m)}</option>`);
+  return ['Bulletin mensuel', 'النشرة الشهرية لإنتاج الحليب', printBtns('waMois'),
+  `${navPeriod('mPrev', '', 'mNext', `<select class="inp" style="width:auto" data-chg="mSel" aria-label="Mois">${mopts.join('')}</select>`)}<div style="height:12px"></div>
+  ${docHead('النشرة الشهرية لإنتاج الحليب', 'Bulletin mensuel de production laitière', monthLbl(MS))}
+  <div class="section">${card('1', 'Clôture / situation du mois', `<div class="kpis">${kpi('Production du mois', nf(A.t, 0), 'L', MD < ME ? `au ${fd(MD)}` : 'mois clos', 'hero')}${kpi('Mois précédent', nf(B.t, 0), 'L')}${kpi('Moy. journalière', nf(A.moyJ), 'L/j')}${kpi('Moy. journ. M-1', nf(B.moyJ), 'L/j')}${kpi('Var. moy. journalière', deltaHtml(B.moyJ ? A.moyJ / B.moyJ - 1 : null))}${kpi('Moy. / vache / jour', nf(A.moyV, 2), 'L')}${kpi('Moy. / vache / j M-1', nf(B.moyV, 2), 'L')}${kpi('Var. / vache', deltaHtml(B.moyV ? A.moyV / B.moyV - 1 : null))}</div>
+  <div class="kpis" style="margin-top:12px">${kpi('Vaches traites (moy./j)', nf(A.nMoy, 1))}${kpi('Effectif présent', lact + tar, '', `${lact} en lactation · ${tar} taries`)}${kpi('Taux de lactation global', pf(A.nMoy / Math.max(lact + tar, 1), 0))}${kpi('Jours saisis', A.days)}${kpi('Livré par MPE', nf(A.livre, 0), 'L')}${kpi('Reçu par SMPL', nf(A.recu, 0), 'L')}${kpi('Écart (%)', pf(A.ecartP))}${kpi('Taux de livraison', pf(A.t ? A.livre / A.t : null, 0))}</div><p class="tip" style="margin-top:10px">Taux de lactation global = nombre moyen de vaches traites par jour ÷ (vaches en lactation + taries). Repère courant en élevage laitier : 80 à 85 %.</p>`)}</div>
+  <div class="grid g2 section">
+    ${card('2', 'Livraisons SMPL du mois · rapprochement', `<div class="kpis">${kpi('Production', nf(A.t, 0), 'L')}${kpi('Livré MPE', nf(A.livre, 0), 'L')}${kpi('Reçu SMPL', nf(A.recu, 0), 'L')}${kpi('Refusé SMPL', nf(A.refus, 0), 'L')}${kpi('Écart', nf(A.ecart, 1), 'L')}${kpi('Jours livrés', A.nl)}${kpi('Jours hors tolérance', A.hors)}${kpi('Montant SMPL', nf(A.montant, 0), 'MRU')}</div><p class="tip" style="margin-top:10px">Valeur de la production : <b>${nf(A.t * prix, 0)} MRU</b> · Écart : <b>${nf((A.ecart || 0) * prix, 0)} MRU</b> · Non livré : <b>${nf((A.t - A.livre) * prix, 0)} MRU</b></p>`)}
+    ${card('3', 'Coûts alimentaires vs rendement laitier', al ? `<div class="kpis">${kpi('Coût aliment total', nf(al.cout, 0), 'MRU')}${kpi('Lait produit', nf(al.lait, 0), 'L')}${kpi('Coût aliment / L', nf(al.coutL, 2), 'MRU')}${kpi('Concentré', nf(al.conc, 0), 'kg')}${kpi('Concentré kg / L', nf(al.concL, 2))}${kpi('Recette SMPL', nf(al.recette, 0), 'MRU')}${kpi('Marge sur coût alim.', nf(al.marge, 0), 'MRU')}${kpi('Recette / coût', nf(al.cout ? al.recette / al.cout : null, 2))}</div>${al.missing ? '<p class="tip">Certains prix d’aliments ne sont pas renseignés (Paramètres) : le coût est incomplet.</p>' : ''}` : '<div class="empty">Aucune quantité d’aliment saisie pour ce mois (page Coûts alimentaires).</div>')}
+  </div>
+  <div class="grid g2 section">
+    ${card('4', 'Performance par race', tbl([['Race'], ['Production', 'n'], ['Part', 'n'], ['Vache-jours', 'n'], ['Moy./v/j', 'n'], ['M-1', 'n'], ['Var.', 'n'], ['En lact.', 'n']], raceRows.map(r => `<tr><td>${raceTag(r.rc)}</td><td class="n">${nf(r.t, 0)}</td><td class="n">${pf(A.t ? r.t / A.t : null, 0)}</td><td class="n">${r.vj}</td><td class="n">${nf(r.mv, 2)}</td><td class="n">${nf(r.mvb, 2)}</td><td class="n">${deltaHtml(r.mvb ? r.mv / r.mvb - 1 : null)}</td><td class="n">${r.nl}</td></tr>`)) + `<div style="margin-top:14px">${CH.donut(raceRows.map((r, i) => ({ l: r.rc + ' (vaches en lactation)', v: r.nl, c: ['var(--brand)', 'var(--matin)', 'var(--soir)'][i] })), [lact, 'en lactation'])}</div>`)}
+    ${card('5', 'Événements du mois', `<div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">${TYPES_EV.map(t => kpi(t, evs.filter(e => e.type === t).length)).join('')}</div>`)}
+  </div>
+  <div class="section">${card('6', 'Top 10 des vaches du mois', tbl([['Rang', 'n'], ['Vache'], ['Race'], ['Production', 'n'], ['Jours traits', 'n'], ['Moy. L/j', 'n'], ['Stade'], ['JEL', 'n']], cows.slice(0, 10).map((c, i) => { const j = jel(c.v, MD); return `<tr><td class="n">${i + 1}</td><td>${cowLink(c.v.id)}</td><td>${raceTag(c.v.race)}</td><td class="n">${nf(c.a.t, 1)}</td><td class="n">${c.a.k}</td><td class="n">${nf(c.a.moy, 2)}</td><td>${esc(stade(j))}</td><td class="n">${j ?? ''}</td></tr>`; })))}</div>
+  <div class="section">${card('7', 'Production journalière du mois', CH.combo({ labels: days.map(fdShort), bars: [{ name: 'Matin', values: days.map(q => IX.daily.get(q)?.m || 0), color: 'var(--matin)' }, { name: 'Soir', values: days.map(q => IX.daily.get(q)?.s || 0), color: 'var(--soir)' }, { name: 'Total sans détail', values: days.map(q => { const z = IX.daily.get(q); return z ? z.t - z.m - z.s : 0; }), color: 'var(--brand)' }], stacked: true, lines: [{ name: 'Livré SMPL', values: days.map(q => IX.smpl.get(q)?.livre ?? null), color: 'var(--ink)', dash: true }], h: 240 }))}</div>
+  <div class="section">${card('8', 'Évolution sur 13 mois', CH.combo({ labels: months.map(m => MOIS[toDate(m).getUTCMonth()].slice(0, 4) + '. ' + String(toDate(m).getUTCFullYear()).slice(2)), bars: [{ name: 'Moy. journalière (L/j)', values: mrows.map(r => r.s.moyJ || 0), color: 'var(--brand)' }], lines: [{ name: 'Moy./vache/jour (axe droit)', values: mrows.map(r => r.s.moyV), color: 'var(--matin)', right: true }], h: 220 }) + `<div style="margin-top:12px">${tbl([['Mois'], ['Production', 'n'], ['Moy. journ.', 'n'], ['Vache-jours', 'n'], ['Moy./v/j', 'n'], ['Livré MPE', 'n'], ['Reçu SMPL', 'n'], ['Écart %', 'n']], mrows.map(r => `<tr><td>${monthLbl(r.m)}</td><td class="n">${nf(r.s.t, 0)}</td><td class="n">${nf(r.s.moyJ)}</td><td class="n">${r.s.vj}</td><td class="n">${nf(r.s.moyV, 2)}</td><td class="n">${nf(r.s.livre, 0)}</td><td class="n">${nf(r.s.recu, 0)}</td><td class="n">${pf(r.s.ecartP)}</td></tr>`))}</div>`)}</div>
+  ${notesBlock('M' + MS)}`];
+};
+ACT.mSel = a => { ST.mois = +a.value; UI.refresh(); };
+ACT.mPrev = () => { ST.mois = addMonths(ST.mois, -1); UI.refresh(); };
+ACT.mNext = () => { const n = addMonths(ST.mois, 1); if (n <= IX.last) ST.mois = n; UI.refresh(); };
+ACT.waMois = () => { const MS = ST.mois, A = periodStats(MS, monthEnd(MS)), B = periodStats(addMonths(MS, -1), monthEnd(addMonths(MS, -1)));
+  waModal([`🐄 *Ferme El Behgua – ${monthLbl(MS)}*`, `Production : *${nf(A.t, 0)} L* · ${nf(A.moyJ)} L/j (M-1 : ${nf(B.moyJ)} L/j)`, `Moyenne par vache : ${nf(A.moyV, 2)} L/j · ${nf(A.nMoy, 0)} vaches traites/j`, `SMPL : livré ${nf(A.livre, 0)} L · reçu ${nf(A.recu, 0)} L · montant ${nf(A.montant, 0)} MRU`, DB.notes['M' + MS] ? 'Observations : ' + DB.notes['M' + MS] : ''].filter(Boolean).join('\n')); };
+
+function alimMonth(m) {
+  const a = DB.alim.find(x => x.m === m); if (!a) return null;
+  const pr = P().prixAlim || []; let cout = 0, missing = false;
+  for (let i = 0; i < 6; i++) { const q = a.q[i]; if (q) { if (pr[i] == null) missing = true; else cout += q * pr[i]; } }
+  cout += a.q[6] || 0;
+  const st = periodStats(m, monthEnd(m)); const conc = (a.q[0] || 0) + (a.q[1] || 0);
+  return { a, cout, missing, lait: st.t, coutL: st.t ? cout / st.t : null, conc, concL: st.t ? conc / st.t : null, livre: st.livre, recette: st.montant, marge: st.montant - cout };
+}
+
+/* ================= Export PDF (capture de la page en A4, sans couper les cartes) ================= */
+function loadLib(src, glob) { if (window[glob]) return Promise.resolve(window[glob]); return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = () => res(window[glob]); s.onerror = () => rej(new Error('Module PDF non chargé : une connexion internet est nécessaire.')); document.head.appendChild(s); }); }
+let pdfBusy = false;
+ACT.pdf = async () => {
+  if (pdfBusy) return; pdfBusy = true; UI.toast('Préparation du PDF…');
+  const root = document.documentElement;
+  try {
+    await loadLib('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', 'html2canvas');
+    await loadLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'jspdf');
+    const el = $('.main'); const W = 1180; let cutsClone = [];
+    root.classList.add('pdf-mode');
+    const bg = getComputedStyle(document.body).backgroundColor;
+    const canvas = await html2canvas(el, { scale: 2, backgroundColor: bg, useCORS: true, logging: false, windowWidth: W, width: W,
+      ignoreElements: n => n.classList && (n.classList.contains('noprint') || n.id === 'page-actions'),
+      onclone: doc => {
+        doc.documentElement.classList.add('pdf-mode');
+        const m = doc.querySelector('.main'); m.style.width = W + 'px'; m.style.maxWidth = W + 'px';
+        const view = doc.defaultView;
+        doc.querySelectorAll('svg, svg *').forEach(n => { const cs = view.getComputedStyle(n);
+          for (const [p, a] of [['fill', 'fill'], ['stroke', 'stroke'], ['stopColor', 'stop-color'], ['opacity', 'opacity']]) { const v = cs[p]; if (v && v !== 'none' || p === 'fill') { n.style[p] = v; if (a !== 'opacity' && a !== 'stop-color') n.setAttribute(a, v); } }
+          if (n.tagName === 'text') { n.style.fontFamily = cs.fontFamily; n.style.fontSize = cs.fontSize; n.style.fontWeight = cs.fontWeight; } });
+        doc.querySelectorAll('.bottle .wv').forEach(n => n.style.animation = 'none');
+        const t0 = m.getBoundingClientRect().top; cutsClone = [...m.querySelectorAll('.card, .doc-head, .hero-band, .banner, .kpis, .section, .grid, footer, tr')].map(n => n.getBoundingClientRect().bottom - t0).filter(x => x > 0).sort((a, b) => a - b);
+      } });
+    root.classList.remove('pdf-mode');
+    const { jsPDF } = window.jspdf; const pdf = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
+    const mm = 8, pw = 210 - 2 * mm, ph = 297 - 2 * mm - 6, pxPerMm = canvas.width / pw, pageH = Math.floor(ph * pxPerMm);
+    const cutPx = cutsClone.map(c => Math.round(c * canvas.width / W));
+    let y = 0, n = 0; const pages = [];
+    while (y < canvas.height - 4) { let end = Math.min(y + pageH, canvas.height); if (end < canvas.height) { const c = cutPx.filter(v => v > y + pageH * 0.35 && v <= end).pop(); if (c) end = c + 6; } pages.push([y, end]); y = end; }
+    pages.forEach(([a, b], i) => {
+      const pc = document.createElement('canvas'); pc.width = canvas.width; pc.height = b - a; const cx = pc.getContext('2d'); cx.fillStyle = bg; cx.fillRect(0, 0, pc.width, pc.height); cx.drawImage(canvas, 0, a, canvas.width, b - a, 0, 0, canvas.width, b - a);
+      if (i) pdf.addPage();
+      pdf.addImage(pc.toDataURL('image/jpeg', 0.9), 'JPEG', mm, mm, pw, (b - a) / pxPerMm);
+      pdf.setFontSize(7.5); pdf.setTextColor(110); pdf.text(`© ${new Date().getFullYear()} MPE - La Mauritanienne des Produits de l'Elevage - Tous droits réservés`, mm, 297 - 5); pdf.text(`Page ${i + 1} / ${pages.length}`, 210 - mm, 297 - 5, { align: 'right' });
+    });
+    const page = (location.hash || '#accueil').slice(1);
+    const lbl = { accueil: 'Tableau_de_bord_' + iso(IX.last), jour: 'Bulletin_journalier_' + iso(ST.jour), semaine: 'Bulletin_hebdo_S' + isoWeek(ST.sem || IX.last).w + '_' + isoWeek(ST.sem || IX.last).y, mois: 'Bulletin_mensuel_' + iso(ST.mois).slice(0, 7), vache: 'Fiche_vache_' + ST.vache }[page] || page;
+    await download(`El_Behgua_${lbl}.pdf`, pdf.output('blob'), 'application/pdf');
+  } catch (e) { root.classList.remove('pdf-mode'); UI.modal('Export PDF', `<p>${esc(e.message || e)}</p>`); console.error(e); }
+  finally { pdfBusy = false; }
+};
+
+/* ================= Fiche vache, registre, bases, coûts, Kobo, paramètres, historique, qualité ================= */
+IC.trend = '<path d="M3 7l6 6 4-4 8 8"/><path d="M21 11v6h-6"/>';
+
+PAGES.vache = () => {
+  const ids = DB.reg.map(v => v.id).sort();
+  if (!ST.vache || !IX.reg.has(ST.vache)) ST.vache = (DB.reg.find(v => v.statut === 'En lactation') || DB.reg[0]).id;
+  const v = IX.reg.get(ST.vache), rows = IX.byCow.get(v.id) || [];
+  const end = Math.min(IX.last, v.sortie || IX.last), lastR = rows[rows.length - 1];
+  const j = jel(v, IX.last), m7 = cowMoy7(v.id, end);
+  const per = (a, b) => cowPeriod(v.id, a, b);
+  const p30 = per(end - 29, end);
+  const lact = rows.filter(r => v.velage != null && r.d >= v.velage);
+  const peak = lact.reduce((b, r) => (tot(r) || 0) > (b ? tot(b) : -1) ? r : b, null);
+  const all = rows.reduce((s, r) => s + (tot(r) || 0), 0), allK = rows.filter(r => tot(r) > 0).length;
+  // rang troupeau sur moy. 7 j
+  const herd = DB.reg.filter(x => x.statut === 'En lactation').map(x => ({ id: x.id, race: x.race, m: cowMoy7(x.id, IX.last) })).filter(x => x.m != null).sort((a, b) => b.m - a.m);
+  const rank = herd.findIndex(x => x.id === v.id) + 1, herdM = herd.length ? sum(herd.map(x => x.m)) / herd.length : null;
+  const raceH = herd.filter(x => x.race === v.race), raceM = raceH.length ? sum(raceH.map(x => x.m)) / raceH.length : null;
+  const t15 = per(end - 14, end), t15b = per(end - 29, end - 15);
+  const r30 = rows.filter(r => r.d > end - 30); const pm = sum(r30.map(r => r.m || 0)), pt = sum(r30.map(tot));
+  const evs = (IX.evByCow.get(v.id) || []).slice().sort((a, b) => b.d - a.d);
+  const lastOf = t => evs.find(e => e.type === t);
+  const vel = evs.filter(e => e.type === 'Vêlage').map(e => e.d).sort((a, b) => b - a);
+  const ia = lastOf('Insémination (IA)'), vp = ia && (!vel[0] || ia.d > vel[0]) ? ia.d + 283 : null;
+  const health = evs.filter(e => e.d >= IX.last - 365 && ['Maladie / Traitement', 'Mammite'].includes(e.type));
+  const ret = retraitsActifs(IX.last).find(e => e.id === v.id);
+  const R = dayReport(IX.last).alerts.find(a => a.c.v.id === v.id);
+  const d60 = []; for (let i = 59; i >= 0; i--) d60.push(end - i);
+  const weeks = []; if (v.velage != null) for (let w = 0; w < 52; w++) { const a = v.velage + w * 7; if (a > end) break; const p = per(a, a + 6); weeks.push(p.moy); }
+  const months = []; for (let k = 11; k >= 0; k--) months.push(addMonths(monthStart(end), -k));
+  return ['Fiche vache', 'البطاقة الفردية للبقرة', printBtns() + `<button class="btn" data-act="editCow" data-id="${esc(v.id)}">${ic('edit')}Modifier</button>`,
+  `<div class="row noprint" style="margin-bottom:12px"><div class="field" style="min-width:200px"><label for="fv-sel">Choisir la vache</label><input class="inp" id="fv-sel" list="dl-all" value="${esc(v.id)}" data-chg="fvSel"></div><button class="icon-btn" data-act="fvPrev" aria-label="Vache précédente">${ic('left')}</button><button class="icon-btn" data-act="fvNext" aria-label="Vache suivante">${ic('right')}</button><datalist id="dl-all">${ids.map(i => `<option value="${esc(i)}">`).join('')}</datalist></div>
+  ${docHead('البطاقة الفردية للبقرة', `Fiche individuelle · ${esc(v.id)}`, `${raceTag(v.race)} ${stTag(v.statut)}`)}
+  <div class="section">${card('1', 'Identité et état actuel', `<div class="kpis">${kpi('Identifiant', esc(v.id))}${kpi('N° boucle / alias', esc(v.alias || '–'))}${kpi('Race', esc(v.race || '–'))}${kpi('Statut', stTag(v.statut))}${kpi('Date d’entrée', fd(v.entree) || '–')}${kpi('Origine', esc(v.origine || '–'))}${kpi('Dernier vêlage', fd(v.velage) || '–')}${kpi('Nb vêlages', v.nbv || 0)}${kpi('Jours en lactation', j ?? '–')}${kpi('Stade', esc(stade(j) || '–'))}${kpi('Sortie / mort', fd(v.sortie) || '–', '', esc(v.motif))}${kpi('Dernière traite', fd(lastR?.d) || '–')}${kpi('Alerte du jour', R ? `<span class="pill ${R.kind === 'non' ? 'bad' : 'warn'}" style="font-size:12px">${esc(R.txt)}</span>` : '<span class="pill ok" style="font-size:12px">Aucune</span>')}${kpi('Délai d’attente lait', ret ? `<span class="pill bad" style="font-size:12px">jusqu’au ${fd(ret.d + ret.retrait)}</span>` : 'Non')}</div>${v.obs ? `<p class="tip" style="margin-top:10px">Observation : ${esc(v.obs)}</p>` : ''}`)}</div>
+  <div class="section">${card('2', 'Performances laitières', `<div class="kpis">${kpi('Dernier jour', nf(lastR ? tot(lastR) : null, 2), 'L', fd(lastR?.d), 'hero')}${kpi('Moy. 7 j', nf(m7, 2), 'L/j')}${kpi('Moy. 30 j', nf(p30.moy, 2), 'L/j')}${kpi('Pic (lactation)', nf(peak ? tot(peak) : null, 2), 'L/j', peak ? 'le ' + fd(peak.d) : '')}${kpi('Cumul lactation', nf(cumulLact(v, end), 0), 'L')}${kpi('Jours traits (lactation)', lact.filter(r => tot(r) > 0).length)}${kpi('Rang troupeau (7 j)', rank ? `${rank}<small>/ ${herd.length}</small>` : '–')}${kpi('Indice vache / troupeau', nf(herdM && m7 ? m7 / herdM : null, 2), '', `troupeau ${nf(herdM, 2)} · ${esc(v.race)} ${nf(raceM, 2)} L/j`)}${kpi('Tendance 15 j', deltaHtml(t15b.moy ? t15.moy / t15b.moy - 1 : null), '', '15 j vs 15 j précédents')}${kpi('Part traite matin (30 j)', pf(pt ? pm / pt : null, 0))}${kpi('Cumul total', nf(all, 0), 'L', `${allK} jours traits`)}${kpi('Moyenne générale', nf(allK ? all / allK : null, 2), 'L/j')}</div><p class="tip" style="margin-top:10px">Indice 1,00 = comme la moyenne du troupeau en lactation sur 7 jours.</p>`)}</div>
+  <div class="grid g2 section">
+    ${card('3', 'Production · 60 derniers jours', CH.combo({ labels: d60.map(fdShort), bars: [{ name: 'Matin', values: d60.map(q => IX.key.get(q + '|' + v.id)?.m || 0), color: 'var(--matin)' }, { name: 'Soir', values: d60.map(q => IX.key.get(q + '|' + v.id)?.s || 0), color: 'var(--soir)' }, { name: 'Total sans détail', values: d60.map(q => { const r = IX.key.get(q + '|' + v.id); return r && r.m == null && r.s == null ? r.t || 0 : 0; }), color: 'var(--brand)' }], stacked: true, h: 220 }))}
+    ${card('4', 'Courbe de lactation · moyenne par semaine depuis le vêlage', weeks.length ? CH.combo({ labels: weeks.map((_, i) => 'S' + (i + 1)), lines: [{ name: 'Moyenne L/j de la semaine', values: weeks, color: 'var(--brand)', area: true }], h: 220 }) : '<div class="empty">Date de vêlage inconnue : courbe non calculable.</div>')}
+  </div>
+  <div class="section">${card('5', 'Bilan mensuel · 12 derniers mois', tbl([['Mois'], ['Production', 'n'], ['Jours traits', 'n'], ['Moy. vache L/j', 'n'], ['Moy. troupeau', 'n'], ['Indice', 'n'], ['Part du troupeau', 'n'], ['Événements', 'n']], months.map(m => { const me = monthEnd(m), a = per(m, me), H = periodStats(m, me); const ne = evs.filter(e => e.d >= m && e.d <= me).length; return `<tr><td>${monthLbl(m)}</td><td class="n">${nf(a.t, 1)}</td><td class="n">${a.k}</td><td class="n">${nf(a.moy, 2)}</td><td class="n">${nf(H.moyV, 2)}</td><td class="n">${nf(a.moy && H.moyV ? a.moy / H.moyV : null, 2)}</td><td class="n">${pf(H.t ? a.t / H.t : null, 1)}</td><td class="n">${ne || ''}</td></tr>`; })))}</div>
+  <div class="grid g2 section">
+    ${card('6', 'Reproduction', `<div class="kpis" style="grid-template-columns:repeat(2,minmax(0,1fr))">${kpi('Dernier vêlage', fd(vel[0] ?? v.velage) || '–')}${kpi('Vêlage précédent', fd(vel[1]) || '–')}${kpi('Intervalle vêlages', vel[1] != null ? vel[0] - vel[1] : '–', vel[1] != null ? 'jours' : '')}${kpi('Dernière IA', fd(ia?.d) || '–')}${kpi('Dernier diagnostic gestation', fd(lastOf('Diagnostic gestation')?.d) || '–', '', esc(lastOf('Diagnostic gestation')?.detail))}${kpi('Dernier tarissement', fd(lastOf('Tarissement')?.d) || '–')}${kpi('Vêlage prévu (IA + 283 j)', fd(vp) || '–')}${kpi('Tarissement conseillé', fd(vp ? vp - 60 : null) || '–')}</div><p class="tip" style="margin-top:10px">Repères : intervalle vêlage-vêlage visé ≈ 365 à 400 jours ; tarissement 60 jours avant le vêlage prévu.</p>`)}
+    ${card('7', 'Santé', `<div class="kpis" style="grid-template-columns:repeat(2,minmax(0,1fr))">${kpi('Événements santé 12 mois', health.length)}${kpi('Dont mammites', health.filter(e => e.type === 'Mammite').length)}${kpi('Dernier traitement', fd(lastOf('Maladie / Traitement')?.d) || '–', '', esc(lastOf('Maladie / Traitement')?.trait || lastOf('Maladie / Traitement')?.detail))}${kpi('Dernière vaccination', fd(lastOf('Vaccination')?.d) || '–', '', esc(lastOf('Vaccination')?.detail))}</div>`)}
+  </div>
+  <div class="section">${card('8', 'Historique des événements', tbl([['Date'], ['Type'], ['Détail / diagnostic'], ['Traitement / produit'], ['Retrait (j)', 'n'], ['Source']], evs.slice(0, 40).map(e => `<tr><td>${fd(e.d)}</td><td>${esc(e.type)}</td><td>${esc(e.detail)}</td><td>${esc(e.trait)}</td><td class="n">${e.retrait ?? ''}</td><td class="tip">${esc(e.src)}</td></tr>`)), `<button class="btn sm noprint" data-act="evNew" data-id="${esc(v.id)}">${ic('plus')}Événement</button>`)}</div>
+  ${notesBlock('V' + v.id)}`];
+};
+ACT.fvSel = a => { const id = a.value.trim().toUpperCase(); if (IX.reg.has(id)) { ST.vache = id; UI.refresh(); } else UI.toast('Vache inconnue : ' + id); };
+ACT.fvPrev = () => { const ids = DB.reg.map(v => v.id).sort(); const i = ids.indexOf(ST.vache); ST.vache = ids[(i - 1 + ids.length) % ids.length]; UI.refresh(); };
+ACT.fvNext = () => { const ids = DB.reg.map(v => v.id).sort(); const i = ids.indexOf(ST.vache); ST.vache = ids[(i + 1) % ids.length]; UI.refresh(); };
+
+/* ---------- Registre ---------- */
+PAGES.troupeau = () => {
+  const d = IX.last, q = ST.tq.toUpperCase();
+  let L = DB.reg.slice();
+  if (ST.tst === 'actives') L = L.filter(v => v.statut === 'En lactation' || v.statut === 'Tarie'); else if (ST.tst !== 'toutes') L = L.filter(v => v.statut === ST.tst);
+  if (ST.trace) L = L.filter(v => v.race === ST.trace);
+  if (q) L = L.filter(v => v.id.includes(q) || (v.alias || '').toUpperCase().includes(q) || (v.origine || '').toUpperCase().includes(q));
+  L.sort((a, b) => a.id < b.id ? -1 : 1);
+  const cnt = s => DB.reg.filter(v => v.statut === s).length;
+  const rows = L.map(v => { const j = jel(v, d), sp = []; for (let i = 13; i >= 0; i--) sp.push(cowTot(v.id, d - i)); return `<tr class="click" data-act="openCow" data-id="${esc(v.id)}"><td><b>${esc(v.id)}</b></td><td class="tip">${esc(v.alias)}</td><td>${raceTag(v.race)}</td><td>${stTag(v.statut)}</td><td>${fd(v.velage)}</td><td class="n">${v.nbv || 0}</td><td class="n">${j ?? ''}</td><td>${j != null ? `<span class="tag ${j > 305 ? 'morte' : ''}">${esc(stade(j))}</span>` : ''}</td><td>${fd(lastMilk(v.id))}</td><td class="n">${nf(cowMoy7(v.id, d), 2)}</td><td class="n">${nf(cumulLact(v, d), 0)}</td><td>${v.statut === 'En lactation' ? CH.spark(sp) : ''}</td></tr>`; });
+  return ['Registre du troupeau', `${DB.reg.length} vaches enregistrées · calculs au ${fd(d)}`, `<button class="btn primary" data-act="newCow">${ic('plus')}Nouvelle vache</button><button class="btn" data-act="csvReg">${ic('down')}CSV</button>`,
+  `<div class="kpis k6 section">${kpi('En lactation', cnt('En lactation'), '', '', 'hero')}${kpi('Taries (Nbeika)', cnt('Tarie'))}${kpi('Sorties', cnt('Sortie'))}${kpi('Mortes', cnt('Morte'))}${kpi('F1 / ZM / ZMA actives', RACES.map(r => DB.reg.filter(v => v.race === r && (v.statut === 'En lactation' || v.statut === 'Tarie')).length).join(' / '))}${kpi('> 305 j de lactation', DB.reg.filter(v => jel(v, d) > 305).length)}</div>
+  ${card('', '', `<div class="row" style="margin-bottom:12px"><input class="inp" style="max-width:240px" placeholder="Rechercher (ID, alias, origine)" value="${esc(ST.tq)}" data-chg="tq" aria-label="Rechercher"><div class="seg">${[['actives', 'Présentes'], ['En lactation', 'En lactation'], ['Tarie', 'Taries'], ['Sortie', 'Sorties'], ['Morte', 'Mortes'], ['toutes', 'Toutes']].map(([k, l]) => `<button class="${ST.tst === k ? 'on' : ''}" data-act="tst" data-k="${k}">${l}</button>`).join('')}</div><div class="seg">${['', ...RACES].map(r => `<button class="${ST.trace === r ? 'on' : ''}" data-act="trace" data-k="${r}">${r || 'Toutes races'}</button>`).join('')}</div><span class="tip">${L.length} vache(s)</span></div>` + tbl([['ID'], ['Alias'], ['Race'], ['Statut'], ['Dernier vêlage'], ['Vêl.', 'n'], ['JEL', 'n'], ['Stade'], ['Dernière traite'], ['Moy. 7 j', 'n'], ['Cumul lact.', 'n'], ['14 jours']], rows))}`];
+};
+ACT.tq = a => { ST.tq = a.value; UI.refresh(); };
+ACT.tst = a => { ST.tst = a.dataset.k; UI.refresh(); };
+ACT.trace = a => { ST.trace = a.dataset.k; UI.refresh(); };
+function cowForm(v) {
+  return `<div class="form-grid"><div class="field"><label for="cf-id">Identifiant</label><input class="inp" id="cf-id" value="${esc(v?.id || '')}" ${v ? 'disabled' : ''} placeholder="ex. B227"></div><div class="field"><label for="cf-alias">N° boucle / alias</label><input class="inp" id="cf-alias" value="${esc(v?.alias || '')}"></div><div class="field"><label for="cf-race">Race</label><select class="inp" id="cf-race">${RACES.map(r => `<option ${v?.race === r ? 'selected' : ''}>${r}</option>`).join('')}</select></div><div class="field"><label for="cf-st">Statut</label><select class="inp" id="cf-st">${STATUTS.map(s => `<option ${v?.statut === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div><div class="field"><label for="cf-ent">Date d’entrée</label><input class="inp" type="date" id="cf-ent" value="${iso(v ? v.entree : today())}"></div><div class="field"><label for="cf-org">Origine</label><input class="inp" id="cf-org" value="${esc(v?.origine || '')}"></div><div class="field"><label for="cf-vel">Dernier vêlage</label><input class="inp" type="date" id="cf-vel" value="${iso(v?.velage)}"></div><div class="field"><label for="cf-nbv">Nb vêlages</label><input class="inp" id="cf-nbv" inputmode="numeric" value="${v?.nbv ?? ''}"></div><div class="field" style="grid-column:1/-1"><label for="cf-obs">Observation</label><input class="inp" id="cf-obs" value="${esc(v?.obs || '')}"></div></div>`;
+}
+ACT.newCow = () => { const m = UI.modal('Nouvelle vache', cowForm(null) + '<p class="tip">Une vache « Sortie » portant le même identifiant est réintégrée, son historique est conservé.</p>', '<button class="btn primary" id="cf-ok">Enregistrer</button>');
+  $('#cf-ok', m).onclick = () => { const id = $('#cf-id', m).value.trim().toUpperCase(); if (!id) return UI.toast('Identifiant obligatoire.'); const g = k => $('#cf-' + k, m).value.trim();
+    commit('Nouvelle vache ' + id, 'Registre', () => { const [ok, note] = regAjouter(id, g('race'), fromIso(g('ent')) ?? today(), g('org'), g('st'), fromIso(g('vel')), g('alias')); if (ok) { const v = DB.reg.find(x => x.id === id); if (g('obs')) v.obs = g('obs'); if (fromIso(g('vel')) != null) addEvent({ d: fromIso(g('vel')), id, type: 'Vêlage', detail: '', trait: '', retrait: null, rappel: null, obs: '', src: 'Ajout ' + nowStamp() }, false); addEvent({ d: fromIso(g('ent')) ?? today(), id, type: 'Entrée', detail: g('org'), trait: '', retrait: null, rappel: null, obs: '', src: 'Ajout ' + nowStamp() }, false); } return note; })
+    .then(note => { m.remove(); UI.toast(note + ' · Publier les listes sur Kobo.'); ST.vache = id; UI.refresh(); }); }; };
+ACT.editCow = a => { const v = IX.reg.get(a.dataset.id); const m = UI.modal('Modifier ' + v.id, cowForm(v), '<button class="btn primary" id="cf-ok">Enregistrer</button>');
+  $('#cf-ok', m).onclick = () => { const g = k => $('#cf-' + k, m).value.trim(); commit('Modification ' + v.id, 'Registre', () => { Object.assign(v, { alias: g('alias'), race: g('race'), statut: g('st'), entree: fromIso(g('ent')), origine: g('org'), velage: fromIso(g('vel')), nbv: +g('nbv') || 0, obs: g('obs') }); return `Fiche ${v.id} modifiée`; }).then(() => { m.remove(); UI.refresh(); }); }; };
+
+/* ---------- Bases de données ---------- */
+const BASES = {
+  lait: { lbl: 'Traite', all: () => DB.lait, d: r => r.d, id: r => r.id, head: [['Date'], ['Vache'], ['Race'], ['Matin', 'n'], ['Soir', 'n'], ['Total', 'n'], ['Trayeur matin'], ['H.'], ['Trayeur soir'], ['H.'], ['Source']], row: r => `<td>${fd(r.d)}</td><td>${cowLink(r.id)}</td><td>${raceTag(r.race)}</td><td class="n">${nf(r.m, 2)}</td><td class="n">${nf(r.s, 2)}</td><td class="n"><b>${nf(tot(r), 2)}</b></td><td>${esc(r.tm)}</td><td class="tip">${esc(r.hm)}</td><td>${esc(r.ts)}</td><td class="tip">${esc(r.hs)}</td><td class="tip">${esc(r.src)}</td>`,
+    fields: [['d', 'Date', 'date'], ['id', 'Vache'], ['m', 'Matin (L)', 'num'], ['s', 'Soir (L)', 'num'], ['t', 'Total si pas de détail (L)', 'num'], ['tm', 'Trayeur matin'], ['ts', 'Trayeur soir'], ['obs', 'Observation']] },
+  smpl: { lbl: 'SMPL', all: () => DB.smpl, d: r => r.d, id: r => r.bon, head: [['Date'], ['N° bon'], ['Production', 'n'], ['Livré MPE', 'n'], ['Reçu SMPL', 'n'], ['Refusé', 'n'], ['Motif'], ['Densité', 'n'], ['Alcool'], ['Écart', 'n'], ['Écart %', 'n'], ['Statut'], ['Taux liv.', 'n'], ['Montant MRU', 'n']], row: r0 => { const r = smplRow(r0); return `<td>${fd(r.d)}</td><td>${esc(r.bon)}</td><td class="n">${nf(r.prod)}</td><td class="n">${nf(r.livre)}</td><td class="n">${nf(r.recu)}</td><td class="n">${nf(r.refus)}</td><td>${esc(r.motif)}</td><td class="n">${nf(r.dens, 3)}</td><td>${esc(r.alcool)}</td><td class="n">${nf(r.ecart)}</td><td class="n">${pf(r.ecartP)}</td><td><span class="pill ${r.statut === 'Conforme' ? 'ok' : r.statut ? 'warn' : ''}">${esc(r.statut || '–')}</span></td><td class="n">${pf(r.tauxLiv, 0)}</td><td class="n">${nf(r.montant, 0)}</td>`; },
+    fields: [['d', 'Date', 'date'], ['bon', 'N° bon'], ['livre', 'Livré MPE (L)', 'num'], ['recu', 'Reçu SMPL (L)', 'num'], ['refus', 'Refusé (L)', 'num'], ['motif', 'Motif'], ['dens', 'Densité', 'num'], ['alcool', 'Test alcool'], ['prix', 'Prix (MRU/L)', 'num'], ['obs', 'Observation']] },
+  ev: { lbl: 'Événements', all: () => DB.ev, d: r => r.d, id: r => r.id, head: [['Date'], ['Vache'], ['Type'], ['Détail'], ['Traitement'], ['Retrait (j)', 'n'], ['Fin retrait'], ['Rappel'], ['Source']], row: r => `<td>${fd(r.d)}</td><td>${cowLink(r.id)}</td><td>${esc(r.type)}</td><td>${esc(r.detail)}</td><td>${esc(r.trait)}</td><td class="n">${r.retrait ?? ''}</td><td>${r.retrait ? fd(r.d + r.retrait) : ''}</td><td>${fd(r.rappel)}</td><td class="tip">${esc(r.src)}</td>`,
+    fields: [['d', 'Date', 'date'], ['id', 'Vache'], ['type', 'Type', 'type'], ['detail', 'Détail / diagnostic'], ['trait', 'Traitement / produit'], ['retrait', 'Délai de retrait (j)', 'num'], ['rappel', 'Date de rappel', 'date'], ['obs', 'Observation']] },
+  kobo: { lbl: 'Journal Kobo', all: () => DB.kobolog, d: r => r.d, id: r => r.trayeur, ro: true, head: [['UUID'], ['Date traite'], ['Traite'], ['Trayeur'], ['Heure'], ['Vaches', 'n'], ['Total (L)', 'n'], ['Livré SMPL', 'n'], ['Évén.', 'n'], ['Importé le']], row: r => `<td class="tip">${esc(String(r.uuid).slice(0, 8))}…</td><td>${fd(r.d)}</td><td>${esc(r.session)}</td><td>${esc(r.trayeur)}</td><td>${esc(r.heure)}</td><td class="n">${r.nv}</td><td class="n">${nf(r.total, 2)}</td><td class="n">${nf(r.livre)}</td><td class="n">${r.nev}</td><td class="tip">${esc(r.at)}</td>` },
+};
+function baseFiltered() { const B = BASES[ST.bases], q = ST.bq.toUpperCase(), a = fromIso(ST.bfrom), b = fromIso(ST.bto); return B.all().filter(r => (a == null || B.d(r) >= a) && (b == null || B.d(r) <= b) && (!q || String(B.id(r) || '').toUpperCase().includes(q) || (ST.bases === 'ev' && (r.type + ' ' + r.detail + ' ' + r.trait).toUpperCase().includes(q)))).sort((x, y) => B.d(y) - B.d(x)); }
+PAGES.bases = () => {
+  const B = BASES[ST.bases], L = baseFiltered(), PG = 60, np = Math.max(1, Math.ceil(L.length / PG)); ST.bpage = Math.min(ST.bpage, np - 1);
+  const slice = L.slice(ST.bpage * PG, ST.bpage * PG + PG);
+  const rows = slice.map(r => `<tr>${B.row(r)}${B.ro ? '' : `<td class="noprint" style="white-space:nowrap"><button class="icon-btn" data-act="rowEdit" data-i="${B.all().indexOf(r)}" aria-label="Modifier">${ic('edit')}</button> <button class="icon-btn" data-act="rowDel" data-i="${B.all().indexOf(r)}" aria-label="Supprimer">${ic('trash')}</button></td>`}</tr>`);
+  return ['Bases de données', '1 ligne = 1 vache × 1 jour (traite) · 1 jour (SMPL) · 1 événement', `<button class="btn" data-act="csvBase">${ic('down')}Exporter CSV</button>${B.ro ? '' : `<button class="btn primary" data-act="rowNew">${ic('plus')}Ajouter</button>`}`,
+  card('', '', `<div class="row" style="margin-bottom:12px"><div class="seg">${Object.entries(BASES).map(([k, b]) => `<button class="${ST.bases === k ? 'on' : ''}" data-act="bTab" data-k="${k}">${b.lbl} · ${nf(b.all().length, 0)}</button>`).join('')}</div></div><div class="row" style="margin-bottom:12px"><input class="inp" style="max-width:220px" placeholder="${ST.bases === 'smpl' ? 'N° bon' : ST.bases === 'kobo' ? 'Trayeur' : 'ID vache ou mot-clé'}" value="${esc(ST.bq)}" data-chg="bq" aria-label="Filtre"><label class="tip" for="bf">Du</label><input id="bf" type="date" class="inp" style="width:auto" value="${esc(ST.bfrom)}" data-chg="bfrom"><label class="tip" for="bt">au</label><input id="bt" type="date" class="inp" style="width:auto" value="${esc(ST.bto)}" data-chg="bto"><span class="tip">${nf(L.length, 0)} ligne(s)</span><span class="sp" style="flex:1"></span><button class="icon-btn" data-act="bPg" data-k="-1" aria-label="Page précédente">${ic('left')}</button><span class="tip">page ${ST.bpage + 1} / ${np}</span><button class="icon-btn" data-act="bPg" data-k="1" aria-label="Page suivante">${ic('right')}</button></div>` + tbl(B.ro ? B.head : [...B.head, ['']], rows))];
+};
+ACT.bTab = a => { ST.bases = a.dataset.k; ST.bpage = 0; ST.bq = ''; UI.refresh(); };
+ACT.bq = a => { ST.bq = a.value; ST.bpage = 0; UI.refresh(); };
+ACT.bfrom = a => { ST.bfrom = a.value; ST.bpage = 0; UI.refresh(); };
+ACT.bto = a => { ST.bto = a.value; ST.bpage = 0; UI.refresh(); };
+ACT.bPg = a => { ST.bpage = Math.max(0, ST.bpage + +a.dataset.k); UI.refresh(); };
+function rowForm(B, r) { return `<div class="form-grid">${B.fields.map(([k, l, t]) => `<div class="field"><label for="rf-${k}">${l}</label>${t === 'type' ? `<select class="inp" id="rf-${k}">${TYPES_EV.map(x => `<option ${r?.[k] === x ? 'selected' : ''}>${x}</option>`).join('')}</select>` : `<input class="inp" id="rf-${k}" ${t === 'date' ? 'type="date"' : t === 'num' ? 'inputmode="decimal"' : ''} value="${esc(t === 'date' ? iso(r?.[k]) : (r?.[k] ?? ''))}">`}</div>`).join('')}</div>`; }
+function readForm(B, m) { const o = {}; for (const [k, , t] of B.fields) { const v = $('#rf-' + k, m).value.trim(); o[k] = t === 'date' ? fromIso(v) : t === 'num' ? num(v) : (k === 'id' ? v.toUpperCase() : v); } return o; }
+ACT.rowEdit = a => { const B = BASES[ST.bases], r = B.all()[+a.dataset.i]; const m = UI.modal('Modifier la ligne', rowForm(B, r), '<button class="btn primary" id="rf-ok">Enregistrer</button>');
+  $('#rf-ok', m).onclick = () => { const o = readForm(B, m); if (o.d == null) return UI.toast('Date obligatoire.'); if (ST.bases === 'lait' && ((o.m ?? 0) > 25 || (o.s ?? 0) > 25)) return UI.toast('Valeur hors 0–25 L.'); commit(`Modification ${B.lbl} ${fd(r.d)}`, 'Correction', () => { Object.assign(r, o); if (ST.bases === 'lait' && (o.m != null || o.s != null)) r.t = null; r.src = (r.src || '') + (ST.bases !== 'smpl' ? ' · corrigé ' + nowStamp() : ''); return `${B.lbl} : ligne du ${fd(r.d)} ${B.id(r) || ''} corrigée`; }).then(() => { m.remove(); UI.refresh(); }); }; };
+ACT.rowDel = a => { const B = BASES[ST.bases], arr = B.all(), r = arr[+a.dataset.i]; UI.confirm('Supprimer la ligne', `Supprimer la ligne ${esc(B.lbl)} du ${fd(r.d)} ${esc(B.id(r) || '')} ? Elle restera récupérable depuis l’historique.`, 'Supprimer', () => commit(`Suppression ${B.lbl} ${fd(r.d)}`, 'Suppression', () => { arr.splice(arr.indexOf(r), 1); return `${B.lbl} : ligne du ${fd(r.d)} ${B.id(r) || ''} supprimée`; }).then(() => UI.refresh())); };
+ACT.rowNew = a => { const B = BASES[ST.bases]; const pre = a.dataset.id ? { id: a.dataset.id, d: today() } : { d: IX.last }; const m = UI.modal('Ajouter · ' + B.lbl, rowForm(B, pre), '<button class="btn primary" id="rf-ok">Ajouter</button>');
+  $('#rf-ok', m).onclick = () => { const o = readForm(B, m); if (o.d == null) return UI.toast('Date obligatoire.'); commit('Ajout ' + B.lbl, 'Ajout', () => {
+    if (ST.bases === 'lait') { const r = upsertLait(o.d, o.id, { ...o, src: 'Saisie ' + nowStamp() }); if (o.m != null || o.s != null) r.t = null; }
+    else if (ST.bases === 'smpl') { const ex = DB.smpl.find(s => s.d === o.d); if (ex) Object.assign(ex, o); else DB.smpl.push({ ...o, prix: o.prix ?? P().prixLait }); }
+    else addEvent({ ...o, src: 'Saisie ' + nowStamp() });
+    return `${B.lbl} : ajout du ${fd(o.d)} ${o.id || o.bon || ''}`; }).then(() => { m.remove(); UI.refresh(); }); }; };
+ACT.evNew = a => { ST.bases = 'ev'; ACT.rowNew(a); };
+
+/* ---------- export CSV / Excel / JSON ---------- */
+async function download(name, data, type) {
+  if (HOSTED && !STATIC) { const dl = await claude.use('downloads'); if (!dl) return UI.toast('Téléchargement indisponible sur ce lien.'); try { await dl.save({ filename: name, data: data instanceof Blob ? data : new Blob([data], { type }) }); } catch (e) { if (e?.code !== 'declined' && e?.code !== 'cancelled') UI.toast('Téléchargement non effectué.'); } return; } const b = data instanceof Blob ? data : new Blob([data], { type }); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); }
+const csv = (head, rows) => '﻿' + [head, ...rows].map(r => r.map(v => { v = v == null ? '' : typeof v === 'number' ? String(v).replace('.', ',') : String(v); return /[;"\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(';')).join('\r\n');
+function tableData(k) {
+  if (k === 'lait') return [['Date', 'ID vache', 'Race', 'Traite matin (L)', 'Traite soir (L)', 'Total jour (L)', 'Source', 'Observation', 'Trayeur matin', 'Heure matin', 'Trayeur soir', 'Heure soir'], DB.lait.slice().sort((a, b) => a.d - b.d || (a.id < b.id ? -1 : 1)).map(r => [fd(r.d), r.id, r.race, r.m, r.s, r3(tot(r)), r.src, r.obs, r.tm, r.hm, r.ts, r.hs])];
+  if (k === 'smpl') return [['Date', 'N° bon', 'Livré MPE (L)', 'Reçu SMPL (L)', 'Refusé (L)', 'Motif', 'Densité', 'Test alcool', 'Observation', 'Écart (L)', 'Écart (%)', 'Statut', 'Production (L)', 'Non livré (L)', 'Taux livraison', 'Prix', 'Montant (MRU)'], DB.smpl.slice().sort((a, b) => a.d - b.d).map(s0 => { const s = smplRow(s0); return [fd(s.d), s.bon, s.livre, s.recu, s.refus, s.motif, s.dens, s.alcool, s.obs, r3(s.ecart), s.ecartP, s.statut, r3(s.prod), r3(s.nonLivre), s.tauxLiv, s.prix, s.montant]; })];
+  if (k === 'ev') return [['Date', 'ID vache', 'Type', 'Détail', 'Traitement', 'Retrait (j)', 'Rappel', 'Observation', 'Source', 'Fin retrait'], DB.ev.map(e => [fd(e.d), e.id, e.type, e.detail, e.trait, e.retrait, fd(e.rappel), e.obs, e.src, e.retrait ? fd(e.d + e.retrait) : ''])];
+  if (k === 'kobo') return [['UUID', 'Date traite', 'Traite', 'Trayeur', 'Heure', 'Vaches', 'Total (L)', 'Livré SMPL', 'Événements', 'Importé le'], DB.kobolog.map(r => [r.uuid, fd(r.d), r.session, r.trayeur, r.heure, r.nv, r.total, r.livre, r.nev, r.at])];
+  if (k === 'reg') { const d = IX.last; return [['ID vache', 'Alias', 'Race', 'Date entrée', 'Origine', 'Dernier vêlage', 'Nb vêlages', 'Statut', 'Date sortie', 'Motif', 'Observation', 'JEL', 'Stade', 'Dernière traite', 'Moy. 7 j', 'Cumul lactation'], DB.reg.map(v => { const j = jel(v, d); return [v.id, v.alias, v.race, fd(v.entree), v.origine, fd(v.velage), v.nbv, v.statut, fd(v.sortie), v.motif, v.obs, j, stade(j), fd(lastMilk(v.id)), r3(cowMoy7(v.id, d)), r3(cumulLact(v, d))]; })]; }
+}
+ACT.csvBase = () => { const [h, r] = tableData(ST.bases); download(`El_Behgua_${ST.bases}_${iso(today())}.csv`, csv(h, r), 'text/csv;charset=utf-8'); };
+ACT.csvReg = () => { const [h, r] = tableData('reg'); download(`El_Behgua_registre_${iso(today())}.csv`, csv(h, r), 'text/csv;charset=utf-8'); };
+ACT.xlsxAll = async () => { try { const X = await loadXLSX(); const wb = X.utils.book_new(); for (const [k, n] of [['lait', 'BDD_LAIT'], ['smpl', 'BDD_SMPL'], ['ev', 'BDD_EVENEMENTS'], ['reg', 'REGISTRE_VACHES'], ['kobo', 'KOBO_LOG']]) { const [h, r] = tableData(k); X.utils.book_append_sheet(wb, X.utils.aoa_to_sheet([h, ...r]), n); } const out = X.write(wb, { bookType: 'xlsx', type: 'array' }); download(`El_Behgua_export_${iso(today())}.xlsx`, new Blob([out], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })); } catch (e) { UI.modal('Export Excel', `<p>${esc(e.message)}</p>`); } };
+
+/* ---------- Coûts alimentaires ---------- */
+PAGES.alim = () => {
+  const pr = P().prixAlim; const months = []; for (let m = monthStart(IX.last); m >= monthStart(IX.first); m = addMonths(m, -1)) months.push(m);
+  const rows = months.map(m => { const a = DB.alim.find(x => x.m === m) || { q: [] }; const c = alimMonth(m); const st = periodStats(m, monthEnd(m));
+    return `<tr><td><b>${monthLbl(m)}</b></td>${[0, 1, 2, 3, 4, 5, 6].map(i => `<td><input class="cell" style="background:var(--surface-2);width:84px" inputmode="decimal" value="${a.q?.[i] ?? ''}" data-chg="alimQ" data-m="${m}" data-i="${i}" aria-label="${ALIM_LBL[i]} ${monthLbl(m)}"></td>`).join('')}<td class="n">${nf(c?.cout, 0)}</td><td class="n">${nf(st.t, 0)}</td><td class="n">${nf(c?.coutL, 2)}</td><td class="n">${nf(c?.concL, 3)}</td><td class="n">${nf(st.livre, 0)}</td><td class="n">${nf(st.montant, 0)}</td><td class="n"><b>${c ? nf(c.marge, 0) : ''}</b></td></tr>`; });
+  const cm = months.slice(0, 12).reverse().map(m => alimMonth(m));
+  return ['Coûts alimentaires', 'Quantités distribuées aux vaches (hors veaux) et coût du litre de lait', '',
+  `<div class="section">${card('', 'Prix unitaires', `<div class="form-grid">${ALIM_LBL.slice(0, 6).map((l, i) => `<div class="field"><label for="pa-${i}">${l.replace('(kg)', '(MRU / kg)').replace('(bottes)', '(MRU / botte)')}</label><input class="inp" id="pa-${i}" inputmode="decimal" value="${pr[i] ?? ''}" data-chg="alimP" data-i="${i}"></div>`).join('')}<div class="field"><label for="pa-lait">Prix du lait SMPL (MRU / L)</label><input class="inp" id="pa-lait" inputmode="decimal" value="${P().prixLait ?? ''}" data-chg="prixLait"></div></div>${pr.some(x => x == null) ? '<p class="tip" style="margin-top:8px">Renseigner tous les prix pour obtenir un coût complet.</p>' : ''}`)}</div>
+  <div class="section">${card('', 'Marge sur coût alimentaire · 12 mois', CH.combo({ labels: months.slice(0, 12).reverse().map(m => MOIS[toDate(m).getUTCMonth()].slice(0, 4) + '.'), bars: [{ name: 'Coût aliment (MRU)', values: cm.map(c => c?.cout || 0), color: 'var(--matin)' }, { name: 'Recette SMPL (MRU)', values: months.slice(0, 12).reverse().map(m => periodStats(m, monthEnd(m)).montant), color: 'var(--brand)' }], h: 210 }))}</div>
+  ${card('', 'Saisie mensuelle', tbl([['Mois'], ...ALIM_LBL.map(l => [l]), ['Coût total MRU', 'n'], ['Lait (L)', 'n'], ['Coût / L', 'n'], ['Concentré kg/L', 'n'], ['Livré SMPL', 'n'], ['Recette MRU', 'n'], ['Marge MRU', 'n']], rows), '', 'Concentré = tourteau de coton + maïs. Recette = quantité reçue SMPL (ou livrée si non saisie) × prix.')}`];
+};
+ACT.alimQ = a => { const m = +a.dataset.m, i = +a.dataset.i; commit('Aliments ' + monthLbl(m), 'Aliments', () => { let r = DB.alim.find(x => x.m === m); if (!r) DB.alim.push(r = { m, q: [null, null, null, null, null, null, null], src: 'Saisie' }); r.q[i] = num(a.value); return `Aliments ${monthLbl(m)} : ${ALIM_LBL[i]} = ${a.value || 'vide'}`; }).then(() => UI.refresh()); };
+ACT.alimP = a => { commit('Prix aliment', 'Paramètres', () => { P().prixAlim[+a.dataset.i] = num(a.value); return `Prix ${ALIM_LBL[+a.dataset.i]} = ${a.value}`; }).then(() => UI.refresh()); };
+ACT.prixLait = a => { commit('Prix du lait', 'Paramètres', () => { P().prixLait = num(a.value); return `Prix du lait = ${a.value} MRU/L (les jours déjà validés gardent leur prix)`; }).then(() => UI.refresh()); };
+
+/* ---------- KoboToolbox ---------- */
+PAGES.kobo = () => HOSTED ? koboWeb() : koboLocal();
+const SYNC_HORAIRES = '09h40, 13h40, 19h40 et 22h40 (heure de Nouakchott)';
+function koboWeb() {
+  const ok = P().syncCloudOk !== false, sc = P().syncCloud || 'pas encore effectuée';
+  const canFire = !!(WEB.mcp && P().triggerId) && !WEB.ro;
+  const qui = STATIC ? 'GitHub relit le projet Kobo toutes les heures' : `Une tâche planifiée Claude relit le projet Kobo à ${SYNC_HORAIRES}`;
+  return ['KoboToolbox', 'Les fiches des trayeurs arrivent automatiquement dans l’application en ligne', canFire ? `<button class="btn primary" data-act="kFire">${ic('sync')}Synchroniser maintenant</button>` : '',
+  `<div class="kpis section">${kpi('Synchronisation', `<span class="pill ${ok ? 'ok' : 'bad'}" style="font-size:13px"><span class="dot"></span>${ok ? 'Automatique' : 'En échec'}</span>`, '', STATIC ? 'toutes les heures, sans ordinateur allumé' : '4 fois par jour, sans ordinateur allumé')}${kpi('Dernière mise à jour', esc(sc.split(' · ')[0]), '', esc(sc.split(' · ').slice(1).join(' · ')))}${kpi('Dernier n° Kobo importé', esc(P().koboLastId))}${kpi('Fiches importées', DB.kobolog.length, '', 'doublons ignorés automatiquement')}</div>
+  <div class="grid g2 section">
+    ${card('1', 'Comment ça marche', `<div class="alerts"><div class="alert info"><div class="ic">${ic('sync')}</div><div><b>Synchronisation en ligne</b><p>${qui}, ajoute les nouvelles fiches (traites, livraisons SMPL, événements) et met cette page à jour pour tout le monde. Aucun ordinateur ni pont local n’est nécessaire.</p></div></div><div class="alert ok"><div class="ic">${ic('check')}</div><div><b>Sans doublon</b><p>Chaque fiche est reconnue par son identifiant Kobo : une fiche déjà importée est ignorée.</p></div></div><div class="alert ${ok ? 'info' : 'bad'}"><div class="ic">${ic('info')}</div><div><b>État</b><p>${esc(sc)}</p></div></div></div>${canFire ? '<p class="tip">« Synchroniser maintenant » lance la tâche tout de suite : la page se met à jour d’elle-même 2 à 5 minutes plus tard.</p>' : ''}`)}
+    ${card('2', 'Listes du formulaire (vaches, trayeurs)', `<p class="tip" style="margin-top:0">Après un vêlage, un tarissement, une entrée ou une sortie, les listes du formulaire doivent être mises à jour pour que les téléphones proposent les bonnes vaches.</p><div class="kpis" style="grid-template-columns:repeat(3,minmax(0,1fr))">${kpi('vaches.csv', KOBO.lists().n, '', 'en lactation')}${kpi('vaches_toutes.csv', DB.reg.filter(v => v.statut === 'En lactation' || v.statut === 'Tarie').length)}${kpi('trayeurs.csv', P().trayeurs.length + 1)}</div><div class="row" style="margin-top:12px">${WEB.ro ? '' : `<button class="btn primary" data-act="kAskLists" ${P().publierListes ? 'disabled' : ''}>${ic('up')}${P().publierListes ? 'Publication demandée' : 'Publier à la prochaine synchronisation'}</button>`}<button class="btn" data-act="kCsv">${ic('down')}Télécharger les 3 CSV</button></div>`)}
+  </div>
+  ${WEB.ro ? '' : `<div class="section">${card('3', 'Import manuel (secours)', `<p class="tip" style="margin-top:0">Pour importer tout de suite sans attendre : ouvrir le lien, se connecter à Kobo, tout copier puis coller ici.</p><div class="row" style="margin-bottom:10px"><a class="btn" href="${esc(KOBO.dataUrl())}" target="_blank" rel="noopener">${ic('sync')}Ouvrir les nouvelles fiches (n° &gt; ${esc(P().koboLastId)})</a><label class="btn" for="k-file">${ic('up')}Importer un fichier (.json / .xlsx)</label><input type="file" id="k-file" accept=".json,.xlsx,.xls" hidden data-chg="kFile"></div><textarea class="inp" id="k-paste" placeholder="Coller ici le contenu de la page Kobo" style="min-height:110px"></textarea><div class="row end" style="margin-top:10px"><button class="btn primary" data-act="kPaste">Importer le texte collé</button></div>`)}</div>`}
+  ${card('4', 'Dernières fiches importées', tbl(BASES.kobo.head, DB.kobolog.slice(-25).reverse().map(r => `<tr>${BASES.kobo.row(r)}</tr>`)), `<a class="btn sm" href="#bases" data-act="bTabGo">Tout le journal</a>`)}`];
+}
+ACT.kAskLists = () => commit('Demande de publication des listes', 'Kobo', () => { P().publierListes = true; return 'Publication des listes Kobo demandée pour la prochaine synchronisation'; }).then(() => UI.refresh());
+ACT.kFire = async () => { try { await WEB.mcp.callTool('Claude Code Remote', 'fire_trigger', { trigger_id: P().triggerId }); UI.toast('Synchronisation lancée : la page se mettra à jour dans quelques minutes.'); } catch (e) { UI.modal('Synchronisation', `<p>Lancement impossible : ${esc(e.message || e.code)}.\nLa synchronisation automatique (${SYNC_HORAIRES}) continue normalement.</p>`); } };
+function koboLocal() {
+  const c = KOBO.cfg();
+  return ['KoboToolbox', 'Saisie mobile des trayeurs · liaison avec le serveur Kobo', `<button class="btn primary" data-act="kSync" ${KOBO.running ? 'disabled' : ''}>${ic('sync')}Synchroniser maintenant</button>`,
+  `<div class="kpis section">${kpi('Liaison', PONT.ok ? '<span class="pill ok" style="font-size:13px"><span class="dot"></span>Pont local actif</span>' : '<span class="pill warn" style="font-size:13px"><span class="dot"></span>Import manuel</span>', '', PONT.ok ? 'synchronisation automatique possible' : 'lancer « Lancer_El_Behgua.bat » pour l’automatique')}${kpi('Dernière synchronisation', esc((KOBO.last || 'jamais').split(' · ')[0]), '', esc((KOBO.last || '').split(' · ').slice(1).join(' · ')))}${kpi('Dernier n° Kobo importé', nf(P().koboLastId, 0).replace(/\s/g, ' '))}${kpi('Fiches importées', DB.kobolog.length, '', 'doublons ignorés automatiquement')}</div>
+  <div class="grid g2 section">
+    ${card('1', 'Configuration de la liaison', `<div class="form-grid" style="grid-template-columns:minmax(0,1fr)"><div class="field"><label for="k-srv">Adresse du serveur</label><input class="inp" id="k-srv" value="${esc(P().koboServeur)}" data-chg="kCfg"></div><div class="field"><label for="k-uid">Identifiant du projet (UID)</label><input class="inp" id="k-uid" value="${esc(P().koboUid)}" data-chg="kCfg"></div><div class="field"><label for="k-tok">Clé API du compte Kobo</label><input class="inp" id="k-tok" type="password" autocomplete="off" value="${esc(c.tok)}" data-chg="kCfg" placeholder="Kobo › Paramètres du compte › Sécurité › Clé API"></div><div class="row"><div class="field"><label for="k-min">Synchroniser toutes les … minutes</label><input class="inp" id="k-min" inputmode="numeric" style="width:120px" value="${esc(P().koboSyncMin)}" data-chg="kCfg"></div><label class="row tip" style="gap:6px"><input type="checkbox" id="k-auto" ${LS.get('autoSync', true) ? 'checked' : ''} data-chg="kCfg"> Synchroniser à l’ouverture et automatiquement</label></div></div><div class="row" style="margin-top:12px"><button class="btn" data-act="kTest">Tester la connexion</button><button class="btn" data-act="kDetect">Rechercher le pont local</button><button class="btn" data-act="kReset">Tout réimporter (n° = 0)</button></div><p class="tip">La clé API reste dans ce navigateur : elle n’est jamais copiée dans les sauvegardes ni dans le fichier.</p>`)}
+    ${card('2', 'Comment fonctionne la synchronisation', `<div class="alerts"><div class="alert info"><div class="ic">${ic('sync')}</div><div><b>Automatique (recommandé)</b><p>Double-cliquer « Lancer_El_Behgua.bat » dans le dossier de l’application. Le pont local relie l’application au serveur Kobo (que les navigateurs bloquent sinon) et enregistre les données sur le disque, avec une copie datée par jour dans « donnees/historique ».</p></div></div><div class="alert warn"><div class="ic">${ic('info')}</div><div><b>Manuel (sans le pont)</b><p>Bouton « Ouvrir les nouvelles fiches », se connecter à Kobo si demandé, tout sélectionner (Ctrl+A), copier (Ctrl+C) puis coller dans la zone 3. Ou importer un export Excel Kobo (« Valeurs et en-têtes XML »).</p></div></div><div class="alert ok"><div class="ic">${ic('check')}</div><div><b>Sans doublon</b><p>Chaque fiche est reconnue par son UUID : une fiche déjà importée est ignorée, quel que soit le mode.</p></div></div></div>`)}
+  </div>
+  <div class="grid g2 section">
+    ${card('3', 'Import manuel', `<div class="row" style="margin-bottom:10px"><a class="btn" href="${esc(KOBO.dataUrl())}" target="_blank" rel="noopener">${ic('sync')}Ouvrir les nouvelles fiches (n° &gt; ${esc(P().koboLastId)})</a><label class="btn" for="k-file">${ic('up')}Importer un fichier (.json / .xlsx)</label><input type="file" id="k-file" accept=".json,.xlsx,.xls" hidden data-chg="kFile"></div><textarea class="inp" id="k-paste" placeholder="Coller ici le contenu de la page Kobo (texte commençant par {&quot;count&quot;…)" style="min-height:120px"></textarea><div class="row end" style="margin-top:10px"><button class="btn primary" data-act="kPaste">Importer le texte collé</button></div>`)}
+    ${card('4', 'Listes du formulaire (vaches, trayeurs)', `<p class="tip" style="margin-top:0">Après un vêlage, un tarissement, une entrée ou une sortie, mettre à jour les listes du formulaire pour que les téléphones proposent les bonnes vaches.</p><div class="kpis" style="grid-template-columns:repeat(3,minmax(0,1fr))">${kpi('vaches.csv', KOBO.lists().n, '', 'en lactation')}${kpi('vaches_toutes.csv', DB.reg.filter(v => v.statut === 'En lactation' || v.statut === 'Tarie').length, '', 'lactation + taries')}${kpi('trayeurs.csv', P().trayeurs.length + 1)}</div><div class="row" style="margin-top:12px"><button class="btn primary" data-act="kPublish" ${PONT.ok ? '' : 'disabled title="Nécessite le pont local"'}>${ic('up')}Publier les listes sur Kobo</button><button class="btn" data-act="kCsv">${ic('down')}Télécharger les 3 CSV</button></div><p class="tip">Sans le pont : télécharger les CSV puis Kobo › Paramètres › Médias › remplacer les fichiers › Redéployer.</p>`)}
+  </div>
+  ${card('5', 'Dernières fiches importées', tbl(BASES.kobo.head, DB.kobolog.slice(-25).reverse().map(r => `<tr>${BASES.kobo.row(r)}</tr>`)), `<a class="btn sm" href="#bases" data-act="bTabGo">Tout le journal</a>`)}`];
+}
+ACT.bTabGo = () => { ST.bases = 'kobo'; location.hash = 'bases'; };
+ACT.kCfg = () => { P().koboServeur = $('#k-srv').value.trim(); P().koboUid = $('#k-uid').value.trim(); P().koboSyncMin = +$('#k-min').value || 0; LS.set('token', $('#k-tok').value.trim()); LS.set('autoSync', $('#k-auto').checked); persist(); KOBO.schedule(); UI.toast('Configuration Kobo enregistrée.'); };
+ACT.kTest = async () => { try { const r = await KOBO.test(); UI.modal('Connexion réussie', `<p>Projet : <b>${esc(r.name)}</b><br>Fiches sur le serveur : <b>${esc(r.count)}</b><br>Déployé : <b>${r.deployed ? 'oui' : 'non'}</b><br>Mode : ${PONT.ok ? 'pont local' : 'direct'}</p>`); } catch (e) { UI.modal('Test de connexion Kobo', `<p>${esc(e.message)}</p>`); } };
+ACT.kSync = () => KOBO.sync(false);
+ACT.kDetect = async () => { UI.toast('Recherche du pont local…'); const ok = await PONT.detect(); UI.status(); UI.refresh(); if (ok) { UI.toast('Pont local trouvé.'); persist(); } else UI.modal('Pont local introuvable', `<p>${esc(PONT_AIDE())}</p>`); };
+ACT.kReset = () => UI.confirm('Tout réimporter', 'Remettre le compteur à 0 : toutes les fiches du serveur seront relues, les fiches déjà importées restent ignorées (UUID).', 'Remettre à 0', () => { P().koboLastId = 0; persist(); UI.refresh(); });
+async function manualIntegrate(fiches, via) { let res; await commit('Import Kobo (' + via + ')', 'Import Kobo', () => { res = KOBO.integrate(fiches, via); const ids = fiches.map(f => +f.idx).filter(x => x > 0 && via !== 'Excel'); if (ids.length) P().koboLastId = Math.max(P().koboLastId || 0, ...ids); return 'Import Kobo (' + via + ') : ' + res.resume; }); KOBO.last = nowStamp() + ' · ' + res.resume; LS.set('koboLast', KOBO.last); UI.modal('Import KoboToolbox terminé', `<p>${esc(res.resume)}</p>${res.notes.length ? `<p class="tip">${res.notes.map(esc).join('<br>')}<br>Pensez à publier les listes sur Kobo.</p>` : ''}`); UI.refresh(); }
+ACT.kPaste = async () => { try { await manualIntegrate(KOBO.importJsonText($('#k-paste').value), 'collé'); } catch (e) { UI.modal('Import', `<p>${esc(e.message)}</p>`); } };
+ACT.kFile = async a => { const f = a.files[0]; if (!f) return; try { const fiches = /\.json$/i.test(f.name) ? KOBO.importJsonText(await f.text()) : await KOBO.importXlsx(f); await manualIntegrate(fiches, /\.json$/i.test(f.name) ? 'fichier' : 'Excel'); } catch (e) { UI.modal('Import', `<p>${esc(e.message)}</p>`); } a.value = ''; };
+ACT.kCsv = () => { for (const [fn, t] of KOBO.lists().files) download(fn, t, 'text/csv;charset=utf-8'); };
+ACT.kPublish = () => { const n = KOBO.lists().n; UI.confirm('Publier les listes', `Publier sur KoboToolbox les listes à jour (${n} vaches en lactation) et redéployer le formulaire ?`, 'Publier', async () => { try { await KOBO.publishLists(); journal('Kobo', `Listes publiées (${n} vaches en lactation) et formulaire redéployé`); persist(); UI.modal('Listes publiées', `<p>Formulaire redéployé (${n} vaches en lactation).<br>Sur les téléphones : KoboCollect › Télécharger un formulaire.</p>`); } catch (e) { UI.modal('Publication interrompue', `<p>${esc(e.message)}</p><p class="tip">Secours : télécharger les 3 CSV et les remplacer à la main dans Kobo (Médias), puis redéployer.</p>`); } }); };
+
+/* ---------- Paramètres ---------- */
+PAGES.param = () => ['Paramètres', 'Seuils d’alerte, prix, objectif et listes', '',
+  `<div class="grid g2 section">${card('', 'Ferme et objectif', `<div class="form-grid"><div class="field" style="grid-column:1/-1"><label for="p-ferme">Nom de la ferme</label><input class="inp" id="p-ferme" value="${esc(P().ferme)}" data-chg="pSave"></div><div class="field"><label for="p-obj">Objectif de production (L/j)</label><input class="inp" id="p-obj" inputmode="numeric" value="${esc(P().objectif)}" data-chg="pSave"></div><div class="field"><label for="p-objd">Échéance</label><input class="inp" type="date" id="p-objd" value="${esc(P().objectifDate)}" data-chg="pSave"></div></div>`)}
+  ${card('', 'Seuils d’alerte', `<div class="form-grid"><div class="field"><label for="p-sb">Baisse individuelle vs moy. 7 j (%)</label><input class="inp" id="p-sb" inputmode="decimal" value="${nf(P().seuilBaisse * 100, 0)}" data-chg="pSave"></div><div class="field"><label for="p-ss">Tolérance écart MPE / SMPL (%)</label><input class="inp" id="p-ss" inputmode="decimal" value="${nf(P().seuilSmpl * 100, 1)}" data-chg="pSave"></div><div class="field"><label for="p-st">Variation du troupeau J / J-1 (%)</label><input class="inp" id="p-st" inputmode="decimal" value="${nf(P().seuilTroupeau * 100, 0)}" data-chg="pSave"></div></div><label class="row tip" style="gap:8px;margin-top:12px"><input type="checkbox" id="p-eg" ${P().compareEgal ? 'checked' : ''} data-chg="pSave"> Comparer à traite égale quand la traite du soir n’est pas encore saisie</label>`)}</div>
+  <div class="grid g2 section">${card('', 'Trayeurs', `<textarea class="inp" id="p-tray" style="min-height:200px" data-chg="pSave">${esc(P().trayeurs.join('\n'))}</textarea><p class="tip">Un nom par ligne. Puis publier les listes sur Kobo.</p>`)}
+  ${card('', 'Affichage', `<div class="row"><button class="btn" data-act="theme">${ic('moon')}Basculer clair / sombre</button></div><p class="tip" style="margin-top:12px">Application v${APPV} · données reprises de « ${esc(DB.source)} » · chargées depuis : ${esc(DB.loadedFrom)}.</p>`)}</div>`];
+ACT.pSave = () => { commit('Paramètres', 'Paramètres', () => { const p = P(); p.ferme = $('#p-ferme').value.trim(); p.objectif = num($('#p-obj').value) || 0; p.objectifDate = $('#p-objd').value; p.seuilBaisse = (num($('#p-sb').value) ?? 20) / 100; p.seuilSmpl = (num($('#p-ss').value) ?? 2) / 100; p.seuilTroupeau = (num($('#p-st').value) ?? 15) / 100; p.compareEgal = $('#p-eg').checked; p.trayeurs = $('#p-tray').value.split('\n').map(s => s.trim()).filter(Boolean); return 'Paramètres modifiés'; }).then(() => UI.toast('Paramètres enregistrés.')); };
+
+/* ---------- Historique & sauvegardes ---------- */
+PAGES.historique = () => {
+  const snapsP = IDB.snaps().then(list => { const el = $('#snaps'); if (el) el.innerHTML = tbl([['Date'], ['Instantané'], ['Traites', 'n'], ['']], list.map(s => `<tr><td>${esc(s.t)}</td><td>${esc(s.label)}</td><td class="n">${nf(s.n, 0)}</td><td><button class="btn sm" data-act="restore" data-id="${s.id}">Restaurer</button></td></tr>`)); });
+  return ['Historique & sauvegardes', 'Toutes les modifications sont tracées et annulables', '',
+  `<div class="grid g2 section">${card('', 'Sauvegardes', `<div class="alerts"><div class="alert ${HOSTED || PONT.ok ? 'ok' : 'warn'}"><div class="ic">${ic(HOSTED || PONT.ok ? 'check' : 'info')}</div><div><b>${HOSTED ? 'Données enregistrées en ligne' : PONT.ok ? 'Enregistrement sur le disque actif' : 'Enregistrement dans ce navigateur uniquement'}</b><p>${HOSTED ? 'Chaque modification crée une nouvelle version de la page : l’historique complet des versions est conservé en ligne et partagé avec les personnes qui ont le lien.' : PONT.ok ? 'Fichier « donnees/el_behgua_donnees.json » + copie datée chaque jour dans « donnees/historique ».' : 'Les données restent dans ce navigateur sur cet ordinateur. Lancer « Lancer_El_Behgua.bat » pour un enregistrement sur le disque, ou exporter une sauvegarde chaque semaine.'}</p></div></div></div><div class="row" style="margin-top:14px"><button class="btn primary" data-act="bkExport">${ic('down')}Exporter une sauvegarde (.json)</button><label class="btn" for="bk-file">${ic('up')}Restaurer une sauvegarde</label><input type="file" id="bk-file" accept=".json" hidden data-chg="bkImport"><button class="btn" data-act="xlsxAll">${ic('down')}Exporter vers Excel</button></div>`)}
+  ${card('', 'Instantanés automatiques', '<div id="snaps"><div class="empty">Chargement…</div></div>', '', 'Un instantané est pris avant chaque synchronisation, saisie, correction ou suppression (12 derniers conservés).')}</div>
+  ${card('', 'Journal des modifications', tbl([['Date'], ['Type'], ['Résumé']], DB.journal.slice(0, 300).map(j => `<tr><td style="white-space:nowrap">${esc(j.t)}</td><td><span class="tag">${esc(j.type)}</span></td><td>${esc(j.resume)}</td></tr>`)))}`];
+};
+ACT.restore = a => UI.confirm('Restaurer un instantané', 'Revenir à cet état ? L’état actuel est d’abord mis de côté dans un nouvel instantané.', 'Restaurer', async () => { const s = await IDB.getSnap(+a.dataset.id); if (!s) return; await snapshot('Avant restauration'); const notes = DB.notes; DB = decode(JSON.parse(s.data)); DB.loadedFrom = 'instantané'; journal('Restauration', 'Retour à l’instantané « ' + s.label + ' » du ' + s.t); reindex(); persist(true); UI.toast('Instantané restauré.'); UI.refresh(); });
+ACT.bkExport = () => { download(`El_Behgua_sauvegarde_${iso(today())}.json`, JSON.stringify(encode(DB)), 'application/json'); journal('Sauvegarde', 'Sauvegarde exportée'); persist(); };
+ACT.bkImport = async a => { const f = a.files[0]; if (!f) return; try { const raw = JSON.parse(await f.text()); if (!raw.lait || !raw.dict) throw new Error('Fichier de sauvegarde non reconnu.'); UI.confirm('Restaurer la sauvegarde', `Remplacer les données actuelles par « ${esc(f.name)} » ? L’état actuel est mis de côté dans un instantané.`, 'Restaurer', async () => { await snapshot('Avant import de sauvegarde'); DB = decode(raw); DB.loadedFrom = 'sauvegarde'; journal('Restauration', 'Sauvegarde importée : ' + f.name); reindex(); persist(true); UI.refresh(); }); } catch (e) { UI.modal('Restauration', `<p>${esc(e.message)}</p>`); } a.value = ''; };
+
+/* ---------- Contrôle qualité ---------- */
+PAGES.qualite = () => {
+  const d = IX.last, out = [];
+  const big = DB.lait.filter(r => (r.m ?? 0) > 25 || (r.s ?? 0) > 25 || (r.m ?? 0) < 0 || (r.s ?? 0) < 0 || (r.m == null && r.s == null && (r.t ?? 0) > 40));
+  out.push(['bad', 'Valeurs hors limites (0–25 L par traite)', big.map(r => `${r.id} le ${fd(r.d)} : ${nf(r.m, 2)} / ${nf(r.s, 2)} L`)]);
+  const unk = [...new Set(DB.lait.filter(r => !IX.reg.has(r.id)).map(r => r.id))];
+  out.push(['warn', 'Traites de vaches absentes du registre', unk]);
+  const gone = DB.lait.filter(r => { const v = IX.reg.get(r.id); return v && (v.statut === 'Sortie' || v.statut === 'Morte') && v.sortie != null && r.d > v.sortie; });
+  out.push(['warn', 'Traites après la date de sortie ou de mort', gone.slice(0, 80).map(r => `${r.id} le ${fd(r.d)}`)]);
+  const silent = DB.reg.filter(v => v.statut === 'En lactation' && (lastMilk(v.id) == null || d - lastMilk(v.id) >= 3));
+  out.push(['warn', 'En lactation mais non traites depuis 3 jours ou plus', silent.map(v => `${v.id} (dernière traite ${fd(lastMilk(v.id)) || 'aucune'})`)]);
+  const taries = DB.reg.filter(v => v.statut === 'Tarie' && (IX.byCow.get(v.id) || []).some(r => r.d >= d - 2 && tot(r) > 0));
+  out.push(['warn', 'Taries mais traites ces 3 derniers jours (statut à vérifier)', taries.map(v => v.id)]);
+  const noVel = DB.reg.filter(v => v.statut === 'En lactation' && !v.velage);
+  out.push(['info', 'En lactation sans date de vêlage (JEL non calculable)', noVel.map(v => v.id)]);
+  const lateL = DB.reg.filter(v => jel(v, d) > 305);
+  out.push(['info', 'Lactation prolongée (> 305 j) : tarissement à envisager', lateL.map(v => `${v.id} (${jel(v, d)} j)`)]);
+  const smiss = DB.smpl.filter(s => s.livre != null && s.recu == null);
+  out.push(['warn', 'Livraisons SMPL sans quantité reçue', smiss.map(s => fd(s.d))]);
+  const hors = DB.smpl.map(smplRow).filter(s => s.statut === 'Écart à justifier');
+  out.push(['warn', `Écarts SMPL au-delà de la tolérance (${pf(P().seuilSmpl, 0)})`, hors.map(s => `${fd(s.d)} : ${nf(s.ecart)} L (${pf(s.ecartP)})`)]);
+  const overLiv = DB.smpl.map(smplRow).filter(s => s.livre != null && s.prod > 0 && s.livre > s.prod * 1.05);
+  out.push(['warn', 'Livré SMPL supérieur à la production saisie (+5 %)', overLiv.map(s => `${fd(s.d)} : livré ${nf(s.livre)} L, produit ${nf(s.prod)} L`)]);
+  const inc = IX.dates.filter(x => x > d - 30 && incomplete(x));
+  out.push(['info', 'Journées sans traite du soir (30 derniers jours)', inc.map(fd)]);
+  const ok = out.filter(o => !o[2].length).length;
+  return ['Contrôle qualité', `${out.length - ok} point(s) à vérifier sur ${out.length} contrôles`, '',
+  `<div class="grid g2">${out.map(([c, t, items]) => card('', `<span class="pill ${items.length ? c === 'info' ? 'brand' : c : 'ok'}">${items.length}</span> ${t}`, items.length ? `<div class="wa" style="max-height:170px">${esc(items.slice(0, 120).join(' · '))}${items.length > 120 ? ' …' : ''}</div>` : '<p class="tip" style="margin:0">Aucune anomalie.</p>')).join('')}</div>`];
+};
+
+/* ================= Démarrage ================= */
+(async function main() {
+  const th = LS.get('theme', null); if (th) document.documentElement.dataset.theme = th;
+  try { await boot(); } catch (e) { $('#view').innerHTML = `<div class="banner">${ic('alert')}<div>Erreur au chargement : ${esc(e.message)}</div></div>`; console.error(e); return; }
+  UI.refresh();
+  if (HOSTED) return;
+  KOBO.schedule();
+  if (LS.get('autoSync', true) && KOBO.cfg().tok && PONT.ok) setTimeout(() => KOBO.sync(true), 1500);
+  setInterval(async () => { const was = PONT.ok; await PONT.detect(); if (was !== PONT.ok) { UI.status(); if (PONT.ok) persist(); } }, 60000);
+})();
+</script>
+
+</body>
+</html>
