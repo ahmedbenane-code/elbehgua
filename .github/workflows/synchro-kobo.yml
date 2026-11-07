@@ -1,0 +1,38 @@
+# Synchronisation automatique KoboToolbox -> data.json (toutes les heures)
+# La cle API Kobo est lue dans le secret du depot KOBO_TOKEN.
+name: Synchro Kobo
+on:
+  schedule:
+    - cron: '10 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: synchro-kobo
+  cancel-in-progress: false
+jobs:
+  synchro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Importer les nouvelles fiches Kobo
+        env:
+          KOBO_TOKEN: ${{ secrets.KOBO_TOKEN }}
+        run: |
+          set +e
+          python3 kobo_sync.py data.json data_new.json
+          code=$?
+          set -e
+          if [ "$code" = "0" ]; then
+            mv data_new.json data.json
+            git config user.name "synchro-kobo"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data.json
+            git commit -m "Synchro Kobo $(date -u '+%Y-%m-%d %H:%M')"
+            git push
+          elif [ "$code" != "3" ]; then
+            echo "Echec de la synchronisation"; exit 1
+          fi
