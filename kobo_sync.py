@@ -31,21 +31,30 @@ def s_(v): return '' if v is None else str(v).strip()
 def tray(v, autre):
     s = s_(v)
     return (s_(autre) or 'Autre') if s.lower() == 'autre' else s.replace('_', ' ')
-TYPES = {'velage': 'Vêlage', 'tarissement': 'Tarissement', 'chaleur': 'Chaleur', 'ia': 'Insémination (IA)', 'diag_gestation': 'Diagnostic gestation', 'maladie': 'Maladie / Traitement', 'mammite': 'Mammite', 'vaccination': 'Vaccination', 'deparasitage': 'Déparasitage', 'mortalite': 'Mortalité', 'sortie': 'Sortie / Vente', 'entree': 'Entrée'}
+TYPES = {'velage': 'Vêlage', 'tarissement': 'Tarissement', 'chaleur': 'Chaleur', 'ia': 'Insémination (IA)', 'diag_gestation': 'Diagnostic gestation', 'maladie': 'Maladie / Traitement', 'mammite': 'Mammite', 'vaccination': 'Vaccination', 'deparasitage': 'Déparasitage', 'mortalite': 'Mortalité', 'sortie': 'Sortie / Vente', 'entree': 'Entrée', 'avortement': 'Avortement'}
 MOTIFS = {'acidite': 'Acidité', 'densite': 'Densité', 'alcool': 'Test alcool positif', 'proprete': 'Propreté', 'temperature': 'Température', 'mouillage': 'Mouillage'}
+
+GEST = {'gestante': 'Gestante', 'vide': 'Vide', 'douteux': 'Douteux, à revoir'}
+def gest(res, mois, detail, lieu):
+    parts = []
+    if s_(res): parts.append(GEST.get(s_(res).lower(), s_(res)) + (' (%s mois)' % s_(mois) if s_(mois) else ''))
+    if s_(detail): parts.append(s_(detail))
+    if lieu == 'nbeika': parts.append('Nbeika')
+    return ' · '.join(parts)
 
 def parse(s):
     f = lambda n: find(s, n)
     F = dict(idx=s_(f('_id')), uuid=s_(f('_uuid')), d=day(f('date_traite')), session=s_(f('session')).lower(), trayeur=tray(f('trayeur'), f('trayeur_autre')),
              heure=s_(f('heure_debut'))[:5], livraison=s_(f('livraison')).lower(), bon=s_(f('n_bon')), livre=num(f('livre_mpe')), recu=num(f('recu_smpl')),
-             refus=num(f('refus')), motif=s_(f('motif')), dens=num(f('densite')), alcool=s_(f('test_alcool')).lower(), traites=[], events=[])
+             refus=num(f('refus')), motif=s_(f('motif')), dens=num(f('densite')), alcool=s_(f('test_alcool')).lower(), traites=[], events=[], lieu=s_(f('lieu')))
+    if not F['trayeur'] and s_(f('agent')): F['trayeur'] = s_(f('agent'))
     for grp, cid, cl in (('traite', 'vache_id', 'litres'), ('autres', 'autre_id', 'autre_litres')):
         for e in (f(grp) or []):
             F['traites'].append(dict(id=s_(find(e, cid)).upper(), L=num(find(e, cl)), tray=tray(find(e, 'trayeur'), find(e, 'trayeur_autre'))))
     for e in (f('evenements') or []):
         g = lambda n: find(e, n)
         F['events'].append(dict(type=TYPES.get(s_(g('ev_type')).lower(), 'Autre'), id=s_(g('ev_id')).upper(), newid=s_(g('ev_nouvel_id')).upper(), race=s_(g('ev_race')).upper(),
-                                statut=s_(g('ev_statut')).lower(), velage=day(g('ev_velage')), detail=s_(g('ev_detail')), trait=s_(g('ev_traitement')), retrait=num(g('ev_retrait')), rappel=day(g('ev_rappel'))))
+                                statut=s_(g('ev_statut')).lower(), velage=day(g('ev_velage')), detail=gest(g('ev_gestation'), g('ev_mois'), g('ev_detail'), F['lieu']), trait=s_(g('ev_traitement')), retrait=num(g('ev_retrait')), rappel=day(g('ev_rappel'))))
     return F
 
 def decode(raw):
@@ -158,7 +167,7 @@ def http(method, url, tok, body=None):
 def lists(raw):
     reg = raw['reg']; lact = [v for v in reg if v['statut'] == 'En lactation']
     t1 = 'name,label,rang,race,nb\r\n' + ''.join('%s,%s - %s,%d,%s,%d\r\n' % (v['id'], v['id'], v['race'], k + 1, v['race'], len(lact)) for k, v in enumerate(lact))
-    t2 = 'name,label\r\n' + ''.join('%s,%s - %s - %s\r\n' % (v['id'], v['id'], v['race'], v['statut']) for v in reg if v['statut'] in ('En lactation', 'Tarie'))
+    t2 = 'name,label,site\r\n' + ''.join('%s,%s - %s - %s,%s\r\n' % (v['id'], v['id'], v['race'], v['statut'], 'nbeika' if v['statut'] == 'Tarie' else 'elbehgua') for v in reg if v['statut'] in ('En lactation', 'Tarie'))
     t3 = 'name,label\r\n' + ''.join('%s,%s\r\n' % (n.replace(' ', '_').replace(',', ''), n.replace(',', '')) for n in raw['param'].get('trayeurs', []) if n) + 'autre,Autre (écrire le nom) / أخرى\r\n'
     return len(lact), [('vaches.csv', t1), ('vaches_toutes.csv', t2), ('trayeurs.csv', t3)]
 def publish_lists(raw, srv, uid, tok):
