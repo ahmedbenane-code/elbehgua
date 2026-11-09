@@ -4,6 +4,7 @@
 Usage : python3 kobo_sync.py data.json data_new.json  (clé API dans la variable KOBO_TOKEN)
 Code de sortie : 0 = nouvelles fiches intégrées (publier data_new.json), 3 = rien de nouveau, 1 = erreur.
 Portage fidèle de KOBO.integrate() de l'application (et de la macro Kobo_Ecrire du classeur).
+Sites : Tarie = Nbeika (reproduction), En lactation = El Behgua ; un vêlage à Nbeika crée un événement « Transfert » vers El Behgua.
 """
 import json, os, sys, time, datetime, urllib.request, urllib.parse, base64
 
@@ -88,13 +89,22 @@ def integrate(raw, fiches):
         for r in rows:
             if r['id'] == i: return r.get('race') or ''
         return ''
-    def add_event(e, maj=True):
+    def push_ev(e):
         ev.append([e['d'], e['id'], e['type'], e.get('detail', ''), e.get('trait', ''), e.get('retrait'), e.get('rappel'), e.get('obs', ''), e.get('src', '')])
+    def add_event(e, maj=True):
+        push_ev(e)
         v = regmap.get(e['id'])
         if not v or not maj: return
         t = e['type']
-        if t == 'Vêlage': v['statut'] = 'En lactation'; v['velage'] = e['d']; v['nbv'] = (v.get('nbv') or 0) + 1
-        elif t == 'Tarissement': v['statut'] = 'Tarie'
+        if t == 'Vêlage':
+            # une vache qui vêle à Nbeika est transportée à El Behgua pour la traite
+            if v.get('site') == 'Nbeika' or v['statut'] == 'Tarie':
+                push_ev(dict(d=e['d'], id=e['id'], type='Transfert', detail='Nbeika → El Behgua (vêlage, mise en traite)', obs=e.get('obs', ''), src=e.get('src', '')))
+            v['statut'] = 'En lactation'; v['site'] = 'El Behgua'; v['velage'] = e['d']; v['nbv'] = (v.get('nbv') or 0) + 1
+        elif t == 'Tarissement':
+            if v.get('site') != 'Nbeika':
+                push_ev(dict(d=e['d'], id=e['id'], type='Transfert', detail='El Behgua → Nbeika (tarissement)', obs=e.get('obs', ''), src=e.get('src', '')))
+            v['statut'] = 'Tarie'; v['site'] = 'Nbeika'
         elif t == 'Mortalité': v['statut'] = 'Morte'; v['sortie'] = e['d']; v['motif'] = 'Mortalité'
         elif t == 'Sortie / Vente': v['statut'] = 'Sortie'; v['sortie'] = e['d']; v['motif'] = e.get('detail', '')
     def reg_add(i, race, dEnt, orig, st, dVel):
@@ -106,11 +116,17 @@ def integrate(raw, fiches):
                 if orig: v['origine'] = orig
                 if race: v['race'] = race
                 if dVel is not None and (v.get('velage') is None or dVel > v['velage']): v['velage'] = dVel; v['nbv'] = (v.get('nbv') or 0) + 1
-                v['statut'] = st
+                v['statut'] = st; v['site'] = 'Nbeika' if st == 'Tarie' else 'El Behgua'
                 return True, '%s : réintégrée (était sortie), statut %s' % (i, st)
+            if v['statut'] == 'Tarie' and st == 'En lactation':
+                # vache de Nbeika qui arrive à El Behgua après son vêlage
+                if dVel is not None and (v.get('velage') is None or dVel > v['velage']): v['velage'] = dVel; v['nbv'] = (v.get('nbv') or 0) + 1
+                v['statut'] = 'En lactation'; v['site'] = 'El Behgua'
+                push_ev(dict(d=dEnt, id=i, type='Transfert', detail='Nbeika → El Behgua (vêlage, mise en traite)', src='Kobo ' + stamp()))
+                return True, '%s : arrivée de Nbeika, mise en lactation à El Behgua' % i
             if v['statut'] == 'Morte': return False, '%s : identifiant d’une vache MORTE, non ajoutée (vérifier le numéro)' % i
             return False, '%s : déjà présente dans le registre (%s)' % (i, v['statut'])
-        v = dict(id=i, alias='', race=race, entree=dEnt, origine=orig, velage=dVel, nbv=1 if dVel is not None else 0, statut=st, sortie=None, motif='', obs='')
+        v = dict(id=i, alias='', race=race, entree=dEnt, origine=orig, velage=dVel, nbv=1 if dVel is not None else 0, statut=st, site='Nbeika' if st == 'Tarie' else 'El Behgua', sortie=None, motif='', obs='')
         reg.append(v); regmap[i] = v
         return True, '%s : ajoutée au registre (%s)' % (i, st)
     deja = {(k[0] if isinstance(k, list) else k.get('uuid')) for k in klog}; seen = set(); src = 'Kobo ' + stamp(); notes = []
@@ -151,7 +167,8 @@ def integrate(raw, fiches):
                     ok, note = reg_add(i, e['race'], F['d'], e['detail'], st, e['velage']); notes.append(note)
                     if ok and e['velage'] is not None: add_event(dict(d=e['velage'], id=i, type='Vêlage', src=src), False)
             if i:
-                add_event(dict(d=F['d'], id=i, type=e['type'], detail=e['detail'], trait=e['trait'], retrait=e['retrait'], rappel=e['rappel'], obs=('Trayeur : ' + F['trayeur']) if F['trayeur'] else '', src=src))
+                obs = ('Nbeika · Responsable : ' + F['trayeur'] if F['trayeur'] else 'Nbeika') if F['lieu'] == 'nbeika' else (('Trayeur : ' + F['trayeur']) if F['trayeur'] else '')
+                add_event(dict(d=F['d'], id=i, type=e['type'], detail=e['detail'], trait=e['trait'], retrait=e['retrait'], rappel=e['rappel'], obs=obs, src=src))
                 ne += 1; nEv += 1
         klog.append(dict(uuid=F['uuid'], d=F['d'], session=F['session'], trayeur=F['trayeur'], heure=F['heure'], nv=nv, total=round(tt, 3), livre=F['livre'] if F['livraison'] == 'oui' else None, nev=ne, at=stamp(), via='Claude (cloud)'))
     encode(raw, rows)
@@ -167,7 +184,7 @@ def http(method, url, tok, body=None):
 def lists(raw):
     reg = raw['reg']; lact = [v for v in reg if v['statut'] == 'En lactation']
     t1 = 'name,label,rang,race,nb\r\n' + ''.join('%s,%s - %s,%d,%s,%d\r\n' % (v['id'], v['id'], v['race'], k + 1, v['race'], len(lact)) for k, v in enumerate(lact))
-    t2 = 'name,label,site\r\n' + ''.join('%s,%s - %s - %s,%s\r\n' % (v['id'], v['id'], v['race'], v['statut'], 'nbeika' if v['statut'] == 'Tarie' else 'elbehgua') for v in reg if v['statut'] in ('En lactation', 'Tarie'))
+    t2 = 'name,label,site\r\n' + ''.join('%s,%s - %s - %s,%s\r\n' % (v['id'], v['id'], v['race'], v['statut'], 'nbeika' if (v.get('site') or ('Nbeika' if v['statut'] == 'Tarie' else 'El Behgua')) == 'Nbeika' else 'elbehgua') for v in reg if v['statut'] in ('En lactation', 'Tarie'))
     t3 = 'name,label\r\n' + ''.join('%s,%s\r\n' % (n.replace(' ', '_').replace(',', ''), n.replace(',', '')) for n in raw['param'].get('trayeurs', []) if n) + 'autre,Autre (écrire le nom) / أخرى\r\n'
     return len(lact), [('vaches.csv', t1), ('vaches_toutes.csv', t2), ('trayeurs.csv', t3)]
 def publish_lists(raw, srv, uid, tok):

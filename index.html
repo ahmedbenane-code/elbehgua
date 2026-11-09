@@ -1,12 +1,4 @@
-<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Suivi de la production laitière de la ferme d’El Behgua · MPE">
-<meta name="robots" content="noindex">
-</head>
-<body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Suivi laitier El Behgua</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -173,7 +165,7 @@ tr.click{cursor:pointer} tr.click:hover td,tbody tr:hover td{background:color-mi
 tfoot td{font-weight:700;background:var(--surface-2)}
 .tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:600;background:var(--surface-2);white-space:nowrap}
 .tag.F1{background:var(--brand-soft);color:var(--brand)} .tag.ZM{background:var(--matin-soft);color:var(--matin)} .tag.ZMA{background:var(--soir-soft);color:var(--soir)}
-.tag.lact{background:var(--ok-soft);color:var(--ok)} .tag.tarie{background:var(--soir-soft);color:var(--soir)} .tag.sortie{background:var(--surface-2);color:var(--muted)} .tag.morte{background:var(--bad-soft);color:var(--bad)}
+.tag.lact{background:var(--ok-soft);color:var(--ok)} .tag.tarie{background:var(--soir-soft);color:var(--soir)} .tag.sortie{background:var(--surface-2);color:var(--muted)} .tag.nb{background:var(--matin-soft);color:var(--matin)} .tag.eb{background:var(--brand-soft);color:var(--brand)} .tag.morte{background:var(--bad-soft);color:var(--bad)}
 .empty{padding:28px;text-align:center;color:var(--muted);font-size:13px;background:var(--surface-2);border-radius:var(--r-lg)}
 
 /* formulaires */
@@ -297,7 +289,9 @@ const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const RACES = ['F1', 'ZM', 'ZMA'];
 const STATUTS = ['En lactation', 'Tarie', 'Sortie', 'Morte'];
-const TYPES_EV = ['Vêlage','Tarissement','Chaleur','Insémination (IA)','Diagnostic gestation','Maladie / Traitement','Mammite','Vaccination','Déparasitage','Mortalité','Sortie / Vente','Entrée','Autre'];
+const TYPES_EV = ['Vêlage','Tarissement','Chaleur','Insémination (IA)','Diagnostic gestation','Avortement','Maladie / Traitement','Mammite','Vaccination','Déparasitage','Mortalité','Sortie / Vente','Entrée','Transfert','Autre'];
+const siteOf = v => v.site || (v.statut === 'Tarie' ? 'Nbeika' : v.statut === 'En lactation' ? 'El Behgua' : '');
+const siteFor = (st, prev) => st === 'Tarie' ? 'Nbeika' : st === 'En lactation' ? 'El Behgua' : (prev || '');
 const MOTIFS = ['Acidité','Densité','Test alcool positif','Propreté','Température','Mouillage','Autre'];
 const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 const JOURS = ['dim.','lun.','mar.','mer.','jeu.','ven.','sam.'];
@@ -537,8 +531,13 @@ function raceOf(id) { return IX.reg.get(id)?.race || (IX.byCow.get(id)?.[0]?.rac
 function addEvent(e, majRegistre = true) {
   DB.ev.push(e);
   const v = DB.reg.find(x => x.id === e.id); if (!v || !majRegistre) return;
-  if (e.type === 'Vêlage') { v.statut = 'En lactation'; v.velage = e.d; v.nbv = (v.nbv || 0) + 1; }
-  else if (e.type === 'Tarissement') v.statut = 'Tarie';
+  const tr = detail => DB.ev.push({ d: e.d, id: e.id, type: 'Transfert', detail, trait: '', retrait: null, rappel: null, obs: e.obs || '', src: e.src || '' });
+  if (e.type === 'Vêlage') {
+    // une vache qui vêle à Nbeika est transportée à El Behgua pour la traite
+    if (siteOf(v) === 'Nbeika' || v.statut === 'Tarie') tr('Nbeika → El Behgua (vêlage, mise en traite)');
+    v.statut = 'En lactation'; v.site = 'El Behgua'; v.velage = e.d; v.nbv = (v.nbv || 0) + 1;
+  }
+  else if (e.type === 'Tarissement') { if (siteOf(v) !== 'Nbeika') tr('El Behgua → Nbeika (tarissement)'); v.statut = 'Tarie'; v.site = 'Nbeika'; }
   else if (e.type === 'Mortalité') { v.statut = 'Morte'; v.sortie = e.d; v.motif = 'Mortalité'; }
   else if (e.type === 'Sortie / Vente') { v.statut = 'Sortie'; v.sortie = e.d; v.motif = e.detail || ''; }
 }
@@ -546,17 +545,24 @@ function regReintegrer(v, race, dEnt, orig, st, dVel) {
   let hist = 'Sortie' + (v.sortie ? ' le ' + fd(v.sortie) : '') + (v.motif ? ` (${v.motif})` : '') + ', réintégrée le ' + fd(dEnt) + (v.obs ? ' | ' + v.obs : '');
   v.obs = hist; v.sortie = null; v.motif = ''; v.entree = dEnt; if (orig) v.origine = orig; if (race) v.race = race;
   if (dVel != null && (!v.velage || dVel > v.velage)) { v.velage = dVel; v.nbv = (v.nbv || 0) + 1; }
-  v.statut = st;
+  v.statut = st; v.site = st === 'Tarie' ? 'Nbeika' : 'El Behgua';
 }
 /* renvoie [ajoutée?, note] */
 function regAjouter(id, race, dEnt, orig, st, dVel, alias) {
   const v = DB.reg.find(x => x.id === id);
   if (v) {
     if (v.statut === 'Sortie') { regReintegrer(v, race, dEnt, orig, st, dVel); return [true, `${id} : réintégrée (était sortie), statut ${st}`]; }
+    if (v.statut === 'Tarie' && st === 'En lactation') {
+      // vache de Nbeika qui arrive à El Behgua après son vêlage
+      if (dVel != null && (!v.velage || dVel > v.velage)) { v.velage = dVel; v.nbv = (v.nbv || 0) + 1; }
+      v.statut = 'En lactation'; v.site = 'El Behgua';
+      DB.ev.push({ d: dEnt, id, type: 'Transfert', detail: 'Nbeika → El Behgua (vêlage, mise en traite)', trait: '', retrait: null, rappel: null, obs: '', src: 'Kobo ' + nowStamp() });
+      return [true, `${id} : arrivée de Nbeika, mise en lactation à El Behgua`];
+    }
     if (v.statut === 'Morte') return [false, `${id} : identifiant d’une vache MORTE, non ajoutée (vérifier le numéro)`];
     return [false, `${id} : déjà présente dans le registre (${v.statut})`];
   }
-  DB.reg.push({ id, alias: alias || '', race: race || '', entree: dEnt, origine: orig || '', velage: dVel ?? null, nbv: dVel != null ? 1 : 0, statut: st, sortie: null, motif: '', obs: '' });
+  DB.reg.push({ id, alias: alias || '', race: race || '', entree: dEnt, origine: orig || '', velage: dVel ?? null, nbv: dVel != null ? 1 : 0, statut: st, site: st === 'Tarie' ? 'Nbeika' : 'El Behgua', sortie: null, motif: '', obs: '' });
   return [true, `${id} : ajoutée au registre (${st})`];
 }
 function upsertLait(d, id, patch) {
@@ -619,7 +625,7 @@ const KOBO = {
   find(o, name) { if (!o || typeof o !== 'object') return undefined; name = name.toLowerCase(); for (const k of Object.keys(o)) { const l = k.toLowerCase(); if (l === name || l.endsWith('/' + name)) return o[k]; } return undefined; },
   str(v) { return v == null ? '' : String(v).trim(); },
   tray(v, autre) { let s = this.str(v); if (s.toLowerCase() === 'autre') { s = this.str(autre) || 'Autre'; } else s = s.replace(/_/g, ' '); return s; },
-  type(c) { return ({ velage: 'Vêlage', tarissement: 'Tarissement', chaleur: 'Chaleur', ia: 'Insémination (IA)', diag_gestation: 'Diagnostic gestation', maladie: 'Maladie / Traitement', mammite: 'Mammite', vaccination: 'Vaccination', deparasitage: 'Déparasitage', mortalite: 'Mortalité', sortie: 'Sortie / Vente', entree: 'Entrée' })[this.str(c).toLowerCase()] || 'Autre'; },
+  type(c) { return ({ velage: 'Vêlage', tarissement: 'Tarissement', chaleur: 'Chaleur', ia: 'Insémination (IA)', diag_gestation: 'Diagnostic gestation', maladie: 'Maladie / Traitement', mammite: 'Mammite', vaccination: 'Vaccination', deparasitage: 'Déparasitage', mortalite: 'Mortalité', sortie: 'Sortie / Vente', entree: 'Entrée', avortement: 'Avortement' })[this.str(c).toLowerCase()] || 'Autre'; },
   motif(c) { c = this.str(c).toLowerCase(); if (!c) return ''; return ({ acidite: 'Acidité', densite: 'Densité', alcool: 'Test alcool positif', proprete: 'Propreté', temperature: 'Température', mouillage: 'Mouillage' })[c] || 'Autre'; },
 
   /* une soumission JSON (API ou export) -> fiche normalisée */
@@ -627,11 +633,12 @@ const KOBO = {
     const f = n => this.find(s, n);
     const fiche = { idx: this.str(f('_id') ?? f('_index')), uuid: this.str(f('_uuid')), d: parseAnyDate(f('date_traite')), session: this.str(f('session')).toLowerCase(),
       trayeur: this.tray(f('trayeur'), f('trayeur_autre')), heure: this.str(f('heure_debut')).slice(0, 5), livraison: this.str(f('livraison')).toLowerCase(),
-      bon: this.str(f('n_bon')), livre: num(f('livre_mpe')), recu: num(f('recu_smpl')), refus: num(f('refus')), motif: this.str(f('motif')), dens: num(f('densite')), alcool: this.str(f('test_alcool')).toLowerCase(), traites: [], events: [] };
+      bon: this.str(f('n_bon')), livre: num(f('livre_mpe')), recu: num(f('recu_smpl')), refus: num(f('refus')), motif: this.str(f('motif')), dens: num(f('densite')), alcool: this.str(f('test_alcool')).toLowerCase(), traites: [], events: [], lieu: this.str(f('lieu')) };
+    if (!fiche.trayeur && this.str(f('agent'))) fiche.trayeur = this.str(f('agent'));
     for (const [grp, cid, cl] of [['traite', 'vache_id', 'litres'], ['autres', 'autre_id', 'autre_litres']]) {
       const arr = f(grp); if (Array.isArray(arr)) for (const e of arr) fiche.traites.push({ id: this.str(this.find(e, cid)).toUpperCase(), L: num(this.find(e, cl)), tray: this.tray(this.find(e, 'trayeur'), this.find(e, 'trayeur_autre')) });
     }
-    const evs = f('evenements'); if (Array.isArray(evs)) for (const e of evs) { const g = n => this.find(e, n); fiche.events.push({ type: this.type(g('ev_type')), id: this.str(g('ev_id')).toUpperCase(), newid: this.str(g('ev_nouvel_id')).toUpperCase(), race: this.str(g('ev_race')).toUpperCase(), statut: this.str(g('ev_statut')).toLowerCase(), velage: parseAnyDate(g('ev_velage')), detail: this.str(g('ev_detail')), trait: this.str(g('ev_traitement')), retrait: num(g('ev_retrait')), rappel: parseAnyDate(g('ev_rappel')) }); }
+    const evs = f('evenements'); if (Array.isArray(evs)) for (const e of evs) { const g = n => this.find(e, n); fiche.events.push({ type: this.type(g('ev_type')), id: this.str(g('ev_id')).toUpperCase(), newid: this.str(g('ev_nouvel_id')).toUpperCase(), race: this.str(g('ev_race')).toUpperCase(), statut: this.str(g('ev_statut')).toLowerCase(), velage: parseAnyDate(g('ev_velage')), detail: [this.str(g('ev_gestation')) ? (({ gestante: 'Gestante', vide: 'Vide', douteux: 'Douteux, à revoir' })[this.str(g('ev_gestation')).toLowerCase()] || this.str(g('ev_gestation'))) + (this.str(g('ev_mois')) ? ` (${this.str(g('ev_mois'))} mois)` : '') : '', this.str(g('ev_detail')), fiche.lieu === 'nbeika' ? 'Nbeika' : ''].filter(Boolean).join(' · '), trait: this.str(g('ev_traitement')), retrait: num(g('ev_retrait')), rappel: parseAnyDate(g('ev_rappel')) }); }
     return fiche;
   },
 
@@ -667,7 +674,7 @@ const KOBO = {
           const st = e.statut === 'tarie' ? 'Tarie' : 'En lactation';
           if (id) { const [ok, note] = regAjouter(id, e.race, F.d, e.detail, st, e.velage); notes.push(note); if (ok && e.velage != null) addEvent({ d: e.velage, id, type: 'Vêlage', detail: '', trait: '', retrait: null, rappel: null, obs: '', src }, false); }
         }
-        if (id) { addEvent({ d: F.d, id, type: e.type, detail: e.detail, trait: e.trait, retrait: e.retrait, rappel: e.rappel, obs: F.trayeur ? 'Trayeur : ' + F.trayeur : '', src }); ne++; nEv++; }
+        if (id) { addEvent({ d: F.d, id, type: e.type, detail: e.detail, trait: e.trait, retrait: e.retrait, rappel: e.rappel, obs: F.lieu === 'nbeika' ? (F.trayeur ? 'Nbeika · Responsable : ' + F.trayeur : 'Nbeika') : (F.trayeur ? 'Trayeur : ' + F.trayeur : ''), src }); ne++; nEv++; }
       }
       DB.kobolog.push({ uuid: F.uuid, d: F.d, session: F.session, trayeur: F.trayeur, heure: F.heure, nv, total: r3(tt), livre: F.livraison === 'oui' ? F.livre : null, nev: ne, at: nowStamp(), via: origine });
     }
@@ -741,7 +748,7 @@ const KOBO = {
   lists() {
     const lact = DB.reg.filter(v => v.statut === 'En lactation'); let k = 0;
     const t1 = 'name,label,rang,race,nb\r\n' + lact.map(v => `${v.id},${v.id} - ${v.race},${++k},${v.race},${lact.length}`).join('\r\n') + '\r\n';
-    const t2 = 'name,label\r\n' + DB.reg.filter(v => v.statut === 'En lactation' || v.statut === 'Tarie').map(v => `${v.id},${v.id} - ${v.race} - ${v.statut}`).join('\r\n') + '\r\n';
+    const t2 = 'name,label,site\r\n' + DB.reg.filter(v => v.statut === 'En lactation' || v.statut === 'Tarie').map(v => `${v.id},${v.id} - ${v.race} - ${v.statut},${siteOf(v) === 'Nbeika' ? 'nbeika' : 'elbehgua'}`).join('\r\n') + '\r\n';
     const t3 = 'name,label\r\n' + P().trayeurs.filter(Boolean).map(n => `${n.replace(/ /g, '_').replace(/,/g, '')},${n.replace(/,/g, '')}`).join('\r\n') + '\r\nautre,Autre (écrire le nom) / أخرى\r\n';
     return { n: lact.length, files: [['vaches.csv', t1], ['vaches_toutes.csv', t2], ['trayeurs.csv', t3]] };
   },
@@ -796,7 +803,7 @@ const IC = {
 };
 const ic = (n, cls = '') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n] || ''}</svg>`;
 const NAV = [
-  ['Pilotage', [['accueil', 'Tableau de bord', 'home'], ['saisie', 'Saisie du jour', 'edit']]],
+  ['Pilotage', [['accueil', 'Tableau de bord', 'home'], ['saisie', 'Saisie du jour', 'edit'], ['nbeika', 'Troupeau de Nbeika', 'barn']]],
   ['Bulletins', [['jour', 'Bulletin journalier', 'day'], ['semaine', 'Bulletin hebdomadaire', 'week'], ['mois', 'Bulletin mensuel', 'month'], ['vache', 'Fiche vache', 'cow']]],
   ['Données', [['troupeau', 'Registre du troupeau', 'herd'], ['bases', 'Bases de données', 'db'], ['alim', 'Coûts alimentaires', 'feed'], ['qualite', 'Contrôle qualité', 'check']]],
   ['Système', [['kobo', 'KoboToolbox', 'sync'], ['historique', 'Historique & sauvegardes', 'hist'], ['param', 'Paramètres', 'cog']]],
@@ -913,7 +920,7 @@ PAGES.accueil = () => {
   </div>
   <div class="grid g3 section">
     ${card('', 'À faire aujourd’hui', `<div class="alerts">${tasks.map(([c, i, t, p]) => `<div class="alert ${c}"><div class="ic">${ic(i)}</div><div style="min-width:0"><b>${t}</b><p>${esc(p)}</p></div></div>`).join('')}</div>`)}
-    ${card('', 'Troupeau', `<div class="kpis" style="grid-template-columns:repeat(2,minmax(0,1fr))">${kpi('En lactation', R.lact)}${kpi('Taries', R.taries)}${kpi('Taux de lactation', pf(R.lact / Math.max(R.lact + R.taries, 1), 0))}${kpi('Sorties / mortes', regCount('Sortie') + regCount('Morte'))}</div><div style="margin-top:14px">${CH.hbars(RACES.map((rc, i) => ({ l: rc, v: DB.reg.filter(v => v.statut === 'En lactation' && v.race === rc).length, c: ['var(--brand)', 'var(--matin)', 'var(--soir)'][i], dec: 0 })), 'vaches')}</div>`)}
+    ${card('', 'Troupeau', `<div class="kpis" style="grid-template-columns:repeat(2,minmax(0,1fr))">${kpi('En lactation', R.lact, '', 'El Behgua')}${kpi('Taries', R.taries, '', 'Nbeika')}${kpi('Taux de lactation', pf(R.lact / Math.max(R.lact + R.taries, 1), 0))}${kpi('Sorties / mortes', regCount('Sortie') + regCount('Morte'))}</div><div style="margin-top:14px">${CH.hbars(RACES.map((rc, i) => ({ l: rc, v: DB.reg.filter(v => v.statut === 'En lactation' && v.race === rc).length, c: ['var(--brand)', 'var(--matin)', 'var(--soir)'][i], dec: 0 })), 'vaches')}</div>`, `<a class="btn sm" href="#nbeika">${ic('barn')}Nbeika</a>`)}
     ${card('', 'Production par race · ' + fdShort(d), CH.donut(raceItems, [nf(x.t, 0), 'litres']) + `<div style="margin-top:12px">${tbl([['Race'], ['L/vache', 'n'], ['Moy. 7 j', 'n'], ['Var.', 'n']], R.races.map(r => `<tr><td>${raceTag(r.rc)}</td><td class="n">${nf(r.moy, 2)}</td><td class="n">${nf(r.m7, 2)}</td><td class="n">${deltaHtml(R.inc ? null : r.varr)}</td></tr>`))}</div>`)}
   </div>
   <div class="grid g2 section">
@@ -1136,7 +1143,7 @@ ACT.pdf = async () => {
       pdf.setFontSize(7.5); pdf.setTextColor(110); pdf.text(`© ${new Date().getFullYear()} MPE - La Mauritanienne des Produits de l'Elevage - Tous droits réservés`, mm, 297 - 5); pdf.text(`Page ${i + 1} / ${pages.length}`, 210 - mm, 297 - 5, { align: 'right' });
     });
     const page = (location.hash || '#accueil').slice(1);
-    const lbl = { accueil: 'Tableau_de_bord_' + iso(IX.last), jour: 'Bulletin_journalier_' + iso(ST.jour), semaine: 'Bulletin_hebdo_S' + isoWeek(ST.sem || IX.last).w + '_' + isoWeek(ST.sem || IX.last).y, mois: 'Bulletin_mensuel_' + iso(ST.mois).slice(0, 7), vache: 'Fiche_vache_' + ST.vache }[page] || page;
+    const lbl = { accueil: 'Tableau_de_bord_' + iso(IX.last), jour: 'Bulletin_journalier_' + iso(ST.jour), semaine: 'Bulletin_hebdo_S' + isoWeek(ST.sem || IX.last).w + '_' + isoWeek(ST.sem || IX.last).y, mois: 'Bulletin_mensuel_' + iso(ST.mois).slice(0, 7), vache: 'Fiche_vache_' + ST.vache, nbeika: 'Troupeau_Nbeika_' + iso(today()) }[page] || page;
     await download(`El_Behgua_${lbl}.pdf`, pdf.output('blob'), 'application/pdf');
   } catch (e) { root.classList.remove('pdf-mode'); UI.modal('Export PDF', `<p>${esc(e.message || e)}</p>`); console.error(e); }
   finally { pdfBusy = false; }
@@ -1174,8 +1181,8 @@ PAGES.vache = () => {
   const months = []; for (let k = 11; k >= 0; k--) months.push(addMonths(monthStart(end), -k));
   return ['Fiche vache', 'البطاقة الفردية للبقرة', printBtns() + `<button class="btn" data-act="editCow" data-id="${esc(v.id)}">${ic('edit')}Modifier</button>`,
   `<div class="row noprint" style="margin-bottom:12px"><div class="field" style="min-width:200px"><label for="fv-sel">Choisir la vache</label><input class="inp" id="fv-sel" list="dl-all" value="${esc(v.id)}" data-chg="fvSel"></div><button class="icon-btn" data-act="fvPrev" aria-label="Vache précédente">${ic('left')}</button><button class="icon-btn" data-act="fvNext" aria-label="Vache suivante">${ic('right')}</button><datalist id="dl-all">${ids.map(i => `<option value="${esc(i)}">`).join('')}</datalist></div>
-  ${docHead('البطاقة الفردية للبقرة', `Fiche individuelle · ${esc(v.id)}`, `${raceTag(v.race)} ${stTag(v.statut)}`)}
-  <div class="section">${card('1', 'Identité et état actuel', `<div class="kpis">${kpi('Identifiant', esc(v.id))}${kpi('N° boucle / alias', esc(v.alias || '–'))}${kpi('Race', esc(v.race || '–'))}${kpi('Statut', stTag(v.statut))}${kpi('Date d’entrée', fd(v.entree) || '–')}${kpi('Origine', esc(v.origine || '–'))}${kpi('Dernier vêlage', fd(v.velage) || '–')}${kpi('Nb vêlages', v.nbv || 0)}${kpi('Jours en lactation', j ?? '–')}${kpi('Stade', esc(stade(j) || '–'))}${kpi('Sortie / mort', fd(v.sortie) || '–', '', esc(v.motif))}${kpi('Dernière traite', fd(lastR?.d) || '–')}${kpi('Alerte du jour', R ? `<span class="pill ${R.kind === 'non' ? 'bad' : 'warn'}" style="font-size:12px">${esc(R.txt)}</span>` : '<span class="pill ok" style="font-size:12px">Aucune</span>')}${kpi('Délai d’attente lait', ret ? `<span class="pill bad" style="font-size:12px">jusqu’au ${fd(ret.d + ret.retrait)}</span>` : 'Non')}</div>${v.obs ? `<p class="tip" style="margin-top:10px">Observation : ${esc(v.obs)}</p>` : ''}`)}</div>
+  ${docHead('البطاقة الفردية للبقرة', `Fiche individuelle · ${esc(v.id)}`, `${raceTag(v.race)} ${stTag(v.statut)} ${siteTag(siteOf(v))}`)}
+  <div class="section">${card('1', 'Identité et état actuel', `<div class="kpis">${kpi('Identifiant', esc(v.id))}${kpi('N° boucle / alias', esc(v.alias || '–'))}${kpi('Race', esc(v.race || '–'))}${kpi('Statut', stTag(v.statut))}${kpi('Site', siteOf(v) ? siteTag(siteOf(v)) : '–', '', siteOf(v) === 'Nbeika' ? '<a href="#nbeika">troupeau de Nbeika</a>' : '')}${kpi('Date d’entrée', fd(v.entree) || '–')}${kpi('Origine', esc(v.origine || '–'))}${kpi('Dernier vêlage', fd(v.velage) || '–')}${kpi('Nb vêlages', v.nbv || 0)}${kpi('Jours en lactation', j ?? '–')}${kpi('Stade', esc(stade(j) || '–'))}${kpi('Sortie / mort', fd(v.sortie) || '–', '', esc(v.motif))}${kpi('Dernière traite', fd(lastR?.d) || '–')}${kpi('Alerte du jour', R ? `<span class="pill ${R.kind === 'non' ? 'bad' : 'warn'}" style="font-size:12px">${esc(R.txt)}</span>` : '<span class="pill ok" style="font-size:12px">Aucune</span>')}${kpi('Délai d’attente lait', ret ? `<span class="pill bad" style="font-size:12px">jusqu’au ${fd(ret.d + ret.retrait)}</span>` : 'Non')}</div>${v.obs ? `<p class="tip" style="margin-top:10px">Observation : ${esc(v.obs)}</p>` : ''}`)}</div>
   <div class="section">${card('2', 'Performances laitières', `<div class="kpis">${kpi('Dernier jour', nf(lastR ? tot(lastR) : null, 2), 'L', fd(lastR?.d), 'hero')}${kpi('Moy. 7 j', nf(m7, 2), 'L/j')}${kpi('Moy. 30 j', nf(p30.moy, 2), 'L/j')}${kpi('Pic (lactation)', nf(peak ? tot(peak) : null, 2), 'L/j', peak ? 'le ' + fd(peak.d) : '')}${kpi('Cumul lactation', nf(cumulLact(v, end), 0), 'L')}${kpi('Jours traits (lactation)', lact.filter(r => tot(r) > 0).length)}${kpi('Rang troupeau (7 j)', rank ? `${rank}<small>/ ${herd.length}</small>` : '–')}${kpi('Indice vache / troupeau', nf(herdM && m7 ? m7 / herdM : null, 2), '', `troupeau ${nf(herdM, 2)} · ${esc(v.race)} ${nf(raceM, 2)} L/j`)}${kpi('Tendance 15 j', deltaHtml(t15b.moy ? t15.moy / t15b.moy - 1 : null), '', '15 j vs 15 j précédents')}${kpi('Part traite matin (30 j)', pf(pt ? pm / pt : null, 0))}${kpi('Cumul total', nf(all, 0), 'L', `${allK} jours traits`)}${kpi('Moyenne générale', nf(allK ? all / allK : null, 2), 'L/j')}</div><p class="tip" style="margin-top:10px">Indice 1,00 = comme la moyenne du troupeau en lactation sur 7 jours.</p>`)}</div>
   <div class="grid g2 section">
     ${card('3', 'Production · 60 derniers jours', CH.combo({ labels: d60.map(fdShort), bars: [{ name: 'Matin', values: d60.map(q => IX.key.get(q + '|' + v.id)?.m || 0), color: 'var(--matin)' }, { name: 'Soir', values: d60.map(q => IX.key.get(q + '|' + v.id)?.s || 0), color: 'var(--soir)' }, { name: 'Total sans détail', values: d60.map(q => { const r = IX.key.get(q + '|' + v.id); return r && r.m == null && r.s == null ? r.t || 0 : 0; }), color: 'var(--brand)' }], stacked: true, h: 220 }))}
@@ -1202,10 +1209,10 @@ PAGES.troupeau = () => {
   if (q) L = L.filter(v => v.id.includes(q) || (v.alias || '').toUpperCase().includes(q) || (v.origine || '').toUpperCase().includes(q));
   L.sort((a, b) => a.id < b.id ? -1 : 1);
   const cnt = s => DB.reg.filter(v => v.statut === s).length;
-  const rows = L.map(v => { const j = jel(v, d), sp = []; for (let i = 13; i >= 0; i--) sp.push(cowTot(v.id, d - i)); return `<tr class="click" data-act="openCow" data-id="${esc(v.id)}"><td><b>${esc(v.id)}</b></td><td class="tip">${esc(v.alias)}</td><td>${raceTag(v.race)}</td><td>${stTag(v.statut)}</td><td>${fd(v.velage)}</td><td class="n">${v.nbv || 0}</td><td class="n">${j ?? ''}</td><td>${j != null ? `<span class="tag ${j > 305 ? 'morte' : ''}">${esc(stade(j))}</span>` : ''}</td><td>${fd(lastMilk(v.id))}</td><td class="n">${nf(cowMoy7(v.id, d), 2)}</td><td class="n">${nf(cumulLact(v, d), 0)}</td><td>${v.statut === 'En lactation' ? CH.spark(sp) : ''}</td></tr>`; });
+  const rows = L.map(v => { const j = jel(v, d), sp = []; for (let i = 13; i >= 0; i--) sp.push(cowTot(v.id, d - i)); return `<tr class="click" data-act="openCow" data-id="${esc(v.id)}"><td><b>${esc(v.id)}</b></td><td class="tip">${esc(v.alias)}</td><td>${raceTag(v.race)}</td><td>${stTag(v.statut)}</td><td>${siteTag(siteOf(v))}</td><td>${fd(v.velage)}</td><td class="n">${v.nbv || 0}</td><td class="n">${j ?? ''}</td><td>${j != null ? `<span class="tag ${j > 305 ? 'morte' : ''}">${esc(stade(j))}</span>` : ''}</td><td>${fd(lastMilk(v.id))}</td><td class="n">${nf(cowMoy7(v.id, d), 2)}</td><td class="n">${nf(cumulLact(v, d), 0)}</td><td>${v.statut === 'En lactation' ? CH.spark(sp) : ''}</td></tr>`; });
   return ['Registre du troupeau', `${DB.reg.length} vaches enregistrées · calculs au ${fd(d)}`, `<button class="btn primary" data-act="newCow">${ic('plus')}Nouvelle vache</button><button class="btn" data-act="csvReg">${ic('down')}CSV</button>`,
-  `<div class="kpis k6 section">${kpi('En lactation', cnt('En lactation'), '', '', 'hero')}${kpi('Taries (Nbeika)', cnt('Tarie'))}${kpi('Sorties', cnt('Sortie'))}${kpi('Mortes', cnt('Morte'))}${kpi('F1 / ZM / ZMA actives', RACES.map(r => DB.reg.filter(v => v.race === r && (v.statut === 'En lactation' || v.statut === 'Tarie')).length).join(' / '))}${kpi('> 305 j de lactation', DB.reg.filter(v => jel(v, d) > 305).length)}</div>
-  ${card('', '', `<div class="row" style="margin-bottom:12px"><input class="inp" style="max-width:240px" placeholder="Rechercher (ID, alias, origine)" value="${esc(ST.tq)}" data-chg="tq" aria-label="Rechercher"><div class="seg">${[['actives', 'Présentes'], ['En lactation', 'En lactation'], ['Tarie', 'Taries'], ['Sortie', 'Sorties'], ['Morte', 'Mortes'], ['toutes', 'Toutes']].map(([k, l]) => `<button class="${ST.tst === k ? 'on' : ''}" data-act="tst" data-k="${k}">${l}</button>`).join('')}</div><div class="seg">${['', ...RACES].map(r => `<button class="${ST.trace === r ? 'on' : ''}" data-act="trace" data-k="${r}">${r || 'Toutes races'}</button>`).join('')}</div><span class="tip">${L.length} vache(s)</span></div>` + tbl([['ID'], ['Alias'], ['Race'], ['Statut'], ['Dernier vêlage'], ['Vêl.', 'n'], ['JEL', 'n'], ['Stade'], ['Dernière traite'], ['Moy. 7 j', 'n'], ['Cumul lact.', 'n'], ['14 jours']], rows))}`];
+  `<div class="kpis k6 section">${kpi('En lactation · El Behgua', cnt('En lactation'), '', '', 'hero')}${kpi('Taries · Nbeika', cnt('Tarie'), '', `<a href="#nbeika">${DB.reg.filter(atNbeika).length} à Nbeika · voir</a>`)}${kpi('Sorties', cnt('Sortie'))}${kpi('Mortes', cnt('Morte'))}${kpi('F1 / ZM / ZMA actives', RACES.map(r => DB.reg.filter(v => v.race === r && (v.statut === 'En lactation' || v.statut === 'Tarie')).length).join(' / '))}${kpi('> 305 j de lactation', DB.reg.filter(v => jel(v, d) > 305).length)}</div>
+  ${card('', '', `<div class="row" style="margin-bottom:12px"><input class="inp" style="max-width:240px" placeholder="Rechercher (ID, alias, origine)" value="${esc(ST.tq)}" data-chg="tq" aria-label="Rechercher"><div class="seg">${[['actives', 'Présentes'], ['En lactation', 'En lactation'], ['Tarie', 'Taries'], ['Sortie', 'Sorties'], ['Morte', 'Mortes'], ['toutes', 'Toutes']].map(([k, l]) => `<button class="${ST.tst === k ? 'on' : ''}" data-act="tst" data-k="${k}">${l}</button>`).join('')}</div><div class="seg">${['', ...RACES].map(r => `<button class="${ST.trace === r ? 'on' : ''}" data-act="trace" data-k="${r}">${r || 'Toutes races'}</button>`).join('')}</div><span class="tip">${L.length} vache(s)</span></div>` + tbl([['ID'], ['Alias'], ['Race'], ['Statut'], ['Site'], ['Dernier vêlage'], ['Vêl.', 'n'], ['JEL', 'n'], ['Stade'], ['Dernière traite'], ['Moy. 7 j', 'n'], ['Cumul lact.', 'n'], ['14 jours']], rows))}`];
 };
 ACT.tq = a => { ST.tq = a.value; UI.refresh(); };
 ACT.tst = a => { ST.tst = a.dataset.k; UI.refresh(); };
@@ -1218,7 +1225,65 @@ ACT.newCow = () => { const m = UI.modal('Nouvelle vache', cowForm(null) + '<p cl
     commit('Nouvelle vache ' + id, 'Registre', () => { const [ok, note] = regAjouter(id, g('race'), fromIso(g('ent')) ?? today(), g('org'), g('st'), fromIso(g('vel')), g('alias')); if (ok) { const v = DB.reg.find(x => x.id === id); if (g('obs')) v.obs = g('obs'); if (fromIso(g('vel')) != null) addEvent({ d: fromIso(g('vel')), id, type: 'Vêlage', detail: '', trait: '', retrait: null, rappel: null, obs: '', src: 'Ajout ' + nowStamp() }, false); addEvent({ d: fromIso(g('ent')) ?? today(), id, type: 'Entrée', detail: g('org'), trait: '', retrait: null, rappel: null, obs: '', src: 'Ajout ' + nowStamp() }, false); } return note; })
     .then(note => { m.remove(); UI.toast(note + ' · Publier les listes sur Kobo.'); ST.vache = id; UI.refresh(); }); }; };
 ACT.editCow = a => { const v = IX.reg.get(a.dataset.id); const m = UI.modal('Modifier ' + v.id, cowForm(v), '<button class="btn primary" id="cf-ok">Enregistrer</button>');
-  $('#cf-ok', m).onclick = () => { const g = k => $('#cf-' + k, m).value.trim(); commit('Modification ' + v.id, 'Registre', () => { Object.assign(v, { alias: g('alias'), race: g('race'), statut: g('st'), entree: fromIso(g('ent')), origine: g('org'), velage: fromIso(g('vel')), nbv: +g('nbv') || 0, obs: g('obs') }); return `Fiche ${v.id} modifiée`; }).then(() => { m.remove(); UI.refresh(); }); }; };
+  $('#cf-ok', m).onclick = () => { const g = k => $('#cf-' + k, m).value.trim(); commit('Modification ' + v.id, 'Registre', () => { Object.assign(v, { alias: g('alias'), race: g('race'), site: siteFor(g('st'), v.site), statut: g('st'), entree: fromIso(g('ent')), origine: g('org'), velage: fromIso(g('vel')), nbv: +g('nbv') || 0, obs: g('obs') }); return `Fiche ${v.id} modifiée`; }).then(() => { m.remove(); UI.refresh(); }); }; };
+
+/* ---------- Troupeau de Nbeika (vaches taries, reproduction) ---------- */
+IC.barn = '<path d="M3 21V10l9-6 9 6v11"/><path d="M8 21v-7h8v7M8 14l8 7M16 14l-8 7"/>';
+const NB_RX = /n['’]?b[eé]ik/i;
+const REPRO = ['Chaleur', 'Insémination (IA)', 'Diagnostic gestation', 'Avortement'];
+const atNbeika = v => (v.statut === 'Tarie' || v.statut === 'En lactation') && siteOf(v) === 'Nbeika';
+const siteTag = s => s ? `<span class="tag ${s === 'Nbeika' ? 'nb' : 'eb'}">${esc(s)}</span>` : '';
+const respOf = e => { const m = /Responsable\s*:\s*(.+)$/i.exec(e.obs || ''); return m ? m[1].trim() : /^Trayeur\s*:/i.test(e.obs || '') ? e.obs.replace(/^Trayeur\s*:\s*/i, '') : ''; };
+/* situation de reproduction d'une vache : dernier vêlage, diagnostic, IA, vêlage prévu */
+function reproOf(v) {
+  const evs = IX.evByCow.get(v.id) || [];
+  let lastVel = v.velage ?? null; for (const e of evs) if (e.type === 'Vêlage' && (lastVel == null || e.d > lastVel)) lastVel = e.d;
+  const after = e => lastVel == null || e.d > lastVel;
+  const diag = evs.filter(e => e.type === 'Diagnostic gestation' && after(e)).pop() || null;
+  const ia = evs.filter(e => e.type === 'Insémination (IA)' && after(e)).pop() || null;
+  const repro = evs.filter(e => REPRO.includes(e.type)).pop() || null;
+  const arr = evs.filter(e => e.type === 'Tarissement' || (e.type === 'Transfert' && /→\s*N['’]?b[eé]ik/i.test(e.detail || ''))).pop();
+  let gest = '', gestCls = '', mois = null;
+  if (diag) {
+    const t = String(diag.detail || '');
+    if (/^gestante/i.test(t)) { const m = /\((\d+(?:[.,]\d+)?)\s*mois/i.exec(t); mois = m ? num(m[1]) : null; gest = mois != null ? `Gestante (${nf(mois, mois % 1 ? 1 : 0)} mois)` : 'Gestante'; gestCls = 'ok'; }
+    else if (/^vide/i.test(t)) { gest = 'Vide'; gestCls = 'bad'; }
+    else if (/^douteu/i.test(t)) { gest = 'Douteux'; gestCls = 'warn'; }
+    else if (t) { gest = t; gestCls = ''; }
+  }
+  let vp = null, vpSrc = '';
+  if (gestCls === 'ok' && mois != null) { vp = diag.d + Math.round((9 - mois) * 30.4); vpSrc = 'diagnostic'; }
+  else if (ia && !evs.some(e => e.type === 'Diagnostic gestation' && e.d >= ia.d && /^vide/i.test(e.detail || ''))) { vp = ia.d + 283; vpSrc = 'IA + 283 j'; }
+  return { lastVel, diag, ia, repro, arrivee: arr ? arr.d : (v.entree ?? null), gest, gestCls, mois, vp, vpSrc, pleine: gestCls === 'ok' };
+}
+PAGES.nbeika = () => {
+  const t0 = today();
+  const cows = DB.reg.filter(atNbeika).map(v => ({ v, R: reproOf(v) }));
+  cows.sort((a, b) => (a.R.vp ?? Infinity) - (b.R.vp ?? Infinity) || (a.v.id < b.v.id ? -1 : 1));
+  const ids = new Set(cows.map(c => c.v.id));
+  const nGest = cows.filter(c => c.R.pleine).length;
+  const nVel30 = cows.filter(c => c.R.vp != null && c.R.vp <= t0 + 30).length;
+  const nRetard = cows.filter(c => c.R.vp != null && c.R.vp < t0).length;
+  const trans = DB.ev.filter(e => e.type === 'Transfert' && e.d >= t0 - 90).sort((a, b) => b.d - a.d);
+  const tr30 = trans.filter(e => e.d >= t0 - 30 && /→\s*El Behgua/i.test(e.detail || '')).length;
+  const evNb = DB.ev.filter(e => e.d >= t0 - 60 && e.type !== 'Transfert' && (NB_RX.test(e.detail || '') || NB_RX.test(e.obs || '') || (ids.has(e.id) && REPRO.slice(0, 3).includes(e.type)))).sort((a, b) => b.d - a.d);
+  const ev30 = evNb.filter(e => e.d >= t0 - 30).length;
+  const rows = cows.map(({ v, R }) => {
+    const late = R.vp != null && R.vp < t0, soon = R.vp != null && !late && R.vp <= t0 + 30;
+    const vpCell = R.vp == null ? '<span class="tip">–</span>' : `${fd(R.vp)} ${late ? `<span class="pill bad">dépassé de ${t0 - R.vp} j</span>` : soon ? `<span class="pill warn">dans ${R.vp - t0} j</span>` : ''}<div class="tip">${esc(R.vpSrc)}</div>`;
+    return `<tr class="click" data-act="openCow" data-id="${esc(v.id)}"><td>${cowLink(v.id)}</td><td>${raceTag(v.race)}</td><td>${fd(R.arrivee) || '–'}</td><td class="n">${R.arrivee != null ? t0 - R.arrivee : ''}</td><td>${R.repro ? `${esc(R.repro.type)} · ${fd(R.repro.d)}${R.repro.detail ? `<div class="tip">${esc(R.repro.detail)}</div>` : ''}` : '<span class="tip">Aucun</span>'}</td><td>${R.gest ? `<span class="pill ${R.gestCls}">${esc(R.gest)}</span><div class="tip">${fd(R.diag.d)}</div>` : '<span class="tip">Non diagnostiquée</span>'}</td><td>${vpCell}</td><td>${fd(R.lastVel) || '–'}</td></tr>`;
+  });
+  const evRows = evNb.map(e => `<tr><td style="white-space:nowrap">${fd(e.d)}</td><td>${cowLink(e.id)}</td><td>${esc(e.type)}</td><td>${esc(e.detail)}</td><td>${esc(e.trait)}</td><td>${esc(respOf(e))}</td></tr>`);
+  const trRows = trans.map(e => { const versEB = /→\s*El Behgua/i.test(e.detail || ''); return `<tr><td style="white-space:nowrap">${fd(e.d)}</td><td>${cowLink(e.id)}</td><td><span class="pill ${versEB ? 'ok' : 'brand'}">${versEB ? 'Vers El Behgua' : 'Vers Nbeika'}</span></td><td>${esc(e.detail)}</td><td class="tip">${esc(e.src)}</td></tr>`; });
+  return ['Troupeau de Nbeika', `Vaches taries gardées à Nbeika pour la reproduction · situation au ${fd(t0)}`, `<a class="btn" href="#troupeau">${ic('herd')}Registre</a>${HOSTED ? `<a class="btn" href="#kobo">${ic('sync')}Listes Kobo</a>` : ''}`,
+  `<div class="kpis section" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">${kpi('Vaches à Nbeika', cows.length, '', 'taries · site Nbeika', 'hero')}${kpi('Gestantes confirmées', nGest, '', `sur ${cows.length} · ${pf(cows.length ? nGest / cows.length : null, 0)}`)}${kpi('Vêlages attendus · 30 j', nVel30, '', nRetard ? `dont ${nRetard} dépassé(s)` : 'd’ici le ' + fd(t0 + 30))}${kpi('Transferts vers El Behgua', tr30, '', '30 derniers jours')}${kpi('Événements à Nbeika', ev30, '', '30 derniers jours')}</div>
+  <div class="banner info">${ic('info')}<div>Une vache qui vêle à Nbeika passe automatiquement <b>en lactation</b> et est transférée à <b>El Behgua</b> pour la traite (événement « Transfert »). Un tarissement l’envoie à Nbeika. Pensez à publier les listes Kobo pour que les téléphones proposent les bonnes vaches.</div></div>
+  <div class="section">${card('1', 'Vaches présentes à Nbeika', tbl([['Vache'], ['Race'], ['Arrivée à Nbeika'], ['Jours', 'n'], ['Dernier évén. reproduction'], ['Gestation'], ['Vêlage prévu'], ['Dernier vêlage']], rows), `<span class="pill">${cows.length}</span>`, 'Triées par vêlage prévu. Vêlage prévu = date du diagnostic + (9 − mois de gestation) × 30,4 j, sinon dernière IA + 283 j (si pas de diagnostic « Vide » ensuite).')}</div>
+  <div class="grid g2 section">
+    ${card('2', 'Événements à Nbeika · 60 jours', tbl([['Date'], ['Vache'], ['Type'], ['Détail'], ['Traitement'], ['Responsable']], evRows), `<span class="pill">${evNb.length}</span>`)}
+    ${card('3', 'Transferts récents · 90 jours', tbl([['Date'], ['Vache'], ['Sens'], ['Détail'], ['Source']], trRows), `<span class="pill">${trans.length}</span>`)}
+  </div>`];
+};
 
 /* ---------- Bases de données ---------- */
 const BASES = {
@@ -1265,7 +1330,7 @@ function tableData(k) {
   if (k === 'smpl') return [['Date', 'N° bon', 'Livré MPE (L)', 'Reçu SMPL (L)', 'Refusé (L)', 'Motif', 'Densité', 'Test alcool', 'Observation', 'Écart (L)', 'Écart (%)', 'Statut', 'Production (L)', 'Non livré (L)', 'Taux livraison', 'Prix', 'Montant (MRU)'], DB.smpl.slice().sort((a, b) => a.d - b.d).map(s0 => { const s = smplRow(s0); return [fd(s.d), s.bon, s.livre, s.recu, s.refus, s.motif, s.dens, s.alcool, s.obs, r3(s.ecart), s.ecartP, s.statut, r3(s.prod), r3(s.nonLivre), s.tauxLiv, s.prix, s.montant]; })];
   if (k === 'ev') return [['Date', 'ID vache', 'Type', 'Détail', 'Traitement', 'Retrait (j)', 'Rappel', 'Observation', 'Source', 'Fin retrait'], DB.ev.map(e => [fd(e.d), e.id, e.type, e.detail, e.trait, e.retrait, fd(e.rappel), e.obs, e.src, e.retrait ? fd(e.d + e.retrait) : ''])];
   if (k === 'kobo') return [['UUID', 'Date traite', 'Traite', 'Trayeur', 'Heure', 'Vaches', 'Total (L)', 'Livré SMPL', 'Événements', 'Importé le'], DB.kobolog.map(r => [r.uuid, fd(r.d), r.session, r.trayeur, r.heure, r.nv, r.total, r.livre, r.nev, r.at])];
-  if (k === 'reg') { const d = IX.last; return [['ID vache', 'Alias', 'Race', 'Date entrée', 'Origine', 'Dernier vêlage', 'Nb vêlages', 'Statut', 'Date sortie', 'Motif', 'Observation', 'JEL', 'Stade', 'Dernière traite', 'Moy. 7 j', 'Cumul lactation'], DB.reg.map(v => { const j = jel(v, d); return [v.id, v.alias, v.race, fd(v.entree), v.origine, fd(v.velage), v.nbv, v.statut, fd(v.sortie), v.motif, v.obs, j, stade(j), fd(lastMilk(v.id)), r3(cowMoy7(v.id, d)), r3(cumulLact(v, d))]; })]; }
+  if (k === 'reg') { const d = IX.last; return [['ID vache', 'Alias', 'Race', 'Date entrée', 'Origine', 'Dernier vêlage', 'Nb vêlages', 'Statut', 'Site', 'Date sortie', 'Motif', 'Observation', 'JEL', 'Stade', 'Dernière traite', 'Moy. 7 j', 'Cumul lactation'], DB.reg.map(v => { const j = jel(v, d); return [v.id, v.alias, v.race, fd(v.entree), v.origine, fd(v.velage), v.nbv, v.statut, siteOf(v), fd(v.sortie), v.motif, v.obs, j, stade(j), fd(lastMilk(v.id)), r3(cowMoy7(v.id, d)), r3(cumulLact(v, d))]; })]; }
 }
 ACT.csvBase = () => { const [h, r] = tableData(ST.bases); download(`El_Behgua_${ST.bases}_${iso(today())}.csv`, csv(h, r), 'text/csv;charset=utf-8'); };
 ACT.csvReg = () => { const [h, r] = tableData('reg'); download(`El_Behgua_registre_${iso(today())}.csv`, csv(h, r), 'text/csv;charset=utf-8'); };
@@ -1392,5 +1457,4 @@ PAGES.qualite = () => {
 })();
 </script>
 
-</body>
-</html>
+</body></html>
